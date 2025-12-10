@@ -90,7 +90,7 @@
                 <div class="absolute -right-5 -top-5 w-20 h-20 border-2 border-white/20 rounded-full border-dashed animate-spin-slow"></div>
                 
                 <div class="relative z-10">
-                    <h2 class="text-xs tracking-tight opacity-95 text-scheme1-cream uppercase mb-0 font-deco font-bold rotate-1 drop-shadow-sm">Wayne & Chloe | Shanghai 2025</h2>
+                    <h2 class="text-xs tracking-normal opacity-95 text-scheme1-cream mb-0 font-deco font-bold rotate-1 drop-shadow-sm">Wayne & Chloe | Shanghai 2025</h2>
                     <h1 class="text-2xl font-deco tracking-tight text-white drop-shadow-md font-bold">{{ appTitle }}</h1>
                 </div>
                 <div class="w-8 h-8 glass-deco rounded-full flex items-center justify-center shadow-inner">
@@ -334,23 +334,23 @@
 
             </main>
 
-            <nav class="glass-nav h-20 px-6 flex justify-between items-center z-20 rounded-t-[2.5rem] pb-2 relative flex-shrink-0 shadow-[0_-5px_15px_rgba(255,255,255,0.15)]">
-                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary' : 'text-scheme1-brown/60 hover:text-scheme1-brown'" class="flex flex-col items-center w-12 transition-colors">
-                    <i class="fa-solid fa-plane-departure text-xl mb-1 drop-shadow-sm"></i><span class="text-xs tracking-wide font-bold">航班</span>
+            <nav class="glass-nav h-16 px-1 flex justify-evenly items-center z-20 rounded-t-[2rem] pb-1 relative flex-shrink-0 shadow-[0_-5px_15px_rgba(255,255,255,0.15)]">
+                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary' : 'text-scheme1-brown/60 hover:text-scheme1-brown'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-plane-departure text-2xl mb-0.5 drop-shadow-sm"></i><span class="text-[10px] tracking-wide font-bold">航班</span>
                 </button>
-                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary' : 'text-scheme1-brown/60 hover:text-scheme1-brown'" class="flex flex-col items-center w-12 transition-colors">
-                    <i class="fa-solid fa-clipboard-list text-xl mb-1 drop-shadow-sm"></i><span class="text-xs tracking-wide font-bold">行程</span>
+                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary' : 'text-scheme1-brown/60 hover:text-scheme1-brown'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-clipboard-list text-2xl mb-0.5 drop-shadow-sm"></i><span class="text-[10px] tracking-wide font-bold">行程</span>
                 </button>
                 <div class="-mt-8 relative z-10">
                     <button @click="currentTab = 'map'" class="bg-scheme1-primary text-white w-14 h-14 rounded-full shadow-[0_8px_25px_rgba(247,158,188,0.6)] flex items-center justify-center border-4 border-white/40 backdrop-blur-sm transform active:scale-95 transition-all">
-                        <i class="fa-solid fa-map text-2xl animate-pulse"></i>
+                        <i class="fa-solid fa-map text-3xl animate-pulse"></i>
                     </button>
                 </div>
-                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary' : 'text-scheme1-brown/60 hover:text-scheme1-brown'" class="flex flex-col items-center w-12 transition-colors">
-                    <i class="fa-solid fa-store text-xl mb-1 drop-shadow-sm"></i><span class="text-xs tracking-wide font-bold">店舖</span>
+                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary' : 'text-scheme1-brown/60 hover:text-scheme1-brown'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-store text-2xl mb-0.5 drop-shadow-sm"></i><span class="text-[10px] tracking-wide font-bold">店舖</span>
                 </button>
-                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary' : 'text-scheme1-brown/60 hover:text-scheme1-brown'" class="flex flex-col items-center w-12 transition-colors">
-                    <i class="fa-solid fa-bed text-xl mb-1 drop-shadow-sm"></i><span class="text-xs tracking-wide font-bold">住宿</span>
+                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary' : 'text-scheme1-brown/60 hover:text-scheme1-brown'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-bed text-2xl mb-0.5 drop-shadow-sm"></i><span class="text-[10px] tracking-wide font-bold">住宿</span>
                 </button>
             </nav>
         </div>
@@ -426,7 +426,7 @@
         const { createApp, ref } = Vue;
         createApp({
             setup() {
-                const currentTab = ref('schedule'); // 預設開啟行程頁以查看文字效果
+                const currentTab = ref('schedule'); // 預設開啟行程頁
                 const appTitle = ref(myTripData.title);
                 const currentDayIndex = ref(0);
                 const myData = ref(myTripData); 
