@@ -14,23 +14,18 @@
                 extend: {
                     colors: {
                         scheme1: { 
-                            // 背景改為深色系
-                            bg: '#0B1121',       
-                            // 主色改為霓虹青/白
-                            primary: '#22D3EE',  
-                            // 次要色改為電光紫/藍
-                            secondary: '#818CF8',
-                            // 強調色改為發光白/淡青 (用於大字)
-                            accent: '#E0F2FE',   
-                            // 副標題顏色 (極淺藍灰)
-                            cream: '#94A3B8',    
-                            // 小字顏色 (淺灰，取代原本的啡色)
-                            brown: '#CBD5E1',    
-                            // 輔助色
-                            extra: '#1E293B',    
-                            // 正文主色 (白)
-                            text: '#F8FAFC',     
-                            card: 'rgba(30, 41, 59, 0.7)'
+                            // 根據 Image 1 色板提取的顏色
+                            bgDark: '#0F2D4D',   // 深藍 (Gradient 05 base)
+                            bgLight: '#174871',  // 中藍 (Gradient 05 light)
+                            mauve: '#A77693',    // 紫藕色 (Gradient 03/04 - 重點色)
+                            beige: '#DED1C6',    // 米杏色 (Gradient 02 - 副標題/圖標)
+                            white: '#F2F3F4',    // 灰白 (Gradient 01 - 主文字)
+                            
+                            // 語義化變量
+                            primary: '#A77693',  // 主按鈕/高亮 (紫藕)
+                            secondary: '#DED1C6',// 次要信息 (米杏)
+                            text: '#F2F3F4',     // 主文字 (灰白)
+                            card: 'rgba(23, 72, 113, 0.5)' // 卡片背景 (基於中藍色)
                         }
                     },
                     fontFamily: { 
@@ -49,9 +44,9 @@
             height: 100dvh;
             overflow: hidden;
             overscroll-behavior: none;
-            /* 背景改為深色漸層 */
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            color: #F8FAFC;
+            /* 背景漸變：深藍 -> 中藍，模擬夜空/深海質感 */
+            background: linear-gradient(180deg, #0F2D4D 0%, #174871 100%);
+            color: #F2F3F4;
         }
         
         #app {
@@ -70,34 +65,33 @@
         
         /* 深色玻璃擬態卡片 */
         .glass-card {
-            background: rgba(30, 41, 59, 0.6); /* 深藍灰半透明 */
+            background: rgba(23, 72, 113, 0.4); /* 基於色板藍色的半透明 */
             backdrop-filter: blur(12px);            
-            border: 1px solid rgba(255, 255, 255, 0.1); /* 極細白邊框 */
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05); /* 內發光感 */
+            border: 1px solid rgba(222, 209, 198, 0.15); /* 使用米杏色作為極細邊框 */
+            box-shadow: 0 8px 32px 0 rgba(15, 45, 77, 0.3);
         }
         
-        /* 導航列深色玻璃 */
+        /* 導航列半透明設定 */
         .glass-nav {
-            background: rgba(15, 23, 42, 0.85); 
+            background: rgba(15, 45, 77, 0.8); /* 深藍色半透明 */
             backdrop-filter: blur(16px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+            border-top: 1px solid rgba(167, 118, 147, 0.2); /* 紫藕色微光邊框 */
         }
 
         /* 裝飾圓圈 */
         .glass-deco {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(167, 118, 147, 0.2); /* 紫藕色半透明 */
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); /* 青色光暈 */
+            border: 1px solid rgba(222, 209, 198, 0.3);
+            box-shadow: 0 0 15px rgba(167, 118, 147, 0.3);
         }
 
-        /* 文字發光效果類別 */
+        /* 文字發光效果 - 配合 Image 2 的霓虹感 */
         .text-glow {
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 10px rgba(242, 243, 244, 0.3);
         }
-        .text-glow-blue {
-            text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        .text-glow-mauve {
+            text-shadow: 0 0 8px rgba(167, 118, 147, 0.6);
         }
     </style>
 </head>
@@ -105,96 +99,95 @@
     <div id="app" class="font-sans font-medium text-scheme1-text">
         <div class="w-full max-w-md h-full relative shadow-2xl flex flex-col overflow-hidden bg-transparent">
             
-            <div class="absolute top-[-10%] left-[-20%] w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[100px] pointer-events-none"></div>
-            <div class="absolute bottom-[-10%] right-[-20%] w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+            <div class="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] bg-scheme1-mauve/20 rounded-full blur-[80px] pointer-events-none"></div>
+            <div class="absolute bottom-[-10%] left-[-20%] w-[300px] h-[300px] bg-scheme1-bgLight/30 rounded-full blur-[80px] pointer-events-none"></div>
 
-            <header class="bg-slate-900/60 backdrop-blur-md text-white p-3 pt-8 shadow-sm z-10 rounded-b-[1.5rem] flex justify-between items-center relative overflow-hidden flex-shrink-0 border-b border-white/10">
-                <div class="absolute -right-5 -top-5 w-20 h-20 border-2 border-cyan-400/20 rounded-full border-dashed animate-spin-slow"></div>
+            <header class="bg-scheme1-bgDark/80 backdrop-blur-md text-white p-3 pt-4 shadow-lg z-10 rounded-b-[1.5rem] flex justify-between items-center relative overflow-hidden flex-shrink-0 border-b border-scheme1-mauve/20">
+                <div class="absolute -right-5 -top-5 w-20 h-20 border-2 border-scheme1-mauve/20 rounded-full border-dashed animate-spin-slow"></div>
                 
-                <div class="relative z-10">
-                    <h2 class="text-lg tracking-normal opacity-100 text-scheme1-cream mb-0 font-deco font-black rotate-1 drop-shadow-md leading-none text-glow">Wayne & Chloe | Shanghai 2025</h2>
-                    <h1 class="text-xl font-deco tracking-tight text-white drop-shadow-lg font-bold mt-1 text-glow">
-                        <span class="text-scheme1-primary">{{ appTitle.substring(0,1) }}</span>{{ appTitle.substring(1) }}
-                    </h1>
+                <div class="relative z-10 mt-2">
+                    <h2 class="text-[10px] tracking-normal opacity-90 text-scheme1-beige mb-0.5 font-deco font-bold rotate-1 drop-shadow-md">Wayne & Chloe | Shanghai 2025</h2>
+                    
+                    <h1 class="text-3xl font-deco tracking-tight text-white drop-shadow-lg font-bold">{{ appTitle }}</h1>
                 </div>
-                <div class="w-8 h-8 glass-deco rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(34,211,238,0.3)]">
-                    <i class="fa-solid fa-plane-up text-scheme1-primary animate-bounce text-xs"></i>
+                <div class="w-8 h-8 glass-deco rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(167,118,147,0.4)]">
+                    <i class="fa-solid fa-plane-up text-scheme1-beige animate-bounce text-xs"></i>
                 </div>
             </header>
 
             <main class="flex-1 overflow-y-auto scrollbar-hide p-4 pb-24 space-y-5 relative z-10">
                 
                 <div v-if="currentTab === 'flight'" class="animate-fade-in space-y-4">
-                    <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-primary text-scheme1-text opacity-90 text-glow">✈️ 航班資訊</h3>
+                    <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-mauve text-scheme1-text opacity-90 text-glow">✈️ 航班資訊</h3>
                     
                     <div class="glass-card rounded-2xl p-4 relative overflow-hidden">
-                        <div class="absolute top-3 left-3 bg-scheme1-primary/20 border border-scheme1-primary/50 text-scheme1-primary text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest shadow-[0_0_10px_rgba(34,211,238,0.2)]">去程 OUTBOUND</div>
+                        <div class="absolute top-3 left-3 bg-scheme1-mauve text-white text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest shadow-md">去程 OUTBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-4">
                             <div class="text-center w-1/3">
-                                <div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">HKG</div>
-                                <div class="text-sm text-scheme1-brown font-bold mt-1">香港 T1</div>
+                                <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-scheme1-beige tracking-tighter drop-shadow-sm font-heiti">HKG</div>
+                                <div class="text-sm text-scheme1-beige font-bold mt-1">香港 T1</div>
                             </div>
                             <div class="flex-1 px-2 text-center flex flex-col items-center">
-                                <div class="text-xs text-scheme1-primary font-bold">{{ myData.flightOut.airline }}</div>
-                                <i class="fa-solid fa-plane text-scheme1-primary text-xl block my-1 drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]"></i>
-                                <div class="border-b-2 border-dotted border-scheme1-brown/30 w-full h-1"></div>
-                                <div class="text-xs text-scheme1-brown mt-1 font-bold">{{ myData.flightOut.no }}</div>
+                                <div class="text-xs text-scheme1-mauve font-bold">{{ myData.flightOut.airline }}</div>
+                                <i class="fa-solid fa-plane text-scheme1-mauve text-xl block my-1 drop-shadow-[0_0_8px_rgba(167,118,147,0.6)]"></i>
+                                <div class="border-b-2 border-dotted border-scheme1-beige/30 w-full h-1"></div>
+                                <div class="text-xs text-scheme1-beige mt-1 font-bold">{{ myData.flightOut.no }}</div>
                             </div>
                             <div class="text-center w-1/3">
-                                <div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">PVG</div>
-                                <div class="text-sm text-scheme1-brown font-bold mt-1">上海浦東 T1</div>
+                                <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-scheme1-beige tracking-tighter drop-shadow-sm font-heiti">PVG</div>
+                                <div class="text-sm text-scheme1-beige font-bold mt-1">上海浦東 T1</div>
                             </div>
                         </div>
-                        <div class="bg-slate-900/40 rounded-xl p-3 flex justify-between items-start text-sm border border-white/5">
+                        <div class="bg-scheme1-bgDark/40 rounded-xl p-3 flex justify-between items-start text-sm border border-scheme1-beige/10">
                             <div class="flex flex-col">
-                                <span class="text-xs text-scheme1-brown uppercase font-bold mb-0.5">Date</span>
+                                <span class="text-xs text-scheme1-beige/70 uppercase font-bold mb-0.5">Date</span>
                                 <span class="font-bold text-scheme1-text text-base">{{ myData.flightOut.date }}</span>
                             </div>
                             <div class="flex gap-5">
                                 <div class="flex flex-col items-end">
-                                    <span class="text-xs text-scheme1-brown uppercase font-bold mb-0.5">Dep</span>
-                                    <span class="font-bold text-scheme1-primary text-xl leading-none text-glow-blue">{{ myData.flightOut.dep }}</span>
+                                    <span class="text-xs text-scheme1-beige/70 uppercase font-bold mb-0.5">Dep</span>
+                                    <span class="font-bold text-scheme1-mauve text-xl leading-none text-glow-mauve">{{ myData.flightOut.dep }}</span>
                                 </div>
                                 <div class="flex flex-col items-end">
-                                    <span class="text-xs text-scheme1-brown uppercase font-bold mb-0.5">Arr</span>
-                                    <span class="font-bold text-scheme1-primary text-xl leading-none text-glow-blue">{{ myData.flightOut.arr }}</span>
+                                    <span class="text-xs text-scheme1-beige/70 uppercase font-bold mb-0.5">Arr</span>
+                                    <span class="font-bold text-scheme1-mauve text-xl leading-none text-glow-mauve">{{ myData.flightOut.arr }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="glass-card rounded-2xl p-4 relative overflow-hidden">
-                        <div class="absolute top-3 left-3 bg-scheme1-secondary/20 border border-scheme1-secondary/50 text-scheme1-secondary text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest shadow-[0_0_10px_rgba(129,140,248,0.2)]">回程 INBOUND</div>
+                        <div class="absolute top-3 left-3 bg-scheme1-beige text-scheme1-bgDark text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest shadow-md">回程 INBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-4">
                             <div class="text-center w-1/3">
-                                <div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">PVG</div>
-                                <div class="text-sm text-scheme1-brown font-bold mt-1">上海浦東 T1</div>
+                                <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-scheme1-beige tracking-tighter drop-shadow-sm font-heiti">PVG</div>
+                                <div class="text-sm text-scheme1-beige font-bold mt-1">上海浦東 T1</div>
                             </div>
                             <div class="flex-1 px-2 text-center flex flex-col items-center">
-                                <div class="text-xs text-scheme1-secondary font-bold">{{ myData.flightIn.airline }}</div>
-                                <i class="fa-solid fa-plane text-scheme1-secondary text-xl block my-1 rotate-180 drop-shadow-[0_0_5px_rgba(129,140,248,0.8)]"></i>
-                                <div class="border-b-2 border-dotted border-scheme1-brown/30 w-full h-1"></div>
-                                <div class="text-xs text-scheme1-brown mt-1 font-bold">{{ myData.flightIn.no }}</div>
+                                <div class="text-xs text-scheme1-beige font-bold">{{ myData.flightIn.airline }}</div>
+                                <i class="fa-solid fa-plane text-scheme1-beige text-xl block my-1 rotate-180 drop-shadow-sm"></i>
+                                <div class="border-b-2 border-dotted border-scheme1-beige/30 w-full h-1"></div>
+                                <div class="text-xs text-scheme1-beige mt-1 font-bold">{{ myData.flightIn.no }}</div>
                             </div>
                             <div class="text-center w-1/3">
-                                <div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">HKG</div>
-                                <div class="text-sm text-scheme1-brown font-bold mt-1">香港 T1</div>
+                                <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-scheme1-beige tracking-tighter drop-shadow-sm font-heiti">HKG</div>
+                                <div class="text-sm text-scheme1-beige font-bold mt-1">香港 T1</div>
                             </div>
                         </div>
-                        <div class="bg-slate-900/40 rounded-xl p-3 flex justify-between items-start text-sm border border-white/5">
+                        <div class="bg-scheme1-bgDark/40 rounded-xl p-3 flex justify-between items-start text-sm border border-scheme1-beige/10">
                             <div class="flex flex-col">
-                                <span class="text-xs text-scheme1-brown uppercase font-bold mb-0.5">Date</span>
+                                <span class="text-xs text-scheme1-beige/70 uppercase font-bold mb-0.5">Date</span>
                                 <span class="font-bold text-scheme1-text text-base">{{ myData.flightIn.date }}</span>
                             </div>
                             <div class="flex gap-5">
                                 <div class="flex flex-col items-end">
-                                    <span class="text-xs text-scheme1-brown uppercase font-bold mb-0.5">Dep</span>
-                                    <span class="font-bold text-scheme1-primary text-xl leading-none text-glow-blue">{{ myData.flightIn.dep }}</span>
+                                    <span class="text-xs text-scheme1-beige/70 uppercase font-bold mb-0.5">Dep</span>
+                                    <span class="font-bold text-scheme1-mauve text-xl leading-none text-glow-mauve">{{ myData.flightIn.dep }}</span>
                                 </div>
                                 <div class="flex flex-col items-end">
-                                    <span class="text-xs text-scheme1-brown uppercase font-bold mb-0.5">Arr</span>
+                                    <span class="text-xs text-scheme1-beige/70 uppercase font-bold mb-0.5">Arr</span>
                                     <div class="text-right">
-                                        <span class="font-bold text-scheme1-primary text-xl leading-none block text-glow-blue">{{ myData.flightIn.arr }}</span>
+                                        <span class="font-bold text-scheme1-mauve text-xl leading-none block text-glow-mauve">{{ myData.flightIn.arr }}</span>
                                         <span class="text-[10px] text-red-400 block mt-0.5 font-bold">+1 Day</span>
                                     </div>
                                 </div>
@@ -203,27 +196,27 @@
                     </div>
 
                     <div class="glass-card rounded-xl p-4">
-                        <h4 class="text-base font-bold text-scheme1-text mb-3 flex items-center"><i class="fa-solid fa-suitcase-rolling mr-2 text-scheme1-secondary"></i> 行李限額</h4>
+                        <h4 class="text-base font-bold text-scheme1-text mb-3 flex items-center"><i class="fa-solid fa-suitcase-rolling mr-2 text-scheme1-beige"></i> 行李限額</h4>
                         <div class="flex flex-col gap-3">
-                            <div class="bg-slate-900/40 rounded-lg p-3 flex items-center shadow-sm border border-white/5">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-suitcase text-scheme1-primary text-2xl drop-shadow"></i></div>
-                                <div class="flex-1 ml-2 border-l border-scheme1-brown/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-scheme1-text text-sm">託運行李</span><span class="text-[10px] bg-scheme1-secondary/20 text-scheme1-secondary border border-scheme1-secondary/30 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-brown mt-1 font-bold"><i class="fa-solid fa-weight-scale text-[10px] mr-1"></i>23kg <span class="mx-1 text-scheme1-brown/50">|</span> 158cm</div>
+                            <div class="bg-scheme1-bgDark/40 rounded-lg p-3 flex items-center shadow-sm border border-scheme1-beige/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-suitcase text-scheme1-mauve text-2xl drop-shadow"></i></div>
+                                <div class="flex-1 ml-2 border-l border-scheme1-beige/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-scheme1-text text-sm">託運行李</span><span class="text-[10px] bg-scheme1-beige/20 text-scheme1-beige border border-scheme1-beige/30 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-beige mt-1 font-bold"><i class="fa-solid fa-weight-scale text-[10px] mr-1"></i>23kg <span class="mx-1 text-scheme1-beige/50">|</span> 158cm</div>
                                 </div>
                             </div>
-                            <div class="bg-slate-900/40 rounded-lg p-3 flex items-center shadow-sm border border-white/5">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-briefcase text-scheme1-secondary text-2xl drop-shadow"></i></div>
-                                <div class="flex-1 ml-2 border-l border-scheme1-brown/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-scheme1-text text-sm">手提行李</span><span class="text-[10px] bg-scheme1-secondary/20 text-scheme1-secondary border border-scheme1-secondary/30 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-brown mt-1 font-bold">8kg <span class="mx-1 text-scheme1-brown/50">|</span> 20x40x55cm</div>
+                            <div class="bg-scheme1-bgDark/40 rounded-lg p-3 flex items-center shadow-sm border border-scheme1-beige/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-briefcase text-scheme1-beige text-2xl drop-shadow"></i></div>
+                                <div class="flex-1 ml-2 border-l border-scheme1-beige/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-scheme1-text text-sm">手提行李</span><span class="text-[10px] bg-scheme1-beige/20 text-scheme1-beige border border-scheme1-beige/30 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-beige mt-1 font-bold">8kg <span class="mx-1 text-scheme1-beige/50">|</span> 20x40x55cm</div>
                                 </div>
                             </div>
-                            <div class="bg-slate-900/40 rounded-lg p-3 flex items-center shadow-sm border border-white/5">
+                            <div class="bg-scheme1-bgDark/40 rounded-lg p-3 flex items-center shadow-sm border border-scheme1-beige/10">
                                 <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-bag-shopping text-white text-2xl drop-shadow"></i></div>
-                                <div class="flex-1 ml-2 border-l border-scheme1-brown/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-scheme1-text text-sm">隨身物品</span><span class="text-[10px] bg-scheme1-secondary/20 text-scheme1-secondary border border-scheme1-secondary/30 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-brown mt-1 font-bold">小型手袋 / 筆電包</div>
+                                <div class="flex-1 ml-2 border-l border-scheme1-beige/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-scheme1-text text-sm">隨身物品</span><span class="text-[10px] bg-scheme1-beige/20 text-scheme1-beige border border-scheme1-beige/30 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-beige mt-1 font-bold">小型手袋 / 筆電包</div>
                                 </div>
                             </div>
                         </div>
@@ -234,7 +227,7 @@
                     
                     <div class="flex overflow-x-auto space-x-3 pb-1 scrollbar-hide px-1">
                         <button v-for="(day, index) in myData.days" :key="index" @click="currentDayIndex = index" 
-                            :class="currentDayIndex === index ? 'bg-scheme1-primary text-slate-900 shadow-[0_0_15px_rgba(34,211,238,0.5)] border-transparent scale-105' : 'glass-card text-scheme1-brown border-white/10'"
+                            :class="currentDayIndex === index ? 'bg-scheme1-mauve text-white shadow-[0_0_15px_rgba(167,118,147,0.5)] border-transparent scale-105' : 'glass-card text-scheme1-beige border-scheme1-beige/20'"
                             class="flex-shrink-0 px-5 py-2.5 rounded-xl flex flex-col items-center min-w-[75px] transition-all duration-300 backdrop-blur-sm">
                             <span class="text-xs uppercase tracking-wider font-bold">Day {{ index + 1 }}</span>
                             <span class="font-black text-xl leading-tight">{{ day.dateShort }}</span>
@@ -243,31 +236,31 @@
 
                     <div>
                         <h3 class="font-bold text-lg mb-4 text-scheme1-text flex items-center opacity-90 pl-1 text-glow">
-                            <span class="text-scheme1-primary mr-2"><i class="fa-solid fa-calendar-day"></i></span>
+                            <span class="text-scheme1-mauve mr-2"><i class="fa-solid fa-calendar-day"></i></span>
                             {{ myData.days[currentDayIndex].date }}
                         </h3>
                         
                         <div class="relative pl-4 space-y-4">
-                            <div class="absolute left-[3.5px] top-2 bottom-0 w-[2px] bg-white/20 rounded-full"></div>
+                            <div class="absolute left-[3.5px] top-2 bottom-0 w-[2px] bg-scheme1-beige/20 rounded-full"></div>
                             
                             <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="idx" class="relative group">
-                                <div class="absolute -left-[17px] top-3 w-3 h-3 bg-slate-900 border-[3px] border-scheme1-primary rounded-full z-10 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
+                                <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bgDark border-[3px] border-scheme1-mauve rounded-full z-10 shadow-[0_0_10px_rgba(167,118,147,0.5)]"></div>
                                 
-                                <div class="glass-card rounded-2xl p-4 transition-all duration-300 relative overflow-hidden z-0 hover:bg-slate-800/50 hover:border-scheme1-primary/30">
+                                <div class="glass-card rounded-2xl p-4 transition-all duration-300 relative overflow-hidden z-0 hover:bg-scheme1-bgLight/50 hover:border-scheme1-mauve/30">
                                     <div class="flex justify-between items-center mb-2 relative z-10">
-                                        <span class="bg-scheme1-primary/10 text-scheme1-primary font-bold text-sm px-3 py-0.5 rounded-full border border-scheme1-primary/20 shadow-[0_0_10px_rgba(34,211,238,0.1)]">{{ item.time }}</span>
-                                        <div class="flex items-center text-scheme1-brown text-xs gap-1.5 font-bold" v-if="item.weather">
+                                        <span class="bg-scheme1-mauve/20 text-scheme1-mauve font-bold text-sm px-3 py-0.5 rounded-full border border-scheme1-mauve/30 shadow-[0_0_10px_rgba(167,118,147,0.1)]">{{ item.time }}</span>
+                                        <div class="flex items-center text-scheme1-beige text-xs gap-1.5 font-bold" v-if="item.weather">
                                             <i :class="getWeatherIcon(item.weather)"></i><span class="font-bold">{{ item.temp }}</span>
                                         </div>
                                     </div>
                                     
                                     <h4 class="font-bold text-lg text-scheme1-text mb-1">{{ item.title }}</h4>
                                     
-                                    <p class="text-sm text-scheme1-brown mb-3 leading-relaxed font-bold">{{ item.desc }}</p>
+                                    <p class="text-sm text-scheme1-beige mb-3 leading-relaxed font-bold">{{ item.desc }}</p>
                                     
                                     <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" 
-                                       class="flex items-center justify-center bg-white/5 hover:bg-scheme1-primary/20 hover:text-white text-scheme1-text text-sm py-2 rounded-lg transition-all font-bold gap-2 border border-white/10 w-full">
-                                        <i class="fa-solid fa-location-dot text-scheme1-secondary group-hover:text-white transition-colors text-xs"></i> {{ item.location }}
+                                       class="flex items-center justify-center bg-white/5 hover:bg-scheme1-mauve/20 hover:text-white text-scheme1-text text-sm py-2 rounded-lg transition-all font-bold gap-2 border border-white/10 w-full">
+                                        <i class="fa-solid fa-location-dot text-scheme1-beige group-hover:text-white transition-colors text-xs"></i> {{ item.location }}
                                     </a>
                                 </div>
                             </div>
@@ -276,34 +269,34 @@
                 </div>
 
                 <div v-if="currentTab === 'map'" class="animate-fade-in h-full flex flex-col items-center justify-center pt-10 pb-20">
-                    <div class="glass-card p-6 rounded-3xl mb-6 animate-bounce relative backdrop-blur-xl border border-scheme1-primary/30 shadow-[0_0_30px_rgba(34,211,238,0.2)]">
-                         <div class="absolute inset-0 bg-scheme1-primary/10 rounded-3xl blur-xl -z-10"></div>
-                        <i class="fa-solid fa-map-location-dot text-7xl text-scheme1-primary drop-shadow-[0_0_15px_rgba(34,211,238,0.6)]"></i>
+                    <div class="glass-card p-6 rounded-3xl mb-6 animate-bounce relative backdrop-blur-xl border border-scheme1-mauve/30 shadow-[0_0_30px_rgba(167,118,147,0.2)]">
+                         <div class="absolute inset-0 bg-scheme1-mauve/10 rounded-3xl blur-xl -z-10"></div>
+                        <i class="fa-solid fa-map-location-dot text-7xl text-scheme1-mauve drop-shadow-[0_0_15px_rgba(167,118,147,0.6)]"></i>
                     </div>
                     <h3 class="font-bold text-2xl text-scheme1-text mb-2 drop-shadow-sm text-glow">🗺️ 探索上海</h3>
-                    <p class="text-scheme1-brown text-base text-center leading-relaxed font-bold">點擊行程中的地點<br>開啟 Google Maps 導航</p>
+                    <p class="text-scheme1-beige text-base text-center leading-relaxed font-bold">點擊行程中的地點<br>開啟 Google Maps 導航</p>
                 </div>
 
                 <div v-if="currentTab === 'shops'" class="animate-fade-in">
-                    <h3 class="font-bold text-xl mb-4 pl-3 border-l-4 border-scheme1-primary text-scheme1-text opacity-90 text-glow">🛍️ 必逛店舖 & 美食</h3>
+                    <h3 class="font-bold text-xl mb-4 pl-3 border-l-4 border-scheme1-mauve text-scheme1-text opacity-90 text-glow">🛍️ 必逛店舖 & 美食</h3>
                     <div class="space-y-4">
-                        <div v-for="(shop, idx) in myData.shops" :key="idx" class="glass-card rounded-2xl p-4 flex items-center relative overflow-hidden group hover:border-scheme1-primary/50 transition-colors">
-                            <div :class="shop.color" class="w-12 h-12 rounded-full bg-slate-800/80 border border-white/10 flex items-center justify-center flex-shrink-0 text-lg group-hover:scale-110 transition-transform shadow-inner">
+                        <div v-for="(shop, idx) in myData.shops" :key="idx" class="glass-card rounded-2xl p-4 flex items-center relative overflow-hidden group hover:border-scheme1-mauve/50 transition-colors">
+                            <div :class="shop.color" class="w-12 h-12 rounded-full bg-scheme1-bgDark/80 border border-white/10 flex items-center justify-center flex-shrink-0 text-lg group-hover:scale-110 transition-transform shadow-inner">
                                 <i :class="['fa-solid', shop.icon]"></i>
                             </div>
                             <div class="flex-1 ml-4 mr-2">
                                 <div class="flex items-center gap-2 mb-1">
                                     <h4 class="font-bold text-scheme1-text text-lg">{{ shop.name }}</h4>
-                                    <span v-if="shop.tag" class="text-[10px] bg-scheme1-primary/10 text-scheme1-primary px-1.5 py-0.5 rounded border border-scheme1-primary/20 font-bold">{{ shop.tag }}</span>
+                                    <span v-if="shop.tag" class="text-[10px] bg-scheme1-mauve/10 text-scheme1-mauve px-1.5 py-0.5 rounded border border-scheme1-mauve/20 font-bold">{{ shop.tag }}</span>
                                 </div>
-                                <div class="flex items-center text-xs text-scheme1-brown gap-2 font-bold">
+                                <div class="flex items-center text-xs text-scheme1-beige gap-2 font-bold">
                                     <span><i class="fa-solid fa-location-dot text-[10px] mr-1"></i>{{ shop.area }}</span>
-                                    <span class="w-1.5 h-1.5 rounded-full bg-scheme1-brown/50"></span>
+                                    <span class="w-1.5 h-1.5 rounded-full bg-scheme1-beige/50"></span>
                                     <span>{{ shop.type }}</span>
                                 </div>
                             </div>
                             <div class="flex flex-col items-end justify-center">
-                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + shop.name" target="_blank" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-scheme1-primary hover:bg-scheme1-primary hover:text-slate-900 transition-colors shadow-sm">
+                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + shop.name" target="_blank" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-scheme1-mauve hover:bg-scheme1-mauve hover:text-white transition-colors shadow-sm">
                                     <i class="fa-solid fa-diamond-turn-right text-sm"></i>
                                 </a>
                             </div>
@@ -312,13 +305,13 @@
                 </div>
 
                 <div v-if="currentTab === 'hotel'" class="animate-fade-in space-y-4">
-                    <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-primary text-scheme1-text opacity-90 text-glow">🏨 住宿資訊</h3>
+                    <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-mauve text-scheme1-text opacity-90 text-glow">🏨 住宿資訊</h3>
                     <div class="glass-card rounded-2xl overflow-hidden">
                         <div class="h-48 relative flex items-end overflow-hidden group">
                             <img :src="myData.hotel.image" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80" alt="Hotel Room">
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-scheme1-bgDark via-scheme1-bgDark/40 to-transparent"></div>
                             <div class="relative z-10 p-5 w-full text-white">
-                                <div class="absolute top-4 right-4 bg-scheme1-primary/80 backdrop-blur-md text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.4)] border border-white/20">
+                                <div class="absolute top-4 right-4 bg-scheme1-mauve/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full shadow-[0_0_15px_rgba(167,118,147,0.4)] border border-white/20">
                                     4晚 ✨
                                 </div>
                                 <h2 class="text-2xl font-black leading-tight mb-1 text-white shadow-sm text-glow">{{ myData.hotel.name }}</h2>
@@ -327,29 +320,29 @@
                         </div>
                         <div class="p-5">
                             <div class="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
-                                <span class="text-xs bg-white/5 text-scheme1-brown px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/10 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-dumbbell mr-1"></i>健身房</span>
-                                <span class="text-xs bg-white/5 text-scheme1-brown px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/10 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-person-swimming mr-1"></i>恆溫泳池</span>
-                                <span class="text-xs bg-white/5 text-scheme1-brown px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/10 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-wifi mr-1"></i>免費WiFi</span>
+                                <span class="text-xs bg-white/5 text-scheme1-beige px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/10 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-dumbbell mr-1"></i>健身房</span>
+                                <span class="text-xs bg-white/5 text-scheme1-beige px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/10 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-person-swimming mr-1"></i>恆溫泳池</span>
+                                <span class="text-xs bg-white/5 text-scheme1-beige px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/10 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-wifi mr-1"></i>免費WiFi</span>
                             </div>
-                            <div class="bg-slate-900/40 rounded-xl p-3 mb-4 flex items-start border border-white/5">
-                                <i class="fa-solid fa-location-dot text-scheme1-secondary mt-1 mr-2.5 text-lg drop-shadow-[0_0_5px_rgba(129,140,248,0.8)]"></i>
+                            <div class="bg-scheme1-bgDark/40 rounded-xl p-3 mb-4 flex items-start border border-white/5">
+                                <i class="fa-solid fa-location-dot text-scheme1-secondary mt-1 mr-2.5 text-lg drop-shadow-[0_0_5px_rgba(222,209,198,0.8)]"></i>
                                 <div class="flex-1">
                                     <p class="text-base text-scheme1-text font-bold mb-1 leading-snug">{{ myData.hotel.address }}</p>
-                                    <a :href="'https://www.google.com/maps/search/?api=1&query=' + myData.hotel.name" target="_blank" class="text-xs text-scheme1-primary font-bold flex items-center gap-1 hover:underline">
+                                    <a :href="'https://www.google.com/maps/search/?api=1&query=' + myData.hotel.name" target="_blank" class="text-xs text-scheme1-mauve font-bold flex items-center gap-1 hover:underline">
                                         開啟 Google Maps <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                                     </a>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-3 text-center">
-                                <div class="bg-slate-900/40 rounded-lg p-3 border border-white/5">
-                                    <div class="text-xs text-scheme1-brown mb-1 uppercase tracking-wide font-black">Check-in</div>
-                                    <div class="font-bold text-scheme1-primary text-xl text-glow-blue">14:00</div>
-                                    <div class="text-xs text-scheme1-brown mt-1 font-bold">{{ myData.hotel.checkIn }}</div>
+                                <div class="bg-scheme1-bgDark/40 rounded-lg p-3 border border-white/5">
+                                    <div class="text-xs text-scheme1-beige mb-1 uppercase tracking-wide font-black">Check-in</div>
+                                    <div class="font-bold text-scheme1-mauve text-xl text-glow-mauve">14:00</div>
+                                    <div class="text-xs text-scheme1-beige mt-1 font-bold">{{ myData.hotel.checkIn }}</div>
                                 </div>
-                                <div class="bg-slate-900/40 rounded-lg p-3 border border-white/5">
-                                    <div class="text-xs text-scheme1-brown mb-1 uppercase tracking-wide font-black">Check-out</div>
-                                    <div class="font-bold text-scheme1-secondary text-xl text-glow">12:00</div>
-                                    <div class="text-xs text-scheme1-brown mt-1 font-bold">{{ myData.hotel.checkOut }}</div>
+                                <div class="bg-scheme1-bgDark/40 rounded-lg p-3 border border-white/5">
+                                    <div class="text-xs text-scheme1-beige mb-1 uppercase tracking-wide font-black">Check-out</div>
+                                    <div class="font-bold text-scheme1-secondary text-xl">12:00</div>
+                                    <div class="text-xs text-scheme1-beige mt-1 font-bold">{{ myData.hotel.checkOut }}</div>
                                 </div>
                             </div>
                         </div>
@@ -359,21 +352,21 @@
             </main>
 
             <nav class="glass-nav h-16 px-1 flex justify-evenly items-center z-20 rounded-t-[2rem] pb-1 relative flex-shrink-0 shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
-                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]' : 'text-scheme1-brown/40 hover:text-scheme1-brown'" class="flex flex-col items-center w-14 transition-colors">
+                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-mauve drop-shadow-[0_0_8px_rgba(167,118,147,0.8)]' : 'text-scheme1-beige/40 hover:text-scheme1-beige'" class="flex flex-col items-center w-14 transition-colors">
                     <i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span>
                 </button>
-                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]' : 'text-scheme1-brown/40 hover:text-scheme1-brown'" class="flex flex-col items-center w-14 transition-colors">
+                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-mauve drop-shadow-[0_0_8px_rgba(167,118,147,0.8)]' : 'text-scheme1-beige/40 hover:text-scheme1-beige'" class="flex flex-col items-center w-14 transition-colors">
                     <i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span>
                 </button>
                 <div class="-mt-8 relative z-10">
-                    <button @click="currentTab = 'map'" class="bg-slate-900 text-scheme1-primary w-14 h-14 rounded-full shadow-[0_0_20px_rgba(34,211,238,0.4)] border-2 border-scheme1-primary/30 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all">
-                        <i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(34,211,238,1)]"></i>
+                    <button @click="currentTab = 'map'" class="bg-scheme1-bgDark text-scheme1-mauve w-14 h-14 rounded-full shadow-[0_0_20px_rgba(167,118,147,0.4)] border-2 border-scheme1-mauve/30 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all">
+                        <i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(167,118,147,1)]"></i>
                     </button>
                 </div>
-                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]' : 'text-scheme1-brown/40 hover:text-scheme1-brown'" class="flex flex-col items-center w-14 transition-colors">
+                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-mauve drop-shadow-[0_0_8px_rgba(167,118,147,0.8)]' : 'text-scheme1-beige/40 hover:text-scheme1-beige'" class="flex flex-col items-center w-14 transition-colors">
                     <i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span>
                 </button>
-                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]' : 'text-scheme1-brown/40 hover:text-scheme1-brown'" class="flex flex-col items-center w-14 transition-colors">
+                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-mauve drop-shadow-[0_0_8px_rgba(167,118,147,0.8)]' : 'text-scheme1-beige/40 hover:text-scheme1-beige'" class="flex flex-col items-center w-14 transition-colors">
                     <i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span>
                 </button>
             </nav>
@@ -386,7 +379,7 @@
             
             shops: [
                 { name: "姥姥家 Grandmas", type: "美食", area: "外灘", tag: "本幫菜", icon: "fa-utensils", color: "text-orange-400" },
-                { name: "M Stand", type: "咖啡", area: "新天地", tag: "網紅打卡", icon: "fa-mug-hot", color: "text-scheme1-text" },
+                { name: "M Stand", type: "咖啡", area: "新天地", tag: "網紅打卡", icon: "fa-mug-hot", color: "text-white" },
                 { name: "Haus Nowhere", type: "購物", area: "淮海中路", tag: "眼鏡/香氛", icon: "fa-bag-shopping", color: "text-scheme1-secondary" },
                 { name: "Peet's Coffee", type: "咖啡", area: "武康路", tag: "露台位", icon: "fa-mug-saucer", color: "text-yellow-600" }
             ],
@@ -458,7 +451,7 @@
                 const getWeatherIcon = (type) => {
                     const t = type ? type.toLowerCase() : '';
                     if (t.includes('sun') || t.includes('clear')) return 'fa-solid fa-sun text-yellow-300 drop-shadow-[0_0_5px_rgba(253,224,71,0.8)]'; 
-                    if (t.includes('cloud')) return 'fa-solid fa-cloud text-slate-400';
+                    if (t.includes('cloud')) return 'fa-solid fa-cloud text-scheme1-beige/70';
                     if (t.includes('rain')) return 'fa-solid fa-umbrella text-blue-400';
                     if (t.includes('snow')) return 'fa-solid fa-snowflake text-white drop-shadow-[0_0_5px_white]';
                     return 'fa-solid fa-cloud-sun text-yellow-300';
