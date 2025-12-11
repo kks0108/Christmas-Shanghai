@@ -56,7 +56,6 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        .animate-spin-slow { animation: spin 10s linear infinite; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         .shanghai-bg {
@@ -103,7 +102,8 @@
         .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
         
         .sortable-ghost { opacity: 0.3; }
-        .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.15); transform: scale(1.02); z-index: 50; }
+        /* 拖曳時的效果：放大並稍微透明 */
+        .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.15); transform: scale(1.05); z-index: 50; }
         
         /* Loader */
         .loader { border: 3px solid rgba(255,255,255,0.1); border-left-color: #FF7EE2; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
@@ -125,7 +125,7 @@
                 </div>
                 <div class="w-9 h-9 glass-card rounded-full flex items-center justify-center shadow-inner flex-shrink-0 mr-2 border border-white/30">
                     <div v-if="isLoading" class="loader"></div>
-                    <i v-else class="fa-solid fa-cloud text-scheme1-secondary text-xs"></i>
+                    <i v-else class="fa-solid fa-plane text-scheme1-secondary text-sm animate-bounce"></i>
                 </div>
             </header>
 
@@ -165,36 +165,10 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="glass-card rounded-xl p-4">
-                        <h4 class="text-base font-bold text-white mb-3 flex items-center text-shadow-sm"><i class="fa-solid fa-suitcase-rolling mr-2 text-scheme1-accent"></i> 行李限額</h4>
-                        <div class="flex flex-col gap-3">
-                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-suitcase text-scheme1-primary text-2xl drop-shadow-md"></i></div>
-                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">託運行李</span><span class="text-[10px] bg-scheme1-primary/20 text-scheme1-primary border border-scheme1-primary/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold"><i class="fa-solid fa-weight-scale text-[10px] mr-1"></i>23kg <span class="mx-1 text-white/30">|</span> 158cm</div>
-                                </div>
-                            </div>
-                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-briefcase text-scheme1-secondary text-2xl drop-shadow-md"></i></div>
-                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">手提行李</span><span class="text-[10px] bg-scheme1-secondary/20 text-scheme1-secondary border border-scheme1-secondary/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">7kg <span class="mx-1 text-white/30">|</span> 20x40x55cm</div>
-                                </div>
-                            </div>
-                             <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-bag-shopping text-scheme1-accent text-2xl drop-shadow-md"></i></div>
-                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">隨身物品</span><span class="text-[10px] bg-scheme1-accent/20 text-scheme1-accent border border-scheme1-accent/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">小型手袋 / 筆電包</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div v-if="currentTab === 'schedule' && myData.days" class="animate-fade-in space-y-4">
+                    
                     <div class="grid grid-cols-4 gap-2 px-1">
                         <button v-for="(day, index) in myData.days" :key="index" @click="currentDayIndex = index" 
                             :class="currentDayIndex === index ? 'bg-scheme1-primary/90 text-white shadow-[0_0_15px_rgba(255,126,226,0.6)] border-transparent scale-105' : 'glass-card text-white/80 border-white/20'"
@@ -219,10 +193,10 @@
                             <div ref="sortableList" class="space-y-3 pb-24">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
                                      @click="openEditModal(idx)"
-                                     class="relative group select-none transition-transform duration-200">
-                                    <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
+                                     class="relative group select-none transition-transform duration-200 cursor-pointer"> <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
                                     
                                     <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-primary/40">
+                                        
                                         <div v-if="item.img" class="h-24 w-full relative overflow-hidden">
                                             <img :src="item.img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 select-none pointer-events-none">
                                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
@@ -235,18 +209,23 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div v-else class="p-3 pb-0 flex justify-between items-center mb-1">
                                             <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-sm px-2.5 py-0.5 rounded-full border border-scheme1-primary/30 shadow-[0_0_10px_rgba(255,126,226,0.4)] select-none">{{ item.time }}</span>
                                             <div class="flex items-center text-scheme1-textSub text-xs gap-1.5 font-bold select-none" v-if="item.weather">
                                                 <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                             </div>
                                         </div>
+                                        
                                         <div class="p-3 pt-1 relative">
-                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md select-text cursor-text">{{ item.title }}</h4>
-                                            <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2 select-none pointer-events-none">{{ item.desc }}</p>
+                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md select-none">{{ item.title }}</h4>
+                                            
+                                            <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2 select-none">{{ item.desc }}</p>
+                                            
                                             <div class="flex justify-between items-end mt-0.5">
-                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
-                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 select-none">
+                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text relative z-20"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
+                                                
+                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 select-none z-20">
                                                     <i class="fa-solid fa-diamond-turn-right text-sm"></i>
                                                 </a>
                                             </div>
@@ -263,7 +242,7 @@
                 </div>
 
                 <div v-if="currentTab === 'map'" class="animate-fade-in h-full flex flex-col items-center justify-center pt-10 pb-20">
-                     <div class="glass-card p-6 rounded-3xl mb-6 animate-bounce relative backdrop-blur-xl border border-scheme1-primary/40 shadow-[0_0_30px_rgba(255,126,226,0.3)]">
+                    <div class="glass-card p-6 rounded-3xl mb-6 animate-bounce relative backdrop-blur-xl border border-scheme1-primary/40 shadow-[0_0_30px_rgba(255,126,226,0.3)]">
                          <div class="absolute inset-0 bg-scheme1-primary/10 rounded-3xl blur-xl -z-10"></div>
                         <i class="fa-solid fa-map-location-dot text-7xl text-scheme1-primary drop-shadow-[0_0_15px_rgba(255,126,226,0.6)]"></i>
                     </div>
@@ -271,24 +250,39 @@
                     <p class="text-scheme1-textSub text-base text-center leading-relaxed font-bold">點擊行程中的地點<br>開啟 Google Maps 導航</p>
                 </div>
 
-                <div v-if="currentTab === 'shops' && myData.shops" class="animate-fade-in">
+                <div v-if="currentTab === 'shops' && myData.shops" class="animate-fade-in pb-20">
                     <h3 class="font-bold text-xl mb-4 pl-3 border-l-4 border-scheme1-primary text-white opacity-90 text-shadow-sm font-deco tracking-wide">🛍️ 必逛店舖 & 美食</h3>
+                    
                     <div class="grid grid-cols-2 gap-4">
-                        <div v-for="(shop, idx) in myData.shops" :key="idx" @click="openShopDetails(shop)"
+                        <div v-for="(shop, idx) in myData.shops" :key="idx" 
+                             @click="openShopDetails(shop)"
                              class="glass-card rounded-2xl p-4 flex flex-col items-center justify-center text-center relative overflow-hidden group hover:border-scheme1-primary/50 transition-colors select-none cursor-pointer aspect-square">
+                            
                             <div :class="getShopIconColor(shop.color)" class="w-10 h-10 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-lg shadow-inner mb-2 group-hover:scale-110 transition-transform">
-                                <i :class="['fa-solid', shop.icon]"></i>
+                                <i :class="getShopCategoryIcon(shop.type)"></i>
                             </div>
+                            
                             <div class="mb-2 w-full">
-                                <h4 class="font-bold text-white text-base leading-tight drop-shadow-sm">{{ getShopNameParts(shop.name).main }}</h4>
-                                <p v-if="getShopNameParts(shop.name).sub" class="text-xs text-scheme1-textSub/90 mt-0.5">{{ getShopNameParts(shop.name).sub }}</p>
+                                <h4 class="font-bold text-white text-base leading-tight drop-shadow-sm">
+                                    {{ getShopNameParts(shop.name).main }}
+                                </h4>
+                                <p v-if="getShopNameParts(shop.name).sub" class="text-xs text-scheme1-textSub/90 mt-0.5">
+                                    {{ getShopNameParts(shop.name).sub }}
+                                </p>
                             </div>
+
                             <div class="flex items-center justify-center text-[10px] text-scheme1-secondary font-bold bg-white/5 px-2 py-1 rounded-full mb-2 w-full">
-                                <i class="fa-solid fa-clock mr-1.5"></i><span class="truncate">{{ getSimpleHours(shop.hours) }}</span>
+                                <i class="fa-solid fa-clock mr-1.5"></i>
+                                <span class="truncate">{{ getSimpleHours(shop.hours) }}</span>
                             </div>
+                            
                             <span v-if="shop.tag" class="text-[10px] bg-scheme1-primary/10 text-scheme1-primary px-2 py-0.5 rounded-full border border-scheme1-primary/20 font-bold">{{ shop.tag }}</span>
                         </div>
                     </div>
+                    
+                    <button @click="openAddShopModal" class="w-full py-3 mt-6 rounded-xl border-2 border-dashed border-scheme1-primary/30 text-scheme1-primary/70 hover:bg-scheme1-primary/10 hover:border-scheme1-primary hover:text-scheme1-primary transition-all font-bold flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> 新增店舖
+                    </button>
                 </div>
 
                 <div v-if="currentTab === 'hotel' && myData.hotel" class="animate-fade-in space-y-4">
@@ -297,9 +291,11 @@
                         <div class="h-48 relative flex items-end overflow-hidden group">
                             <img :src="myData.hotel.image" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70" alt="Hotel Room">
                             <div class="absolute inset-0 bg-gradient-to-t from-scheme1-bg via-scheme1-bg/40 to-transparent"></div>
+                            
                             <div class="absolute top-3 right-3 bg-black/40 backdrop-blur-md text-white/90 text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-white/10 select-none z-20">
                                 4晚 ✨
                             </div>
+
                             <div class="relative z-10 p-5 w-full text-white">
                                 <h2 class="text-2xl font-black leading-tight mb-1 text-white shadow-sm text-shadow-sm">{{ myData.hotel.name }}</h2>
                                 <p class="text-sm text-white/90 font-bold truncate">{{ myData.hotel.engName }}</p>
@@ -333,30 +329,61 @@
 
             </main>
 
-            <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
-                <nav class="glass-nav w-full h-16 px-1 flex justify-evenly items-center rounded-t-[2rem] pb-1 relative flex-shrink-0 animate-fade-in pointer-events-auto">
-                    <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span></button>
-                    <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span></button>
-                    <div class="-mt-8 relative z-10"><button @click="currentTab = 'map'" class="bg-scheme1-bg text-scheme1-primary w-14 h-14 rounded-full shadow-[0_0_20px_rgba(255,126,226,0.4)] border-2 border-scheme1-primary/50 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all"><i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(255,126,226,1)]"></i></button></div>
-                    <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span></button>
-                    <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span></button>
-                </nav>
-            </div>
+            <nav class="glass-nav h-16 px-1 flex justify-evenly items-center z-50 rounded-t-[2rem] pb-1 relative flex-shrink-0">
+                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span></button>
+                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span></button>
+                <div class="-mt-8 relative z-10"><button @click="currentTab = 'map'" class="bg-scheme1-bg text-scheme1-primary w-14 h-14 rounded-full shadow-[0_0_20px_rgba(255,126,226,0.4)] border-2 border-scheme1-primary/50 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all"><i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(255,126,226,1)]"></i></button></div>
+                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span></button>
+                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span></button>
+            </nav>
 
             <div v-if="showShopModal && selectedShop" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal" @click.self="closeShopModal">
                 <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col shadow-2xl border border-scheme1-primary/40">
                     <button @click="closeShopModal" class="absolute top-4 right-4 text-white/60 hover:text-white transition-colors z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
+                    
                     <div class="flex flex-col items-center text-center mb-6">
-                        <div :class="getShopIconColor(selectedShop.color)" class="w-16 h-16 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-3"><i :class="['fa-solid', selectedShop.icon]"></i></div>
+                        <div :class="getShopIconColor(selectedShop.color)" class="w-16 h-16 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-3">
+                             <i :class="getShopCategoryIcon(selectedShop.type)"></i>
+                        </div>
                         <h3 class="text-2xl font-bold text-white font-deco tracking-wide select-text cursor-text">{{ selectedShop.name }}</h3>
                         <span v-if="selectedShop.tag" class="mt-2 text-xs bg-scheme1-primary/20 text-scheme1-primary px-3 py-0.5 rounded-full border border-scheme1-primary/30 font-bold select-none">{{ selectedShop.tag }}</span>
                     </div>
+
                     <div class="space-y-4 text-sm flex-1 overflow-y-auto scrollbar-hide">
                         <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-text cursor-text"><label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1 select-none">地址</label><p class="text-white leading-relaxed"><i class="fa-solid fa-location-dot mr-2 text-scheme1-secondary select-none"></i>{{ selectedShop.address }}</p></div>
                         <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-none"><label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1">營業時間</label><div class="text-white"><i class="fa-solid fa-clock mr-2 text-scheme1-secondary float-left mt-1"></i><div class="overflow-hidden"><div v-for="(line, idx) in selectedShop.hours.split('|')" :key="idx" class="block">{{ line.trim() }}</div></div></div></div>
                         <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-none" v-if="selectedShop.transport"><label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1">交通方式</label><p class="text-white"><i class="fa-solid fa-train-subway mr-2 text-scheme1-secondary"></i>{{ selectedShop.transport }}</p></div>
                     </div>
-                    <a :href="'https://www.google.com/maps/search/?api=1&query=' + selectedShop.address" target="_blank" class="mt-6 w-full py-3 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-lg flex items-center justify-center gap-2 select-none"><i class="fa-solid fa-map-location-dot"></i> 開啟 Google Maps</a>
+                    
+                    <div class="flex gap-2 mt-6">
+                         <button @click="deleteShop(selectedShop)" class="px-4 py-3 rounded-xl border border-red-500/50 text-red-400 hover:bg-red-500/20 font-bold select-none"><i class="fa-solid fa-trash"></i></button>
+                         <a :href="'https://www.google.com/maps/search/?api=1&query=' + selectedShop.address" target="_blank" class="flex-1 py-3 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-lg flex items-center justify-center gap-2 select-none"><i class="fa-solid fa-map-location-dot"></i> 開啟 Google Maps</a>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="showAddShopModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal">
+                <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col max-h-[90vh] overflow-hidden border border-scheme1-primary/50">
+                    <h3 class="text-2xl font-bold text-center mb-4 text-white font-deco tracking-widest">新增店舖</h3>
+                    <div class="overflow-y-auto space-y-4 pr-1 scrollbar-hide flex-1">
+                        <div><label class="text-xs text-scheme1-secondary font-bold uppercase">店名</label><input v-model="shopFormData.name" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1"></div>
+                        <div>
+                             <label class="text-xs text-scheme1-secondary font-bold uppercase">種類</label>
+                             <select v-model="shopFormData.type" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1">
+                                 <option class="text-black" value="Cafe">Cafe</option>
+                                 <option class="text-black" value="餐廳">餐廳</option>
+                                 <option class="text-black" value="零售">零售</option>
+                             </select>
+                        </div>
+                        <div><label class="text-xs text-scheme1-secondary font-bold uppercase">標籤 (選填)</label><input v-model="shopFormData.tag" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1"></div>
+                        <div><label class="text-xs text-scheme1-secondary font-bold uppercase">地址</label><input v-model="shopFormData.address" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1"></div>
+                        <div><label class="text-xs text-scheme1-secondary font-bold uppercase">營業時間</label><input v-model="shopFormData.hours" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1" placeholder="例如: 10:00 - 22:00"></div>
+                        <div><label class="text-xs text-scheme1-secondary font-bold uppercase">交通方式</label><input v-model="shopFormData.transport" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1"></div>
+                    </div>
+                    <div class="flex gap-3 mt-6 pt-4 border-t border-white/10">
+                        <button @click="showAddShopModal = false" class="flex-1 py-2.5 rounded-xl border border-white/30 text-white hover:bg-white/10 transition-colors font-bold">取消</button>
+                        <button @click="saveShop" class="flex-1 py-2.5 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-sm">儲存</button>
+                    </div>
                 </div>
             </div>
 
@@ -368,16 +395,14 @@
                         <div><label class="text-xs text-scheme1-secondary font-bold uppercase">標題</label><input v-model="modalData.title" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1"></div>
                         <div><label class="text-xs text-scheme1-secondary font-bold uppercase">描述</label><textarea v-model="modalData.desc" rows="3" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1 resize-none scrollbar-hide"></textarea></div>
                         <div><label class="text-xs text-scheme1-secondary font-bold uppercase">地點/地址</label><input v-model="modalData.location" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1"></div>
-                        <div>
-                             <label class="text-xs text-scheme1-secondary font-bold uppercase">圖片 (上傳或URL)</label>
-                             <input type="file" @change="handleFileUpload" accept="image/*" class="w-full mt-1 text-xs text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-scheme1-primary/20 file:text-white hover:file:bg-scheme1-primary/40 mb-2">
-                             <div v-if="isUploading" class="text-xs text-scheme1-primary font-bold animate-pulse">正在壓縮並上傳圖片...</div>
-                             <input v-model="modalData.img" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1" placeholder="或貼上圖片 URL...">
+                         <div>
+                            <label class="text-xs text-scheme1-secondary font-bold uppercase">圖片 URL (選填)</label>
+                            <input v-model="modalData.img" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1" placeholder="https://...">
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6 pt-4 border-t border-white/10">
                         <button @click="closeModal" class="flex-1 py-2.5 rounded-xl border border-white/30 text-white hover:bg-white/10 transition-colors font-bold">取消</button>
-                        <button @click="saveEvent" class="flex-1 py-2.5 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-sm" :disabled="isUploading">{{ isEditing ? '儲存變更' : '新增' }}</button>
+                        <button @click="saveEvent" class="flex-1 py-2.5 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-sm">{{ isEditing ? '儲存變更' : '新增' }}</button>
                     </div>
                     <button v-if="isEditing" @click="deleteEvent" class="absolute top-4 right-4 text-white/50 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
                 </div>
@@ -424,9 +449,9 @@
         const defaultData = {
             title: "🎄 聖誕上海之旅 2025", 
             shops: [
-                { name: "一尺花園（廣富林店）", tag: "古宅花園", address: "松江區廣富林路3088弄3號集賢坊01-03棟", hours: "10:00 - 22:00", transport: "巴士松江98路 / 松江15路 (廣富林路龍源路站) 下車步行5分鐘", icon: "tree", color: "text-green-400" },
-                { name: "wabi cofe（愚園路店）", tag: "日式庭院", address: "長寧區愚園路1327號", hours: "10:30 - 00:00", transport: "地鐵中山公園站 8號出口", icon: "mug-hot", color: "text-yellow-600" },
-                { name: "LCH Café", tag: "復古風", address: "上海市黃浦區南昌路274號-1號", hours: "10:00-18:00 | 10:00-19:00", transport: "地鐵陝西南路站 (1/10/12號線)", icon: "martini-glass-citrus", color: "text-pink-400" }
+                { name: "一尺花園（廣富林店）", type: "Cafe", tag: "古宅花園", address: "松江區廣富林路3088弄3號集賢坊01-03棟", hours: "10:00 - 22:00", transport: "巴士松江98路 / 松江15路 (廣富林路龍源路站) 下車步行5分鐘", color: "text-green-400" },
+                { name: "wabi cofe（愚園路店）", type: "Cafe", tag: "日式庭院", address: "長寧區愚園路1327號", hours: "10:30 - 00:00", transport: "地鐵中山公園站 8號出口", color: "text-yellow-600" },
+                { name: "LCH Café", type: "Cafe", tag: "復古風", address: "上海市黃浦區南昌路274號-1號", hours: "10:00-18:00 | 10:00-19:00", transport: "地鐵陝西南路站 (1/10/12號線)", color: "text-pink-400" }
             ],
             hotel: { name: "上海東錦江希爾頓逸林酒店", engName: "DoubleTree by Hilton Shanghai - Pudong", address: "上海市浦東新區東方路889號", checkIn: "12月23日 (二)", checkOut: "12月26日 (五)", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1000&auto=format&fit=crop" },
             flightOut: { from: "HKG", to: "PVG", date: "2025/12/23 (二)", no: "MU726", dep: "07:40", arr: "10:30", airline: "中國東方航空" },
@@ -463,10 +488,16 @@
                 const showModal = ref(false);
                 const isEditing = ref(false);
                 const editingEventIndex = ref(null);
+                
+                // Shops
                 const showShopModal = ref(false);
+                const showAddShopModal = ref(false);
                 const selectedShop = ref(null);
+                const shopFormData = ref({ name: '', type: 'Cafe', tag: '', address: '', hours: '', transport: '' });
+
                 const sortableList = ref(null);
                 let sortableInstance = null;
+                
                 const isLoading = ref(true);
                 const isUploading = ref(false);
                 
@@ -498,39 +529,6 @@
                     setDoc(doc(db, "trips", "shanghai2025"), dataToSave).catch(e => console.error("Save Error:", e));
                 };
 
-                const handleFileUpload = async (event) => {
-                    const file = event.target.files[0];
-                    if (!file) return;
-                    if (!storage) { alert("Storage not configured."); return; }
-                    isUploading.value = true;
-                    try {
-                        const compressedBlob = await compressImage(file);
-                        const fileName = `images/${Date.now()}_${file.name}`;
-                        const imgRef = storageRef(storage, fileName);
-                        await uploadBytes(imgRef, compressedBlob);
-                        const url = await getDownloadURL(imgRef);
-                        modalData.value.img = url;
-                    } catch (error) { console.error("Upload failed:", error); alert("圖片上傳失敗"); } finally { isUploading.value = false; }
-                };
-
-                const compressImage = (file) => {
-                    return new Promise((resolve, reject) => {
-                        const img = new Image();
-                        img.src = URL.createObjectURL(file);
-                        img.onload = () => {
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            const maxWidth = 800; 
-                            const scaleSize = maxWidth / img.width;
-                            canvas.width = maxWidth;
-                            canvas.height = img.height * scaleSize;
-                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                            canvas.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error("Canvas blob error")); }, 'image/webp', 0.8);
-                        };
-                        img.onerror = (e) => reject(e);
-                    });
-                };
-
                 const getWeatherIcon = (weather) => {
                     switch (weather) {
                         case 'sunny': return 'fa-solid fa-sun text-scheme1-accent';
@@ -542,13 +540,16 @@
                 };
                 
                 const getShopIconColor = (colorClass) => {
-                    if(colorClass.includes('orange')) return 'text-orange-400';
-                    if(colorClass.includes('yellow')) return 'text-yellow-400';
-                    if(colorClass.includes('scheme1-secondary')) return 'text-scheme1-secondary';
-                    if(colorClass.includes('text-green-400')) return 'text-green-400';
-                    if(colorClass.includes('text-pink-400')) return 'text-pink-400';
+                    if(colorClass) return colorClass; // If manually set
                     return 'text-white';
-                }
+                };
+
+                const getShopCategoryIcon = (type) => {
+                    if (type === 'Cafe') return 'fa-mug-hot';
+                    if (type === '餐廳') return 'fa-utensils';
+                    if (type === '零售') return 'fa-bag-shopping';
+                    return 'fa-store';
+                };
 
                 const getShopNameParts = (name) => {
                     const parts = name.split(/[\(（]/);
@@ -569,12 +570,11 @@
                     if (sortableList.value) {
                         sortableInstance = new Sortable(sortableList.value, {
                             animation: 150,
-                            delay: 200, // Long press to drag
+                            delay: 300, // Long press duration
                             delayOnTouchOnly: true, 
                             touchStartThreshold: 5, 
                             ghostClass: 'sortable-ghost',
                             dragClass: 'sortable-drag',
-                            // No handle, entire card is draggable after delay
                             onEnd: (evt) => {
                                 const movedItem = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
                                 myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, movedItem);
@@ -608,6 +608,11 @@
                 const closeModal = () => { showModal.value = false; };
                 const openShopDetails = (shop) => { selectedShop.value = shop; showShopModal.value = true; };
                 const closeShopModal = () => { showShopModal.value = false; setTimeout(() => selectedShop.value = null, 200); };
+                
+                const openAddShopModal = () => {
+                     shopFormData.value = { name: '', type: 'Cafe', tag: '', address: '', hours: '', transport: '' };
+                     showAddShopModal.value = true;
+                };
 
                 const saveEvent = () => {
                     if (!modalData.value.title) return alert('請填寫標題');
@@ -629,14 +634,42 @@
                     }
                 };
 
+                const saveShop = () => {
+                     if (!shopFormData.value.name) return alert('請填寫店名');
+                     
+                     let iconColor = 'text-white';
+                     if (shopFormData.value.type === 'Cafe') iconColor = 'text-yellow-600';
+                     if (shopFormData.value.type === '餐廳') iconColor = 'text-orange-400';
+                     if (shopFormData.value.type === '零售') iconColor = 'text-green-400';
+
+                     const newShop = {
+                         ...shopFormData.value,
+                         icon: '', // Dynamic based on type
+                         color: iconColor
+                     };
+                     
+                     if (!myData.value.shops) myData.value.shops = [];
+                     myData.value.shops.push(newShop);
+                     updateTripData();
+                     showAddShopModal.value = false;
+                };
+
+                const deleteShop = (shop) => {
+                    if(confirm('確定要刪除此店舖嗎？')) {
+                        myData.value.shops = myData.value.shops.filter(s => s !== shop);
+                        updateTripData();
+                        closeShopModal();
+                    }
+                };
+
                 onMounted(() => { initSync(); });
                 Vue.watch(currentTab, (newTab) => { if (newTab === 'schedule') { nextTick(() => initSortable()); } });
                 Vue.watch(currentDayIndex, () => { if (sortableInstance) sortableInstance.destroy(); nextTick(() => initSortable()); });
 
                 return {
-                    currentTab, currentDayIndex, myData, getWeatherIcon, getShopIconColor, getShopNameParts, getSimpleHours, sortableList, showModal, isEditing, modalData,
+                    currentTab, currentDayIndex, myData, getWeatherIcon, getShopIconColor, getShopCategoryIcon, getShopNameParts, getSimpleHours, sortableList, showModal, isEditing, modalData,
                     openAddModal, openEditModal, closeModal, saveEvent, deleteEvent, showShopModal, selectedShop, openShopDetails, closeShopModal,
-                    isLoading, isUploading, handleFileUpload
+                    isLoading, showAddShopModal, openAddShopModal, shopFormData, saveShop, deleteShop
                 };
             }
         }).mount('#app');
