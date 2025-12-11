@@ -440,7 +440,7 @@
 
         createApp({
             setup() {
-                const currentTab = ref('shops'); // 預設顯示店舖頁以查看效果
+                const currentTab = ref('shops'); // Default tab set to shops
                 const currentDayIndex = ref(0);
                 
                 const showModal = ref(false);
@@ -563,26 +563,24 @@
                     return 'text-white';
                 }
 
-                // 輔助函數：處理店名分行 (自動偵測括號)
                 const getShopNameParts = (name) => {
-                    // 支援全形和半形括號
                     const parts = name.split(/[\(（]/);
                     if (parts.length > 1) {
                         return { 
                             main: parts[0], 
-                            sub: '(' + parts[1].replace(/[\)）]/, '') + ')' // 確保括號格式統一
+                            sub: '(' + parts[1].replace(/[\)）]/, '') + ')' 
                         };
                     }
                     return { main: name, sub: '' };
                 };
 
-                // 輔助函數：簡化營業時間顯示 (取第一段時間)
+                // 優化後的 getSimpleHours：過濾掉星期文字
                 const getSimpleHours = (hours) => {
                     if (!hours) return '';
-                    // 如果有 | 分隔，只取第一部分，並簡化文字
+                    // 1. 取出第一段時間 (用 | 分隔)
                     let simple = hours.split('|')[0].trim();
-                    // 移除 "星期一至日" 等前綴，只保留時間數字 (簡單處理)
-                    // 這裡為了保持資訊準確，暫時顯示完整的第一段，或可根據需求用正則提取數字
+                    // 2. 移除 "星期..."、"週..."、"周..." 等前綴，保留 "10am - 10pm" 或 "10:00 - 18:00"
+                    simple = simple.replace(/^(星期|週|周)[一二三四五六日至\s]+/, '').trim();
                     return simple;
                 };
 
@@ -670,8 +668,8 @@
                     myData,
                     getWeatherIcon,
                     getShopIconColor,
-                    getShopNameParts, // 匯出新函數
-                    getSimpleHours,   // 匯出新函數
+                    getShopNameParts, 
+                    getSimpleHours,
                     sortableList,
                     showModal,
                     isEditing,
