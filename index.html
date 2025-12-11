@@ -195,10 +195,11 @@
                         <button v-for="(day, index) in myData.days" :key="index" @click="currentDayIndex = index" 
                             :class="currentDayIndex === index ? 'bg-scheme1-primary/90 text-white shadow-[0_0_15px_rgba(255,126,226,0.6)] border-transparent scale-105' : 'glass-card text-white/80 border-white/20'"
                             class="py-2 rounded-xl flex flex-col items-center justify-center transition-all duration-300 backdrop-blur-sm h-full">
-                            <div class="flex flex-col items-center leading-none text-white w-full">
-                                <span class="text-xs font-bold tracking-wider mb-0.5 opacity-90">DAY {{ index + 1 }}</span>
-                                <span class="text-3xl font-black my-0.5 drop-shadow-sm">{{ day.dayNum }}</span>
-                                <span class="text-[10px] font-bold opacity-80">{{ day.weekday }}</span>
+                            
+                            <div class="flex flex-col items-center justify-center w-full">
+                                <span class="text-[10px] font-bold tracking-widest opacity-90 leading-none mb-0.5">DAY {{ index + 1 }}</span>
+                                <span class="text-2xl font-black leading-none my-0.5 drop-shadow-sm">{{ day.dayNum }}</span>
+                                <span class="text-[10px] font-bold opacity-80 leading-none mt-0.5">{{ day.weekday }}</span>
                             </div>
                         </button>
                     </div>
@@ -215,9 +216,7 @@
                             <div ref="sortableList" class="space-y-3">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
                                      @click="openEditModal(idx)"
-                                     class="relative group cursor-pointer active:cursor-grabbing select-none">
-                                    
-                                    <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
+                                     class="relative group cursor-pointer active:cursor-grabbing select-none"> <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
                                     
                                     <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-primary/40">
                                         
@@ -226,8 +225,8 @@
                                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                                             <div class="absolute bottom-2 left-3 right-3 flex justify-between items-end z-10">
                                                 <div class="flex items-center gap-2">
-                                                    <span class="bg-scheme1-primary text-white font-bold text-sm px-2 py-0.5 rounded shadow-[0_0_10px_#FF7EE2]">{{ item.time }}</span>
-                                                    <div class="flex items-center text-white text-xs gap-1 font-bold" v-if="item.weather">
+                                                    <span class="bg-scheme1-primary text-white font-bold text-sm px-2 py-0.5 rounded shadow-[0_0_10px_#FF7EE2] select-none">{{ item.time }}</span>
+                                                    <div class="flex items-center text-white text-xs gap-1 font-bold select-none" v-if="item.weather">
                                                         <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                                     </div>
                                                 </div>
@@ -235,8 +234,8 @@
                                         </div>
 
                                         <div v-else class="p-3 pb-0 flex justify-between items-center mb-1">
-                                            <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-sm px-2.5 py-0.5 rounded-full border border-scheme1-primary/30 shadow-[0_0_10px_rgba(255,126,226,0.4)]">{{ item.time }}</span>
-                                            <div class="flex items-center text-scheme1-textSub text-xs gap-1.5 font-bold" v-if="item.weather">
+                                            <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-sm px-2.5 py-0.5 rounded-full border border-scheme1-primary/30 shadow-[0_0_10px_rgba(255,126,226,0.4)] select-none">{{ item.time }}</span>
+                                            <div class="flex items-center text-scheme1-textSub text-xs gap-1.5 font-bold select-none" v-if="item.weather">
                                                 <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                             </div>
                                         </div>
@@ -247,9 +246,9 @@
                                             <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2 select-none">{{ item.desc }}</p>
                                             
                                             <div class="flex justify-between items-end mt-0.5">
-                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)]"></i>{{ item.location }}</p>
+                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
                                                 
-                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0">
+                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 select-none">
                                                     <i class="fa-solid fa-diamond-turn-right text-sm"></i>
                                                 </a>
                                             </div>
@@ -258,7 +257,7 @@
                                 </div>
                             </div>
                             
-                            <button @click="openAddModal" class="w-full py-3 mt-4 mb-4 rounded-xl border-2 border-dashed border-scheme1-primary/30 text-scheme1-primary/70 hover:bg-scheme1-primary/10 hover:border-scheme1-primary hover:text-scheme1-primary transition-all font-bold flex items-center justify-center gap-2">
+                            <button @click="openAddModal" class="w-full py-3 mt-4 mb-4 rounded-xl border-2 border-dashed border-scheme1-primary/30 text-scheme1-primary/70 hover:bg-scheme1-primary/10 hover:border-scheme1-primary hover:text-scheme1-primary transition-all font-bold flex items-center justify-center gap-2 select-none">
                                 <i class="fa-solid fa-plus"></i> 新增行程
                             </button>
                         </div>
@@ -501,7 +500,7 @@
                             name: "LCH Café", 
                             tag: "復古風", 
                             address: "上海市黃浦區南昌路274號-1號", 
-                            hours: "10:00-18:00 | 10:00-19:00", // 24h, removed text prefix for cleaner card
+                            hours: "10:00-18:00 | 10:00-19:00", // 24h
                             transport: "地鐵陝西南路站 (1/10/12號線)", 
                             icon: "martini-glass-citrus", 
                             color: "text-pink-400" 
@@ -531,7 +530,7 @@
                     },
                     days: [
                         {
-                            date: "12月23日 (二)", dateShort: "23 DEC", weekday: "(二)", dayNum: "23",
+                            date: "12月23日", dateShort: "23 DEC", weekday: "(二)", dayNum: "23",
                             events: [
                                 { id: 1, time: "10:30", title: "抵達上海浦東 🛬", location: "上海市浦東新區浦東國際機場 T1", desc: "入境手續、領取行李，前往酒店Check-in。", weather: "cloudy", temp: "8°C" },
                                 { id: 2, time: "15:00", title: "浦東美術館 🎨", location: "上海市浦東新區濱江大道2777號", desc: "欣賞建築之美，窗口可直面外灘萬國建築群。", weather: "cloudy", temp: "9°C" },
@@ -539,7 +538,7 @@
                             ]
                         },
                         {
-                            date: "12月24日 (三)", dateShort: "24 DEC", weekday: "(三)", dayNum: "24",
+                            date: "12月24日", dateShort: "24 DEC", weekday: "(三)", dayNum: "24",
                             events: [
                                 { id: 4, time: "10:00", title: "豫園 & 城隍廟 🧧", location: "上海市黃浦區福佑路168號", desc: "江南古典園林與老上海祈福，品嚐南翔小籠包。", weather: "sunny", temp: "9°C" },
                                 { id: 5, time: "14:30", title: "新天地北里 🎄", location: "上海市黃浦區太倉路181號", desc: "平安夜逛街，石庫門建築與現代聖誕裝飾完美融合。", weather: "sunny", temp: "10°C" },
@@ -547,14 +546,14 @@
                             ]
                         },
                         {
-                            date: "12月25日 (四)", dateShort: "25 DEC", weekday: "(四)", dayNum: "25",
+                            date: "12月25日", dateShort: "25 DEC", weekday: "(四)", dayNum: "25",
                             events: [
                                 { id: 7, time: "10:00", title: "朱家角古鎮 🛶", location: "上海市青浦區朱家角古鎮課植園路", desc: "上海威尼斯，乘手搖船遊覽放生橋與古巷(全日行程)。", weather: "sunny", temp: "11°C" },
                                 { id: 8, time: "17:00", title: "返回市區 🚌", location: "上海市黃浦區人民廣場", desc: "搭乘地鐵17號線返回市區休息。", weather: "clear", temp: "7°C" }
                             ]
                         },
                         {
-                            date: "12月26日 (五)", dateShort: "26 DEC", weekday: "(五)", dayNum: "26",
+                            date: "12月26日", dateShort: "26 DEC", weekday: "(五)", dayNum: "26",
                             events: [
                                 { id: 9, time: "10:30", title: "武康路 City Walk 🍂", location: "上海市徐匯區武康路", desc: "打卡武康大樓(淮海中路1850號)，感受法租界梧桐樹下的浪漫。", weather: "cloudy", temp: "8°C" },
                                 { id: 10, time: "14:00", title: "田子坊 🛍️", location: "上海市黃浦區泰康路210號", desc: "穿梭老弄堂，購買特色文創與伴手禮。", weather: "cloudy", temp: "9°C" },
