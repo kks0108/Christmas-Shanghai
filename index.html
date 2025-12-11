@@ -196,10 +196,10 @@
                             :class="currentDayIndex === index ? 'bg-scheme1-primary/90 text-white shadow-[0_0_15px_rgba(255,126,226,0.6)] border-transparent scale-105' : 'glass-card text-white/80 border-white/20'"
                             class="py-2 rounded-xl flex flex-col items-center justify-center transition-all duration-300 backdrop-blur-sm h-full">
                             
-                            <div class="flex flex-col items-center leading-none text-white w-full">
-                                <span class="text-[10px] uppercase tracking-wider font-bold opacity-80 scale-90 mb-0.5">DAY {{ index + 1 }}</span>
+                            <div class="flex flex-col items-center leading-none text-white w-full gap-0.5">
+                                <span class="text-xs uppercase tracking-wider font-bold opacity-80 mb-0.5">DAY {{ index + 1 }}</span>
                                 <span class="text-3xl font-black drop-shadow-sm -my-1">{{ day.dayNum }}</span>
-                                <span class="text-[10px] font-bold opacity-80 scale-90 mt-0.5">{{ day.weekday }}</span>
+                                <span class="text-xs font-bold opacity-80 mt-0.5">{{ day.weekday }}</span>
                             </div>
                         </button>
                     </div>
@@ -216,7 +216,9 @@
                             <div ref="sortableList" class="space-y-3">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
                                      @click="openEditModal(idx)"
-                                     class="relative group cursor-pointer active:cursor-grabbing select-none"> <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
+                                     class="relative group cursor-pointer active:cursor-grabbing select-none">
+                                    
+                                    <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
                                     
                                     <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-primary/40">
                                         
@@ -459,7 +461,7 @@
 
         createApp({
             setup() {
-                const currentTab = ref('flight'); 
+                const currentTab = ref('flight'); // Default to flight tab
                 const currentDayIndex = ref(0);
                 
                 const showModal = ref(false);
@@ -533,6 +535,7 @@
                             date: "12月23日 (二)", dateShort: "23 DEC", weekday: "(二)", dayNum: "23",
                             events: [
                                 { id: 1, time: "10:30", title: "抵達上海浦東 🛬", location: "上海市浦東新區浦東國際機場 T1", desc: "入境手續、領取行李，前往酒店Check-in。", weather: "cloudy", temp: "8°C" },
+                                { id: 101, time: "12:30", title: "辦理入住 🏨", location: "上海市浦東新區東方路889號", desc: "前往東錦江希爾頓逸林酒店 Check-in / 寄存行李。", icon: "hotel" },
                                 { id: 2, time: "15:00", title: "浦東美術館 🎨", location: "上海市浦東新區濱江大道2777號", desc: "欣賞建築之美，窗口可直面外灘萬國建築群。", weather: "cloudy", temp: "9°C" },
                                 { id: 3, time: "18:00", title: "十六鋪碼頭 🌃", location: "上海市黃浦區中山東二路551號", desc: "漫步江邊或搭乘遊船，欣賞黃浦江璀璨夜景。", weather: "clear", temp: "5°C" }
                             ]
@@ -555,6 +558,7 @@
                         {
                             date: "12月26日 (五)", dateShort: "26 DEC", weekday: "(五)", dayNum: "26",
                             events: [
+                                { id: 102, time: "10:00", title: "辦理退房 👋", location: "上海市浦東新區東方路889號", desc: "Check-out 並寄存行李，開始最後一天行程。", icon: "suitcase" },
                                 { id: 9, time: "10:30", title: "武康路 City Walk 🍂", location: "上海市徐匯區武康路", desc: "打卡武康大樓(淮海中路1850號)，感受法租界梧桐樹下的浪漫。", weather: "cloudy", temp: "8°C" },
                                 { id: 10, time: "14:00", title: "田子坊 🛍️", location: "上海市黃浦區泰康路210號", desc: "穿梭老弄堂，購買特色文創與伴手禮。", weather: "cloudy", temp: "9°C" },
                                 { id: 11, time: "17:30", title: "前往機場 🚕", location: "上海市浦東新區浦東國際機場 T1", desc: "預留時間前往機場，準備搭乘21:20航班。", weather: "cloudy", temp: "7°C" }
@@ -604,7 +608,7 @@
                     if (sortableList.value) {
                         sortableInstance = new Sortable(sortableList.value, {
                             animation: 150,
-                            delay: 250, 
+                            delay: 150, // Updated delay to 150ms for easier drag
                             delayOnTouchOnly: true, 
                             touchStartThreshold: 5, 
                             ghostClass: 'sortable-ghost',
