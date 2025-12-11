@@ -440,7 +440,7 @@
 
         createApp({
             setup() {
-                const currentTab = ref('shops'); // Default tab set to shops
+                const currentTab = ref('flight'); // 預設顯示航班頁
                 const currentDayIndex = ref(0);
                 
                 const showModal = ref(false);
@@ -577,9 +577,8 @@
                 // 優化後的 getSimpleHours：過濾掉星期文字
                 const getSimpleHours = (hours) => {
                     if (!hours) return '';
-                    // 1. 取出第一段時間 (用 | 分隔)
                     let simple = hours.split('|')[0].trim();
-                    // 2. 移除 "星期..."、"週..."、"周..." 等前綴，保留 "10am - 10pm" 或 "10:00 - 18:00"
+                    // 移除常見的中文前綴
                     simple = simple.replace(/^(星期|週|周)[一二三四五六日至\s]+/, '').trim();
                     return simple;
                 };
