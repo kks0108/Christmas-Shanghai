@@ -8,20 +8,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Noto+Sans+SC:wght@300;400;700;900&family=Noto+Sans+TC:wght@300;400;700;900&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Noto+Sans+SC:wght@400;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Caveat:wght@700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        // 全新鮮明霓虹配色
-                        p: { 
-                            white: '#FFFFFF',    // 純白文字，對比最強
-                            apricot: '#FFC857',  // 鮮明金杏色 (替代原本的 beige)
-                            purple: '#E056FD',   // 鮮明霓虹紫 (替代原本的 mauve)
-                            midBlue: '#1E40AF',  // 更飽和的深藍
-                            darkBlue: '#0F172A', // 午夜深藍背景
+                        scheme1: { 
+                            neonPink: '#FF7EE2',   
+                            neonCyan: '#22D3EE',   
+                            neonGold: '#FDE047',   
+                            deepBlue: '#0F172A',
+                            textMain: '#FFFFFF',
+                            textSub: '#E2E8F0',
                         }
                     },
                     fontFamily: { 
@@ -40,12 +40,13 @@
             height: 100dvh;
             overflow: hidden;
             overscroll-behavior: none;
-            background-color: #0F172A; /* 使用新的深背景色 */
+            background-color: #0F172A;
             color: #FFFFFF;
         }
         
         #app {
             height: 100%;
+            height: 100dvh;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -53,194 +54,212 @@
 
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        .animate-fade-in { animation: fadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        .animate-spin-slow { animation: spin 12s linear infinite; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .animate-spin-slow { animation: spin 10s linear infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* 深色玻璃擬態 - 邊框色更新 */
         .glass-card {
-            background: rgba(30, 64, 175, 0.3); /* 基於 midBlue 的半透 */
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 200, 87, 0.2); /* 鮮明杏色微光邊框 */
-            box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.5);
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(12px);            
+            border: 1px solid rgba(255, 255, 255, 0.25); 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
         
-        /* 導航列 - 頂部邊框與光暈更新 */
         .glass-nav {
+            background: rgba(15, 23, 42, 0.6); 
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-deco {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 15px rgba(255, 126, 226, 0.5);
+        }
+
+        .glass-modal {
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(224, 86, 253, 0.3); /* 鮮明紫色邊框 */
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.7);
         }
 
-        /* 裝飾圓圈 - 顏色更新 */
-        .glass-deco {
-            background: rgba(224, 86, 253, 0.2);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 200, 87, 0.3);
-            box-shadow: 0 0 15px rgba(224, 86, 253, 0.4);
-        }
-        
-        .glass-modal {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(15px);
-        }
+        .text-glow { text-shadow: 0 0 8px rgba(255, 255, 255, 0.9); }
+        .text-glow-pink { text-shadow: 0 0 10px rgba(255, 126, 226, 0.9); }
+        .text-glow-gold { text-shadow: 0 0 10px rgba(253, 224, 71, 0.9); }
+        .text-glow-cyan { text-shadow: 0 0 10px rgba(34, 211, 238, 0.9); }
 
-        /* 文字發光 - 顏色更新 */
-        .text-glow { text-shadow: 0 0 12px rgba(255, 255, 255, 0.7); }
-        .text-glow-purple { text-shadow: 0 0 15px rgba(224, 86, 253, 0.8); } /* 更強烈的紫色光暈 */
-        
-        /* 拖曳樣式 */
+        /* --- 修改了這裡的背景設定 --- */
+        .aurora-bg {
+            background-color: #0F172A;
+            /* 使用 Unsplash 的上海圖片，並疊加一個藍紫色的半透明漸變層以確保文字可讀性 */
+            background-image: 
+                linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(58, 13, 99, 0.7)),
+                url('https://images.unsplash.com/photo-1506353266980-73cbe71050dc?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        /* --------------------------- */
+
         .sortable-ghost { opacity: 0.3; }
-        .sortable-drag { cursor: grabbing; background: rgba(224, 86, 253, 0.3); }
+        .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
-    <div id="app" class="font-sans font-medium text-p-white">
+    <div id="app" class="font-sans font-medium text-scheme1-textMain">
         <div class="w-full max-w-md h-full relative shadow-2xl flex flex-col overflow-hidden bg-transparent">
             
-            <div class="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-p-darkBlue to-p-midBlue">
-                <div class="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] bg-p-purple/20 rounded-full blur-[100px]"></div>
-                <div class="absolute bottom-[-10%] left-[-20%] w-[350px] h-[350px] bg-p-midBlue/40 rounded-full blur-[100px]"></div>
+            <div class="absolute inset-0 z-0 aurora-bg pointer-events-none">
+                <div class="absolute top-[-10%] right-[-15%] w-[400px] h-[400px] bg-scheme1-neonPink/20 rounded-full blur-[80px]"></div>
+                <div class="absolute bottom-[-10%] left-[-15%] w-[350px] h-[350px] bg-scheme1-neonCyan/15 rounded-full blur-[80px]"></div>
+                <div class="absolute top-[30%] left-[20%] w-[150px] h-[150px] bg-purple-500/20 rounded-full blur-[60px]"></div>
             </div>
 
-            <header class="bg-transparent p-3 pt-4 z-10 flex justify-between items-start relative flex-shrink-0">
-                <div class="relative z-10 pl-2 flex flex-col justify-center w-full">
-                    <h2 class="text-[10px] tracking-widest opacity-90 text-p-apricot mb-0.5 font-deco font-bold rotate-1 drop-shadow-md leading-none">Wayne & Chloe | Shanghai 2025</h2>
-                    <h1 class="text-3xl font-deco tracking-tight text-white drop-shadow-lg font-bold mt-0.5 text-glow">
-                        <span class="inline-block filter drop-shadow-none">🎄</span> 聖誕上海之旅 <span class="inline-block filter drop-shadow-none">✨</span>
+            <header class="bg-transparent text-white p-2 pt-7 shadow-none z-10 flex justify-between items-center relative flex-shrink-0">
+                <div class="relative z-10 flex flex-col justify-center h-full w-full pl-2">
+                    <h2 class="text-lg tracking-normal opacity-100 text-scheme1-neonPink mb-0 font-deco font-black rotate-1 drop-shadow-md leading-none text-glow-pink">Wayne & Chloe | Shanghai 2025</h2>
+                    <h1 class="text-xl font-deco tracking-tight text-white drop-shadow-lg font-bold mt-1 text-glow">
+                        🎄 聖誕上海之旅 ✨
                     </h1>
                 </div>
-                <div class="w-9 h-9 glass-deco rounded-full flex items-center justify-center shadow-inner flex-shrink-0 mr-2">
-                    <i class="fa-solid fa-plane-up text-p-apricot animate-bounce text-xs"></i>
+                <div class="w-9 h-9 glass-deco rounded-full flex items-center justify-center shadow-inner flex-shrink-0 mr-2 border border-white/30">
+                    <i class="fa-solid fa-plane-up text-white animate-bounce text-xs drop-shadow-md"></i>
                 </div>
             </header>
 
-            <main class="flex-1 overflow-y-auto scrollbar-hide p-5 pb-24 space-y-6 relative z-10">
+            <main class="flex-1 overflow-y-auto scrollbar-hide p-4 pb-24 space-y-5 relative z-10">
                 
-                <div v-if="currentTab === 'flight'" class="animate-fade-in space-y-5">
-                    <h3 class="text-xl font-bold text-p-white tracking-wide pl-1 border-l-4 border-p-purple text-glow">航班資訊</h3>
+                <div v-if="currentTab === 'flight'" class="animate-fade-in space-y-4">
+                    <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-neonPink text-white text-glow">✈️ 航班資訊</h3>
                     
-                    <div class="glass-card rounded-3xl p-5 relative overflow-hidden group">
-                        <div class="absolute top-4 left-4 bg-p-purple text-white text-[10px] px-2 py-0.5 rounded-full font-bold tracking-widest shadow-md shadow-p-purple/30">去程 OUTBOUND</div>
-                        <div class="mt-8 flex justify-between items-center mb-6">
-                            <div class="text-center">
-                                <div class="text-4xl font-black text-p-white font-heiti tracking-tighter text-glow">{{ myData.flightOut.from }}</div>
-                                <div class="text-xs text-p-apricot mt-1">香港 T1</div>
-                            </div>
-                            <div class="flex-1 px-4 flex flex-col items-center">
-                                <div class="text-[10px] text-p-purple mb-1">{{ myData.flightOut.airline }}</div>
-                                <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-p-apricot/50 to-transparent relative">
-                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-p-purple rounded-full shadow-[0_0_8px_#E056FD]"></div>
-                                </div>
-                                <div class="text-[10px] text-p-apricot mt-1">{{ myData.flightOut.no }}</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-4xl font-black text-p-white font-heiti tracking-tighter text-glow">{{ myData.flightOut.to }}</div>
-                                <div class="text-xs text-p-apricot mt-1">浦東 T1</div>
-                            </div>
+                    <div class="glass-card rounded-2xl p-4 relative overflow-hidden group">
+                        <div class="absolute top-3 left-3 bg-scheme1-neonPink/20 border border-scheme1-neonPink/80 text-scheme1-neonPink text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest shadow-[0_0_15px_rgba(255,126,226,0.4)]">去程 OUTBOUND</div>
+                        <div class="mt-8 flex justify-between items-center mb-4">
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">HKG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">香港 T1</div></div>
+                            <div class="flex-1 px-2 text-center flex flex-col items-center"><div class="text-xs text-scheme1-neonPink font-bold">{{ myData.flightOut.airline }}</div><i class="fa-solid fa-plane text-white text-xl block my-1 drop-shadow-md"></i><div class="border-b-2 border-dotted border-white/40 w-full h-1"></div><div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.flightOut.no }}</div></div>
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">PVG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">上海浦東 T1</div></div>
                         </div>
-                        <div class="flex justify-between text-sm pt-4 border-t border-p-apricot/10">
-                            <div><span class="text-p-apricot/70 text-xs mr-2">Dep</span><span class="font-bold text-p-purple">{{ myData.flightOut.dep }}</span></div>
-                            <div><span class="text-p-apricot/70 text-xs mr-2">Arr</span><span class="font-bold text-p-purple">{{ myData.flightOut.arr }}</span></div>
+                        <div class="bg-white/5 rounded-xl p-3 flex justify-between items-start text-sm border border-white/20">
+                            <div><span class="text-xs text-scheme1-textSub/80 font-bold block">Date</span>{{ myData.flightOut.date }}</div>
+                            <div class="flex gap-4">
+                                <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Dep</span><span class="font-bold text-scheme1-neonPink text-xl">{{ myData.flightOut.dep }}</span></div>
+                                <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Arr</span><span class="font-bold text-scheme1-neonPink text-xl">{{ myData.flightOut.arr }}</span></div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-3xl p-5 relative overflow-hidden group">
-                        <div class="absolute top-4 left-4 bg-p-apricot text-p-darkBlue text-[10px] px-2 py-0.5 rounded-full font-bold tracking-widest shadow-md shadow-p-apricot/30">回程 INBOUND</div>
-                        <div class="mt-8 flex justify-between items-center mb-6">
-                            <div class="text-center">
-                                <div class="text-4xl font-black text-p-white font-heiti tracking-tighter text-glow">{{ myData.flightIn.from }}</div>
-                                <div class="text-xs text-p-apricot mt-1">浦東 T1</div>
-                            </div>
-                            <div class="flex-1 px-4 flex flex-col items-center">
-                                <div class="text-[10px] text-p-apricot mb-1">{{ myData.flightIn.airline }}</div>
-                                <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-p-apricot/50 to-transparent relative">
-                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-p-apricot rounded-full shadow-[0_0_8px_#FFC857]"></div>
-                                </div>
-                                <div class="text-[10px] text-p-apricot mt-1">{{ myData.flightIn.no }}</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-4xl font-black text-p-white font-heiti tracking-tighter text-glow">{{ myData.flightIn.to }}</div>
-                                <div class="text-xs text-p-apricot mt-1">香港 T1</div>
+                    <div class="glass-card rounded-2xl p-4 relative overflow-hidden group">
+                        <div class="absolute top-3 left-3 bg-scheme1-neonCyan/20 border border-scheme1-neonCyan/80 text-scheme1-neonCyan text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.4)]">回程 INBOUND</div>
+                        <div class="mt-8 flex justify-between items-center mb-4">
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">PVG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">上海浦東 T1</div></div>
+                            <div class="flex-1 px-2 text-center flex flex-col items-center"><div class="text-xs text-scheme1-neonCyan font-bold">{{ myData.flightIn.airline }}</div><i class="fa-solid fa-plane text-white text-xl block my-1 rotate-180 drop-shadow-md"></i><div class="border-b-2 border-dotted border-white/40 w-full h-1"></div><div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.flightIn.no }}</div></div>
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">HKG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">香港 T1</div></div>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-3 flex justify-between items-start text-sm border border-white/20">
+                            <div><span class="text-xs text-scheme1-textSub/80 font-bold block">Date</span>{{ myData.flightIn.date }}</div>
+                            <div class="flex gap-4">
+                                <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Dep</span><span class="font-bold text-scheme1-neonCyan text-xl">{{ myData.flightIn.dep }}</span></div>
+                                <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Arr</span><span class="font-bold text-scheme1-neonCyan text-xl">{{ myData.flightIn.arr }}</span><span class="text-[10px] text-scheme1-neonPink block mt-0.5 font-bold text-glow-pink">+1 Day</span></div>
                             </div>
                         </div>
-                        <div class="flex justify-between text-sm pt-4 border-t border-p-apricot/10">
-                            <div><span class="text-p-apricot/70 text-xs mr-2">Dep</span><span class="font-bold text-p-white">{{ myData.flightIn.dep }}</span></div>
-                            <div><span class="text-p-apricot/70 text-xs mr-2">Arr</span><span class="font-bold text-p-white">{{ myData.flightIn.arr }}</span></div>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-4">
+                        <h4 class="text-base font-bold text-white mb-3 flex items-center text-glow"><i class="fa-solid fa-suitcase-rolling mr-2 text-scheme1-neonGold"></i> 行李限額</h4>
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-suitcase text-scheme1-neonPink text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">託運行李</span><span class="text-[10px] bg-scheme1-neonPink/20 text-scheme1-neonPink border border-scheme1-neonPink/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold"><i class="fa-solid fa-weight-scale text-[10px] mr-1"></i>23kg <span class="mx-1 text-white/30">|</span> 158cm</div>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-briefcase text-scheme1-neonCyan text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">手提行李</span><span class="text-[10px] bg-scheme1-neonCyan/20 text-scheme1-neonCyan border border-scheme1-neonCyan/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">8kg <span class="mx-1 text-white/30">|</span> 20x40x55cm</div>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-bag-shopping text-scheme1-neonGold text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">隨身物品</span><span class="text-[10px] bg-scheme1-neonGold/20 text-scheme1-neonGold border border-scheme1-neonGold/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">小型手袋 / 筆電包</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div v-if="currentTab === 'schedule'" class="animate-fade-in space-y-6">
-                    <div class="flex overflow-x-auto space-x-3 pb-2 scrollbar-hide px-1">
+                <div v-if="currentTab === 'schedule'" class="animate-fade-in space-y-4">
+                    
+                    <div class="flex overflow-x-auto space-x-3 pb-1 scrollbar-hide px-1">
                         <button v-for="(day, index) in myData.days" :key="index" @click="currentDayIndex = index" 
-                            :class="currentDayIndex === index ? 'bg-p-purple text-white shadow-lg shadow-p-purple/40 border-transparent' : 'glass-card text-p-apricot border-p-apricot/20'"
-                            class="flex-shrink-0 px-5 py-3 rounded-2xl flex flex-col items-center min-w-[70px] transition-all duration-300">
-                            <span class="text-[10px] uppercase tracking-wider font-bold mb-0.5">Day {{ index + 1 }}</span>
-                            <span class="font-black text-xl leading-none font-heiti">{{ day.dateShort }}</span>
+                            :class="currentDayIndex === index ? 'bg-scheme1-neonPink text-white shadow-[0_0_15px_rgba(255,126,226,0.6)] border-transparent scale-105' : 'glass-card text-scheme1-textSub border-white/20'"
+                            class="flex-shrink-0 px-5 py-2.5 rounded-xl flex flex-col items-center min-w-[75px] transition-all duration-300 backdrop-blur-sm">
+                            <span class="text-xs uppercase tracking-wider font-bold">Day {{ index + 1 }}</span>
+                            <span class="font-black text-xl leading-tight">{{ day.dateShort }}</span>
                         </button>
                     </div>
 
                     <div>
-                        <div class="flex items-center justify-between mb-5 px-1">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-p-purple/20 flex items-center justify-center text-p-purple border border-p-purple/30">
-                                    <i class="fa-regular fa-calendar"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-p-white text-glow">{{ myData.days[currentDayIndex].date }}</h3>
-                            </div>
-                            <span class="text-[10px] text-p-apricot/50">長按拖曳排序</span>
-                        </div>
+                        <h3 class="font-bold text-lg mb-4 text-white flex items-center justify-between opacity-90 pl-1 text-glow">
+                            <div><span class="text-scheme1-neonPink mr-2"><i class="fa-solid fa-calendar-day"></i></span>{{ myData.days[currentDayIndex].date }}</div>
+                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-arrows-up-down mr-1"></i>長按拖曳</span>
+                        </h3>
                         
-                        <div class="relative pl-2">
-                            <div class="absolute left-[3.5px] top-2 bottom-0 w-[1px] bg-p-apricot/20 rounded-full"></div>
+                        <div class="relative pl-4">
+                            <div class="absolute left-[3.5px] top-2 bottom-0 w-[2px] bg-white/20 rounded-full"></div>
                             
-                            <div ref="sortableList" class="space-y-4">
+                            <div ref="sortableList" class="space-y-3">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
                                      @click="openEditModal(idx)"
                                      class="relative group cursor-pointer active:cursor-grabbing">
                                     
-                                    <div class="absolute -left-[17px] top-4 w-3 h-3 bg-p-darkBlue border-[3px] border-p-purple rounded-full z-10 shadow-sm shadow-p-purple/50"></div>
+                                    <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-deepBlue border-[3px] border-scheme1-neonPink rounded-full z-10 shadow-[0_0_10px_rgba(255,126,226,0.5)]"></div>
                                     
-                                    <div class="glass-card rounded-2xl p-0 overflow-hidden group hover:border-p-purple/50 transition-all duration-300">
+                                    <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-neonPink/40">
                                         
-                                        <div v-if="item.img" class="h-24 w-full relative overflow-hidden">
+                                        <div v-if="item.img" class="h-20 w-full relative overflow-hidden">
                                             <img :src="item.img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                            <div class="absolute inset-0 bg-gradient-to-t from-p-darkBlue/90 via-transparent to-transparent"></div>
-                                            <div class="absolute bottom-2 left-3 flex items-center gap-2 z-10">
-                                                <span class="bg-p-purple text-white font-bold text-[10px] px-2 py-0.5 rounded shadow-md shadow-p-purple/30">{{ item.time }}</span>
-                                                <div class="flex items-center text-white text-[10px] gap-1 font-bold" v-if="item.weather">
-                                                    <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
+                                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                                            <div class="absolute bottom-1.5 left-2.5 right-3 flex justify-between items-end z-10">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="bg-scheme1-neonPink text-scheme1-deepBlue font-bold text-[10px] px-1.5 py-0.5 rounded shadow">{{ item.time }}</span>
+                                                    <div class="flex items-center text-white text-[10px] gap-1 font-bold" v-if="item.weather">
+                                                        <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div v-else class="p-4 pb-0 flex justify-between items-center mb-1">
-                                            <span class="bg-p-purple/20 text-p-purple font-bold text-[10px] px-2 py-0.5 rounded-full border border-p-purple/30">{{ item.time }}</span>
-                                            <div class="flex items-center text-p-apricot/70 text-[10px] gap-1.5" v-if="item.weather">
+                                        <div v-else class="p-2.5 pb-0 flex justify-between items-center mb-1">
+                                            <span class="bg-scheme1-neonPink/20 text-scheme1-neonPink font-bold text-[10px] px-2 py-0.5 rounded-full border border-scheme1-neonPink/30">{{ item.time }}</span>
+                                            <div class="flex items-center text-scheme1-textSub text-[10px] gap-1.5 font-bold" v-if="item.weather">
                                                 <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                             </div>
                                         </div>
                                         
-                                        <div class="p-4 pt-2 relative">
-                                            <h4 class="font-bold text-lg text-p-white mb-1 leading-tight">{{ item.title }}</h4>
-                                            <div class="flex items-center text-xs text-p-purple mb-2">
-                                                <i class="fa-solid fa-location-dot mr-1.5"></i>{{ item.location }}
-                                            </div>
-                                            <p class="text-sm text-p-apricot/80 font-light leading-relaxed line-clamp-2">{{ item.desc }}</p>
+                                        <div class="p-2.5 pt-1.5 relative">
+                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md">{{ item.title }}</h4>
                                             
-                                            <a :href="'https://www.google.com/maps/search/?api=1&query=' + (item.addr || item.location)" target="_blank" @click.stop class="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-p-midBlue/50 flex items-center justify-center text-p-purple hover:text-white hover:bg-p-purple transition-all border border-p-apricot/20 shadow-sm shadow-p-purple/20">
-                                                <i class="fa-solid fa-diamond-turn-right text-xs"></i>
-                                            </a>
+                                            <p class="text-xs text-scheme1-textSub/90 mb-1 leading-snug font-bold line-clamp-2">{{ item.desc }}</p>
+                                            
+                                            <div class="flex justify-between items-end mt-1">
+                                                <p v-if="item.addr" class="text-[10px] text-scheme1-neonCyan flex items-center truncate max-w-[65%]"><i class="fa-solid fa-location-dot mr-1"></i>{{ item.addr }}</p>
+                                                
+                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + (item.addr || item.location)" target="_blank" @click.stop class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-scheme1-neonCyan hover:bg-scheme1-neonCyan hover:text-white transition-colors shadow-sm border border-white/10">
+                                                    <i class="fa-solid fa-diamond-turn-right text-[10px]"></i>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <button @click="openAddModal" class="w-full py-3 mt-6 rounded-xl border border-dashed border-p-purple/40 text-p-purple/70 hover:bg-p-purple/10 hover:text-p-purple hover:border-p-purple transition-all font-bold flex items-center justify-center gap-2">
+                            <button @click="openAddModal" class="w-full py-3 mt-4 mb-4 rounded-xl border-2 border-dashed border-scheme1-neonPink/30 text-scheme1-neonPink/70 hover:bg-scheme1-neonPink/10 hover:border-scheme1-neonPink hover:text-scheme1-neonPink transition-all font-bold flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-plus"></i> 新增行程
                             </button>
                         </div>
@@ -248,59 +267,81 @@
                 </div>
 
                 <div v-if="currentTab === 'map'" class="animate-fade-in h-full flex flex-col items-center justify-center pt-10 pb-20">
-                    <div class="glass-card w-40 h-40 rounded-full flex items-center justify-center mb-8 border border-p-purple/30 shadow-[0_0_40px_rgba(224,86,253,0.3)]">
-                        <i class="fa-solid fa-map-location-dot text-6xl text-p-purple drop-shadow-[0_0_10px_rgba(224,86,253,0.5)]"></i>
+                    <div class="glass-card p-6 rounded-3xl mb-6 animate-bounce relative backdrop-blur-xl border border-scheme1-neonPink/40 shadow-[0_0_30px_rgba(255,126,226,0.3)]">
+                         <div class="absolute inset-0 bg-scheme1-neonPink/10 rounded-3xl blur-xl -z-10"></div>
+                        <i class="fa-solid fa-map-location-dot text-7xl text-scheme1-neonPink drop-shadow-[0_0_15px_rgba(255,126,226,0.6)]"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-p-white mb-3 text-glow">探索地圖</h3>
-                    <p class="text-p-apricot text-sm text-center font-light px-10">點擊行程卡片上的地點即可開啟導航</p>
+                    <h3 class="font-bold text-2xl text-white mb-2 drop-shadow-sm text-glow">🗺️ 探索上海</h3>
+                    <p class="text-scheme1-textSub text-base text-center leading-relaxed font-bold">點擊行程中的地點<br>開啟 Google Maps 導航</p>
                 </div>
 
-                <div v-if="currentTab === 'shops'" class="animate-fade-in space-y-4">
-                    <h3 class="text-xl font-bold text-p-white pl-1 border-l-4 border-p-purple text-glow">精選店舖</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div v-for="(shop, idx) in myData.shops" :key="idx" class="glass-card rounded-2xl p-4 flex flex-col items-center text-center gap-3 group hover:-translate-y-1 transition-transform duration-300">
-                            <div class="w-12 h-12 rounded-full flex items-center justify-center text-xl mb-1 shadow-lg" :class="idx % 2 === 0 ? 'bg-p-purple/20 text-p-purple border border-p-purple/30 shadow-p-purple/20' : 'bg-p-apricot/20 text-p-apricot border border-p-apricot/30 shadow-p-apricot/20'">
+                <div v-if="currentTab === 'shops'" class="animate-fade-in">
+                    <h3 class="font-bold text-xl mb-4 pl-3 border-l-4 border-scheme1-neonPink text-white opacity-90 text-glow">🛍️ 必逛店舖 & 美食</h3>
+                    <div class="space-y-4">
+                        <div v-for="(shop, idx) in myData.shops" :key="idx" class="glass-card rounded-2xl p-4 flex items-center relative overflow-hidden group hover:border-scheme1-neonPink/50 transition-colors">
+                            <div :class="shop.color" class="w-12 h-12 rounded-full bg-white/5 border border-white/20 flex items-center justify-center flex-shrink-0 text-lg group-hover:scale-110 transition-transform shadow-inner">
                                 <i :class="['fa-solid', shop.icon]"></i>
                             </div>
-                            <div>
-                                <h4 class="font-bold text-p-white text-sm mb-1">{{ shop.name }}</h4>
-                                <div class="text-[10px] text-p-apricot/70 border border-p-apricot/20 rounded-full px-2 py-0.5 inline-block">{{ shop.area }}</div>
+                            <div class="flex-1 ml-4 mr-2">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h4 class="font-bold text-white text-lg drop-shadow-sm">{{ shop.name }}</h4>
+                                    <span v-if="shop.tag" class="text-[10px] bg-scheme1-neonPink/10 text-scheme1-neonPink px-1.5 py-0.5 rounded border border-scheme1-neonPink/20 font-bold">{{ shop.tag }}</span>
+                                </div>
+                                <div class="flex items-center text-xs text-scheme1-textSub gap-2 font-bold">
+                                    <span><i class="fa-solid fa-location-dot text-[10px] mr-1"></i>{{ shop.area }}</span>
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white/30"></span>
+                                    <span>{{ shop.type }}</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end justify-center">
+                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + shop.name" target="_blank" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-scheme1-neonPink hover:bg-scheme1-neonPink hover:text-white transition-colors shadow-sm border border-white/10">
+                                    <i class="fa-solid fa-diamond-turn-right text-sm"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div v-if="currentTab === 'hotel'" class="animate-fade-in space-y-5">
-                    <h3 class="text-xl font-bold text-p-white pl-1 border-l-4 border-p-apricot text-glow">住宿資訊</h3>
-                    
-                    <div class="glass-card rounded-3xl overflow-hidden group">
-                        <div class="h-56 relative">
-                            <img :src="myData.hotel.image" class="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-t from-p-midBlue via-transparent to-transparent"></div>
-                            
-                            <div class="absolute bottom-4 left-4 right-4">
-                                <div class="flex gap-1 mb-2">
-                                    <i class="fa-solid fa-star text-xs text-p-apricot"></i>
-                                    <i class="fa-solid fa-star text-xs text-p-apricot"></i>
-                                    <i class="fa-solid fa-star text-xs text-p-apricot"></i>
-                                    <i class="fa-solid fa-star text-xs text-p-apricot"></i>
+                <div v-if="currentTab === 'hotel'" class="animate-fade-in space-y-4">
+                    <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-neonCyan text-white opacity-90 text-glow">🏨 住宿資訊</h3>
+                    <div class="glass-card rounded-2xl overflow-hidden">
+                        <div class="h-48 relative flex items-end overflow-hidden group">
+                            <img :src="myData.hotel.image" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70" alt="Hotel Room">
+                            <div class="absolute inset-0 bg-gradient-to-t from-scheme1-deepBlue via-scheme1-deepBlue/40 to-transparent"></div>
+                            <div class="relative z-10 p-5 w-full text-white">
+                                <div class="absolute top-4 right-4 bg-scheme1-neonPink/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full shadow-[0_0_15px_rgba(255,126,226,0.6)] border border-white/20">
+                                    4晚 ✨
                                 </div>
-                                <h2 class="text-2xl font-bold text-p-white mb-1 shadow-sm text-glow">{{ myData.hotel.name }}</h2>
-                                <p class="text-xs text-p-apricot flex items-center"><i class="fa-solid fa-location-dot mr-1"></i>{{ myData.hotel.address }}</p>
+                                <h2 class="text-2xl font-black leading-tight mb-1 text-white shadow-sm text-glow">{{ myData.hotel.name }}</h2>
+                                <p class="text-sm text-white/90 font-bold truncate">{{ myData.hotel.engName }}</p>
                             </div>
                         </div>
-                        
-                        <div class="p-5 flex justify-between text-center border-t border-p-apricot/10">
-                            <div>
-                                <div class="text-xs text-p-apricot/60 uppercase tracking-widest mb-1">Check-in</div>
-                                <div class="text-xl font-bold text-p-purple text-glow-purple">14:00</div>
-                                <div class="text-[10px] text-p-apricot mt-1">{{ myData.hotel.checkIn }}</div>
+                        <div class="p-5">
+                            <div class="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
+                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-dumbbell mr-1"></i>健身房</span>
+                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-person-swimming mr-1"></i>恆溫泳池</span>
+                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-wifi mr-1"></i>免費WiFi</span>
                             </div>
-                            <div class="w-[1px] bg-p-apricot/20"></div>
-                            <div>
-                                <div class="text-xs text-p-apricot/60 uppercase tracking-widest mb-1">Check-out</div>
-                                <div class="text-xl font-bold text-p-white text-glow">12:00</div>
-                                <div class="text-[10px] text-p-apricot mt-1">{{ myData.hotel.checkOut }}</div>
+                            <div class="bg-white/5 rounded-xl p-3 mb-4 flex items-start border border-white/10">
+                                <i class="fa-solid fa-location-dot text-scheme1-neonCyan mt-1 mr-2.5 text-lg drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]"></i>
+                                <div class="flex-1">
+                                    <p class="text-base text-white font-bold mb-1 leading-snug">{{ myData.hotel.address }}</p>
+                                    <a :href="'https://www.google.com/maps/search/?api=1&query=' + myData.hotel.name" target="_blank" class="text-xs text-scheme1-neonPink font-bold flex items-center gap-1 hover:underline">
+                                        開啟 Google Maps <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 text-center">
+                                <div class="bg-white/5 rounded-lg p-3 border border-white/10">
+                                    <div class="text-xs text-scheme1-textSub mb-1 uppercase tracking-wide font-black">Check-in</div>
+                                    <div class="font-bold text-scheme1-neonPink text-xl text-glow-pink">14:00</div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.hotel.checkIn }}</div>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-3 border border-white/10">
+                                    <div class="text-xs text-scheme1-textSub mb-1 uppercase tracking-wide font-black">Check-out</div>
+                                    <div class="font-bold text-scheme1-neonCyan text-xl text-glow-cyan">12:00</div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.hotel.checkOut }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -308,69 +349,58 @@
 
             </main>
 
-            <nav class="glass-nav h-20 px-6 flex justify-between items-center z-20 rounded-t-[2.5rem] pb-2 relative flex-shrink-0">
-                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-p-purple scale-110 drop-shadow-[0_0_8px_rgba(224,86,253,0.6)]' : 'text-p-apricot/50 hover:text-p-apricot'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
-                    <i class="fa-solid fa-plane-departure text-xl"></i>
-                    <span class="text-[10px] font-bold">航班</span>
+            <nav class="glass-nav h-16 px-1 flex justify-evenly items-center z-20 rounded-t-[2rem] pb-1 relative flex-shrink-0">
+                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-neonPink drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span>
                 </button>
-                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-p-purple scale-110 drop-shadow-[0_0_8px_rgba(224,86,253,0.6)]' : 'text-p-apricot/50 hover:text-p-apricot'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
-                    <i class="fa-solid fa-clipboard-list text-xl"></i>
-                    <span class="text-[10px] font-bold">行程</span>
+                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-neonPink drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span>
                 </button>
-                <div class="-mt-10 relative z-10">
-                    <button @click="currentTab = 'map'" class="bg-gradient-to-tr from-p-midBlue to-p-purple text-white w-14 h-14 rounded-full shadow-lg shadow-p-purple/50 border-[3px] border-p-midBlue flex items-center justify-center transform transition-transform active:scale-95">
-                        <i class="fa-solid fa-map text-2xl animate-pulse"></i>
+                <div class="-mt-8 relative z-10">
+                    <button @click="currentTab = 'map'" class="bg-scheme1-deepBlue text-scheme1-neonPink w-14 h-14 rounded-full shadow-[0_0_20px_rgba(255,126,226,0.4)] border-2 border-scheme1-neonPink/50 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all">
+                        <i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(255,126,226,1)]"></i>
                     </button>
                 </div>
-                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-p-purple scale-110 drop-shadow-[0_0_8px_rgba(224,86,253,0.6)]' : 'text-p-apricot/50 hover:text-p-apricot'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
-                    <i class="fa-solid fa-store text-xl"></i>
-                    <span class="text-[10px] font-bold">店舖</span>
+                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-neonPink drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span>
                 </button>
-                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-p-purple scale-110 drop-shadow-[0_0_8px_rgba(224,86,253,0.6)]' : 'text-p-apricot/50 hover:text-p-apricot'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
-                    <i class="fa-solid fa-bed text-xl"></i>
-                    <span class="text-[10px] font-bold">住宿</span>
+                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-neonPink drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span>
                 </button>
             </nav>
 
             <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal">
-                <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col max-h-[90vh] overflow-hidden border border-p-purple/50">
-                    <h3 class="text-2xl font-bold text-center mb-4 text-p-white text-glow">{{ isEditing ? '編輯行程' : '新增行程' }}</h3>
+                <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col max-h-[90vh] overflow-hidden border border-scheme1-neonPink/50">
+                    <h3 class="text-2xl font-bold text-center mb-4 text-glow-pink">{{ isEditing ? '編輯行程' : '新增行程' }}</h3>
                     
                     <div class="overflow-y-auto space-y-4 pr-1 scrollbar-hide flex-1">
                         <div>
-                            <label class="text-xs text-p-apricot font-bold uppercase">時間</label>
-                            <input v-model="modalData.time" type="text" class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors">
+                            <label class="text-xs text-scheme1-neonCyan font-bold uppercase">時間</label>
+                            <input v-model="modalData.time" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1">
                         </div>
                         <div>
-                            <label class="text-xs text-p-apricot font-bold uppercase">標題</label>
-                            <input v-model="modalData.title" type="text" class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors">
+                            <label class="text-xs text-scheme1-neonCyan font-bold uppercase">標題</label>
+                            <input v-model="modalData.title" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1">
                         </div>
                         <div>
-                            <label class="text-xs text-p-apricot font-bold uppercase">地點 (導航用)</label>
-                            <input v-model="modalData.location" type="text" class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors">
+                            <label class="text-xs text-scheme1-neonCyan font-bold uppercase">描述</label>
+                            <textarea v-model="modalData.desc" rows="3" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1 resize-none scrollbar-hide"></textarea>
                         </div>
                         <div>
-                            <label class="text-xs text-p-apricot font-bold uppercase">地址 (顯示用)</label>
-                            <input v-model="modalData.addr" type="text" class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors">
+                            <label class="text-xs text-scheme1-neonCyan font-bold uppercase">地點/地址</label>
+                            <input v-model="modalData.addr" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1">
                         </div>
-                        <div>
-                            <label class="text-xs text-p-apricot font-bold uppercase">圖片網址</label>
-                            <input v-model="modalData.img" type="text" placeholder="https://..." class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors">
-                        </div>
-                        <div v-if="modalData.img" class="h-32 rounded-lg overflow-hidden border border-p-apricot/30">
-                            <img :src="modalData.img" class="w-full h-full object-cover">
-                        </div>
-                        <div>
-                            <label class="text-xs text-p-apricot font-bold uppercase">詳細描述</label>
-                            <textarea v-model="modalData.desc" rows="3" class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors"></textarea>
+                         <div>
+                            <label class="text-xs text-scheme1-neonCyan font-bold uppercase">圖片 URL (選填)</label>
+                            <input v-model="modalData.img" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1" placeholder="https://...">
                         </div>
                     </div>
 
-                    <div class="flex gap-3 mt-6 pt-4 border-t border-p-apricot/20">
-                        <button v-if="isEditing" @click="deleteEvent" class="flex-1 py-3 rounded-xl bg-red-500/80 text-white font-bold hover:bg-red-500 transition-colors">刪除</button>
-                        <button @click="showModal = false" class="flex-1 py-3 rounded-xl bg-white/10 text-white font-bold hover:bg-white/20 transition-colors">取消</button>
-                        <button @click="saveEvent" class="flex-1 py-3 rounded-xl bg-p-purple text-white font-bold hover:bg-white hover:text-p-purple shadow-lg shadow-p-purple/30 transition-all">儲存</button>
+                    <div class="flex gap-3 mt-6 pt-4 border-t border-white/10">
+                        <button @click="closeModal" class="flex-1 py-2.5 rounded-xl border border-white/30 text-white hover:bg-white/10 transition-colors font-bold">取消</button>
+                        <button @click="saveEvent" class="flex-1 py-2.5 rounded-xl bg-scheme1-neonPink text-scheme1-deepBlue hover:bg-scheme1-neonPink/90 transition-colors font-bold shadow-[0_0_15px_rgba(255,126,226,0.4)]">{{ isEditing ? '儲存變更' : '新增' }}</button>
                     </div>
+                    <button v-if="isEditing" @click="deleteEvent" class="absolute top-4 right-4 text-white/50 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
 
@@ -378,139 +408,179 @@
     </div>
 
     <script>
-        const { createApp, ref, onMounted, nextTick, watch } = Vue;
-
-        const myTripData = {
-            title: "聖誕上海之旅", 
-            shops: [
-                { name: "姥姥家 Grandmas", area: "外灘", icon: "fa-utensils" },
-                { name: "M Stand", area: "新天地", icon: "fa-mug-hot" },
-                { name: "Haus Nowhere", area: "淮海中路", icon: "fa-bag-shopping" },
-                { name: "Peet's Coffee", area: "武康路", icon: "fa-mug-saucer" }
-            ],
-            hotel: {
-                name: "上海東錦江希爾頓逸林酒店",
-                engName: "DoubleTree by Hilton",
-                address: "上海市浦東新區東方路889號",
-                checkIn: "12月23日", checkOut: "12月26日",
-                image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1000&auto=format&fit=crop"
-            },
-            flightOut: { from: "HKG", to: "PVG", date: "2025/12/23", no: "MU726", dep: "07:40", arr: "10:30", airline: "中國東方航空" },
-            flightIn: { from: "PVG", to: "HKG", date: "2025/12/26", no: "MU725", dep: "21:20", arr: "00:15", airline: "中國東方航空" },
-            days: [
-                {
-                    date: "12月23日 (二)", dateShort: "23", 
-                    events: [
-                        { id: 1, time: "10:30", title: "抵達上海浦東", location: "上海浦東國際機場", desc: "入境手續、領取行李。", weather: "cloudy", temp: "8°C", img: "https://images.unsplash.com/photo-1474302770737-173ee21bab63?q=80&w=1000", addr: "浦東新區" },
-                        { id: 2, time: "15:00", title: "浦東美術館", location: "浦東美術館", desc: "欣賞建築之美，直面外灘。", weather: "cloudy", temp: "9°C", img: "https://images.unsplash.com/photo-1634351330397-6950295232a5?q=80&w=1000", addr: "濱江大道2777號" },
-                        { id: 3, time: "18:00", title: "十六鋪碼頭", location: "十六鋪碼頭", desc: "欣賞黃浦江璀璨夜景。", weather: "clear", temp: "5°C", addr: "中山東二路531號", img: "https://images.unsplash.com/photo-1548658166-136d9f6a7df1?q=80&w=1000" }
-                    ]
-                },
-                {
-                    date: "12月24日 (三)", dateShort: "24",
-                    events: [
-                        { id: 4, time: "10:00", title: "豫園 & 城隍廟", location: "豫園", desc: "江南古典園林。", weather: "sunny", temp: "9°C", img: "https://images.unsplash.com/photo-1580910543239-166299d25725?q=80&w=1000", addr: "福佑路168號" },
-                        { id: 5, time: "14:30", title: "新天地北里", location: "上海新天地", desc: "平安夜逛街。", weather: "sunny", temp: "10°C", img: "https://images.unsplash.com/photo-1548658827-63d0529d2b27?q=80&w=1000" },
-                        { id: 6, time: "19:00", title: "平安夜晚餐", location: "新天地", desc: "聖誕大餐。", weather: "clear", temp: "6°C", img: "https://images.unsplash.com/photo-1543007630-9710e4a00a20?q=80&w=1000" }
-                    ]
-                },
-                {
-                    date: "12月25日 (四)", dateShort: "25",
-                    events: [
-                        { id: 7, time: "10:00", title: "朱家角古鎮", location: "朱家角古鎮", desc: "上海威尼斯。", weather: "sunny", temp: "11°C", img: "https://images.unsplash.com/photo-1548956923-38c826922904?q=80&w=1000" },
-                        { id: 8, time: "17:00", title: "返回市區", location: "人民廣場", desc: "休息/晚餐", img: "https://images.unsplash.com/photo-1505164294036-746a5f67a2cb?q=80&w=1000" }
-                    ]
-                },
-                {
-                    date: "12月26日 (五)", dateShort: "26",
-                    events: [
-                        { id: 9, time: "10:30", title: "武康路 City Walk", location: "武康路", desc: "法租界風情。", img: "https://images.unsplash.com/photo-1678786968037-33633667c427?q=80&w=1000" },
-                        { id: 10, time: "14:00", title: "田子坊", location: "田子坊", desc: "弄堂文創。", img: "https://images.unsplash.com/photo-1558273643-979929281a8f?q=80&w=1000" },
-                        { id: 11, time: "17:30", title: "前往機場", location: "浦東機場", desc: "返程", img: "https://images.unsplash.com/photo-1530521954074-e64f6810b32d?q=80&w=1000" }
-                    ]
-                }
-            ]
-        };
+        const { createApp, ref, computed, onMounted, nextTick } = Vue;
 
         createApp({
             setup() {
-                const currentTab = ref('schedule');
-                const appTitle = ref(myTripData.title);
+                const currentTab = ref('flight');
                 const currentDayIndex = ref(0);
-                const myData = ref(myTripData); 
-                const sortableList = ref(null);
                 const showModal = ref(false);
                 const isEditing = ref(false);
-                const editingIdx = ref(-1);
-                const modalData = ref({}); 
+                const editingEventIndex = ref(null);
+                const sortableList = ref(null);
+                let sortableInstance = null;
 
-                const getWeatherIcon = (type) => {
-                    const t = type ? type.toLowerCase() : '';
-                    // 更新天氣圖標顏色為鮮明杏色
-                    if (t.includes('sun') || t.includes('clear')) return 'fa-solid fa-sun text-p-apricot'; 
-                    if (t.includes('cloud')) return 'fa-solid fa-cloud text-p-apricot/60';
-                    return 'fa-solid fa-cloud-sun text-p-apricot';
+                const modalData = ref({
+                    time: '',
+                    title: '',
+                    desc: '',
+                    addr: '',
+                    img: '',
+                    location: ''
+                });
+
+                const myData = ref({
+                    flightOut: { date: '2025-12-24 (Wed)', dep: '10:00', arr: '12:30', airline: 'Cathay Pacific', no: 'CX360' },
+                    flightIn: { date: '2025-12-28 (Sun)', dep: '18:00', arr: '20:30', airline: 'Cathay Pacific', no: 'CX369' },
+                    hotel: {
+                        name: '上海艾迪遜酒店',
+                        engName: 'The Shanghai EDITION',
+                        address: '上海市黃浦區南京東路199號',
+                        image: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/164662377.jpg?k=a053307176565505640630667173261407014705431126275316043625645223&o=&hp=1',
+                        checkIn: '12-24 (Wed)',
+                        checkOut: '12-28 (Sun)'
+                    },
+                    shops: [
+                        { name: 'Speak Low', type: '酒吧', area: '徐匯區', icon: 'martini-glass-citrus', color: 'text-scheme1-neonPink', tag: '亞洲前50' },
+                        { name: 'RAC Bar', type: '早午餐', area: '徐匯區', icon: 'utensils', color: 'text-scheme1-neonCyan', tag: '網紅店' },
+                        { name: 'Luneurs', type: '甜點', area: '多區', icon: 'ice-cream', color: 'text-scheme1-neonGold', tag: '焦糖海鹽' },
+                        { name: 'Short Sentence', type: '服飾', area: '安福路', icon: 'shirt', color: 'text-scheme1-neonPink' }
+                    ],
+                    days: [
+                        {
+                            date: '12月24日 (三)', dateShort: '24 DEC',
+                            events: [
+                                { id: 1, time: '13:30', title: '抵達 & Check-in', desc: '辦理入住手續，稍作休息', location: 'The Shanghai EDITION', icon: 'hotel', addr: '南京東路199號' },
+                                { id: 2, time: '15:00', title: '南京東路步行街', desc: '感受聖誕氣氛，逛街購物', location: 'Nanjing Road Pedestrian Street', icon: 'bag-shopping', addr: '南京東路' },
+                                { id: 3, time: '18:00', title: '外灘夜景晚餐', desc: '米其林餐廳享受聖誕大餐，欣賞萬國建築群燈光', location: 'The Bund', icon: 'wine-glass', addr: '中山東一路', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/The_Bund_Shanghai_2019.jpg/1280px-The_Bund_Shanghai_2019.jpg' },
+                                { id: 4, time: '21:00', title: '外灘源聖誕市集', desc: '熱紅酒、特色小吃、手工藝品', location: 'Waitanyuan', icon: 'gifts', addr: '圓明園路' }
+                            ]
+                        },
+                        {
+                            date: '12月25日 (四)', dateShort: '25 DEC',
+                            events: [
+                                { id: 5, time: '10:00', title: '上海迪士尼樂園', desc: '全天沉浸在聖誕童話世界，觀賞特別巡遊和煙火', location: 'Shanghai Disney Resort', icon: 'wand-magic-sparkles', addr: '浦東新區川沙新鎮', img: 'https://cdn1.parksmedia.wdprapps.disney.com/resize/mwImage/1/1600/900/75/dam/shdr/parks-and-tickets/shanghai-disneyland/shanghai-disneyland-enchanted-storybook-castle-mobile.jpg?1699660800000', weather: 'sunny', temp: '8°C' },
+                                { id: 6, time: '20:30', title: '迪士尼小鎮晚餐', desc: '樂園外有多種餐廳選擇', location: 'Disneytown', icon: 'burger', addr: '迪士尼度假區' }
+                            ]
+                        },
+                        {
+                            date: '12月26日 (五)', dateShort: '26 DEC',
+                            events: [
+                                { id: 7, time: '10:30', title: '武康路 & 安福路 City Walk', desc: '梧桐樹下漫步，打卡網紅店，參觀武康大樓', location: 'Wukang Road', icon: 'shoe-prints', addr: '武康路 / 安福路', weather: 'cloudy', temp: '6°C' },
+                                { id: 8, time: '13:00', title: 'RAC Bar 午餐', desc: '人氣法式煎餅和早午餐', location: 'RAC Bar', icon: 'utensils', addr: '安福路322號' },
+                                { id: 9, time: '15:00', title: '參觀 Pradasphere II 展覽 (如適用)', desc: '或在周邊特色買手店逛街', location: 'Start Museum', icon: 'palette', addr: '瑞寧路111號' },
+                                { id: 10, time: '19:30', title: 'Speak Low 酒吧', desc: '隱藏式地下酒吧，品嚐特色雞尾酒', location: 'Speak Low', icon: 'martini-glass-citrus', addr: '復興中路579號' }
+                            ]
+                        },
+                        {
+                            date: '12月27日 (六)', dateShort: '27 DEC',
+                            events: [
+                                { id: 11, time: '11:00', title: '豫園 & 城隍廟', desc: '感受江南古典園林和傳統氛圍，品嚐小籠包', location: 'Yu Garden', icon: 'place-of-worship', addr: '福佑路168號' },
+                                { id: 12, time: '14:30', title: '新天地 & 一大會址', desc: '石庫門建築群，時尚與歷史交融', location: 'Xintiandi', icon: 'building', addr: '興業路' },
+                                { id: 13, time: '17:00', title: '陸家嘴三件套打卡', desc: '近距離感受摩天大樓，可選擇登頂', location: 'Lujiazui', icon: 'building-flag', addr: '陸家嘴環路' },
+                                { id: 14, time: '19:00', title: '浦東美術館看展 (可選)', desc: '或在江邊餐廳享用晚餐', location: 'Museum of Art Pudong', icon: 'palette', addr: '濱江大道2777號', img: 'https://images.adsttc.com/media/images/6102/8d2c/f91c/8117/6500/001b/large_jpg/05_MAP_©Hufton_Crow.jpg?1627557157' }
+                            ]
+                        },
+                         {
+                            date: '12月28日 (日)', dateShort: '28 DEC',
+                            events: [
+                                { id: 15, time: '11:00', title: 'Check-out & 寄存行李', desc: '享受酒店最後時光', location: 'The Shanghai EDITION', icon: 'hotel', addr: '南京東路199號' },
+                                { id: 16, time: '12:30', title: '靜安寺商圈最後採購', desc: '久光百貨、嘉里中心等', location: 'Jingan Temple', icon: 'bag-shopping', addr: '南京西路1686號' },
+                                { id: 17, time: '15:00', title: '前往浦東機場', desc: '預留充足時間', location: 'PVG Airport', icon: 'plane', addr: '浦東國際機場' }
+                            ]
+                        }
+                    ]
+                });
+
+                const getWeatherIcon = (weather) => {
+                    switch (weather) {
+                        case 'sunny': return 'fa-solid fa-sun text-scheme1-neonGold';
+                        case 'cloudy': return 'fa-solid fa-cloud text-scheme1-textSub';
+                        case 'rainy': return 'fa-solid fa-cloud-rain text-scheme1-neonCyan';
+                        default: return '';
+                    }
                 };
 
                 const initSortable = () => {
                     if (sortableList.value) {
-                        new Sortable(sortableList.value, {
+                        sortableInstance = new Sortable(sortableList.value, {
                             animation: 150,
-                            handle: '.glass-card', 
-                            delay: 200, 
-                            delayOnTouchOnly: true,
                             ghostClass: 'sortable-ghost',
                             dragClass: 'sortable-drag',
+                            handle: '.group', 
                             onEnd: (evt) => {
-                                const item = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
-                                myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, item);
+                                const movedItem = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
+                                myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, movedItem);
                             }
                         });
                     }
                 };
 
-                watch([currentTab, currentDayIndex], async () => {
-                    if (currentTab.value === 'schedule') {
-                        await nextTick();
-                        initSortable();
-                    }
-                });
-
-                onMounted(() => {
-                    initSortable();
-                });
-
-                const openAddModal = () => {
+                 const openAddModal = () => {
                     isEditing.value = false;
-                    modalData.value = { time: "", title: "", location: "", desc: "", img: "", addr: "" };
+                    editingEventIndex.value = null;
+                    modalData.value = { time: '', title: '', desc: '', addr: '', img: '', location: '' };
                     showModal.value = true;
                 };
 
-                const openEditModal = (idx) => {
+                const openEditModal = (index) => {
                     isEditing.value = true;
-                    editingIdx.value = idx;
-                    modalData.value = { ...myData.value.days[currentDayIndex.value].events[idx] };
+                    editingEventIndex.value = index;
+                    modalData.value = { ...myData.value.days[currentDayIndex.value].events[index] };
                     showModal.value = true;
                 };
 
-                const saveEvent = () => {
-                    const currentEvents = myData.value.days[currentDayIndex.value].events;
-                    if (isEditing.value) {
-                        currentEvents[editingIdx.value] = { ...modalData.value, id: currentEvents[editingIdx.value].id };
-                    } else {
-                        currentEvents.push({ ...modalData.value, id: Date.now() });
-                    }
+                const closeModal = () => {
                     showModal.value = false;
                 };
 
+                const saveEvent = () => {
+                    if (!modalData.value.title) return alert('請填寫標題');
+                    const newEvent = { ...modalData.value, id: Date.now(), location: modalData.value.title }; 
+                    
+                    if (isEditing.value) {
+                        myData.value.days[currentDayIndex.value].events[editingEventIndex.value] = newEvent;
+                    } else {
+                        myData.value.days[currentDayIndex.value].events.push(newEvent);
+                    }
+                    closeModal();
+                    nextTick(() => initSortable()); 
+                };
+
                 const deleteEvent = () => {
-                    if (confirm("確定要刪除此行程嗎？")) {
-                        myData.value.days[currentDayIndex.value].events.splice(editingIdx.value, 1);
-                        showModal.value = false;
+                    if (confirm('確定要刪除此行程嗎？')) {
+                        myData.value.days[currentDayIndex.value].events.splice(editingEventIndex.value, 1);
+                        closeModal();
+                        nextTick(() => initSortable());
                     }
                 };
 
-                return { currentTab, appTitle, currentDayIndex, myData, getWeatherIcon, sortableList, showModal, isEditing, modalData, openAddModal, openEditModal, saveEvent, deleteEvent };
+                onMounted(() => {
+                    nextTick(() => {
+                        initSortable();
+                    });
+                });
+                
+                Vue.watch(currentDayIndex, () => {
+                     if (sortableInstance) sortableInstance.destroy();
+                     nextTick(() => initSortable());
+                });
+
+                return {
+                    currentTab,
+                    currentDayIndex,
+                    myData,
+                    getWeatherIcon,
+                    sortableList,
+                    showModal,
+                    isEditing,
+                    modalData,
+                    openAddModal,
+                    openEditModal,
+                    closeModal,
+                    saveEvent,
+                    deleteEvent
+                };
             }
         }).mount('#app');
     </script>
