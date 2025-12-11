@@ -89,23 +89,17 @@
         .text-glow-gold { text-shadow: 0 0 10px rgba(253, 224, 71, 0.9); }
         .text-glow-cyan { text-shadow: 0 0 10px rgba(34, 211, 238, 0.9); }
 
-        /* --- 背景樣式：完美復刻您的圖片風格 --- */
+        /* --- 藍紫色漸變天空背景 --- */
         .aurora-bg {
             background-color: #0F172A;
-            /* 1. 使用 linear-gradient 疊加一層藍紫色漸變，模擬您圖片中的濾鏡效果
-               2. 使用 Unsplash 高畫質上海夜景圖 (ID: photo-1506353266980-73cbe71050dc)
-            */
             background-image: 
                 linear-gradient(to bottom, rgba(88, 101, 242, 0.3), rgba(49, 15, 89, 0.6)),
                 url('https://images.unsplash.com/photo-1506353266980-73cbe71050dc?q=80&w=2940&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            
-            /* 如果您希望背景像您原本的圖片一樣有點模糊，可以取消下面這行的註解 */
-            /* filter: blur(2px); transform: scale(1.02); */
         }
-        /* -------------------------------------- */
+        /* ----------------------- */
 
         .sortable-ghost { opacity: 0.3; }
         .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.2); }
@@ -116,7 +110,6 @@
         <div class="w-full max-w-md h-full relative shadow-2xl flex flex-col overflow-hidden bg-transparent">
             
             <div class="absolute inset-0 z-0 aurora-bg pointer-events-none"></div>
-
             <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                 <div class="absolute top-[-10%] right-[-15%] w-[400px] h-[400px] bg-scheme1-neonPink/10 rounded-full blur-[80px]"></div>
                 <div class="absolute bottom-[-10%] left-[-15%] w-[350px] h-[350px] bg-scheme1-neonCyan/10 rounded-full blur-[80px]"></div>
@@ -126,7 +119,7 @@
                 <div class="relative z-10 flex flex-col justify-center h-full w-full pl-2">
                     <h2 class="text-lg tracking-normal opacity-100 text-scheme1-neonPink mb-0 font-deco font-black rotate-1 drop-shadow-md leading-none text-glow-pink">Wayne & Chloe | Shanghai 2025</h2>
                     <h1 class="text-xl font-deco tracking-tight text-white drop-shadow-lg font-bold mt-1 text-glow">
-                        🎄 聖誕上海之旅 ✨
+                        {{ myData.title }}
                     </h1>
                 </div>
                 <div class="w-9 h-9 glass-deco rounded-full flex items-center justify-center shadow-inner flex-shrink-0 mr-2 border border-white/30">
@@ -142,9 +135,9 @@
                     <div class="glass-card rounded-2xl p-4 relative overflow-hidden group">
                         <div class="absolute top-3 left-3 bg-scheme1-neonPink/20 border border-scheme1-neonPink/80 text-scheme1-neonPink text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest shadow-[0_0_15px_rgba(255,126,226,0.4)]">去程 OUTBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-4">
-                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">HKG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">香港 T1</div></div>
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">{{ myData.flightOut.from }}</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">香港 T1</div></div>
                             <div class="flex-1 px-2 text-center flex flex-col items-center"><div class="text-xs text-scheme1-neonPink font-bold">{{ myData.flightOut.airline }}</div><i class="fa-solid fa-plane text-white text-xl block my-1 drop-shadow-md"></i><div class="border-b-2 border-dotted border-white/40 w-full h-1"></div><div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.flightOut.no }}</div></div>
-                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">PVG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">上海浦東 T1</div></div>
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">{{ myData.flightOut.to }}</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">上海浦東 T1</div></div>
                         </div>
                         <div class="bg-white/5 rounded-xl p-3 flex justify-between items-start text-sm border border-white/20">
                             <div><span class="text-xs text-scheme1-textSub/80 font-bold block">Date</span>{{ myData.flightOut.date }}</div>
@@ -158,9 +151,9 @@
                     <div class="glass-card rounded-2xl p-4 relative overflow-hidden group">
                         <div class="absolute top-3 left-3 bg-scheme1-neonCyan/20 border border-scheme1-neonCyan/80 text-scheme1-neonCyan text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.4)]">回程 INBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-4">
-                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">PVG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">上海浦東 T1</div></div>
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">{{ myData.flightIn.from }}</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">上海浦東 T1</div></div>
                             <div class="flex-1 px-2 text-center flex flex-col items-center"><div class="text-xs text-scheme1-neonCyan font-bold">{{ myData.flightIn.airline }}</div><i class="fa-solid fa-plane text-white text-xl block my-1 rotate-180 drop-shadow-md"></i><div class="border-b-2 border-dotted border-white/40 w-full h-1"></div><div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.flightIn.no }}</div></div>
-                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">HKG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">香港 T1</div></div>
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">{{ myData.flightIn.to }}</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">香港 T1</div></div>
                         </div>
                         <div class="bg-white/5 rounded-xl p-3 flex justify-between items-start text-sm border border-white/20">
                             <div><span class="text-xs text-scheme1-textSub/80 font-bold block">Date</span>{{ myData.flightIn.date }}</div>
@@ -188,7 +181,7 @@
                                     <div class="text-xs text-scheme1-textSub mt-1 font-bold">8kg <span class="mx-1 text-white/30">|</span> 20x40x55cm</div>
                                 </div>
                             </div>
-                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                             <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
                                 <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-bag-shopping text-scheme1-neonGold text-2xl drop-shadow-md"></i></div>
                                 <div class="flex-1 ml-2 border-l border-white/20 pl-3">
                                     <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">隨身物品</span><span class="text-[10px] bg-scheme1-neonGold/20 text-scheme1-neonGold border border-scheme1-neonGold/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
@@ -254,9 +247,9 @@
                                             <p class="text-xs text-scheme1-textSub/90 mb-1 leading-snug font-bold line-clamp-2">{{ item.desc }}</p>
                                             
                                             <div class="flex justify-between items-end mt-1">
-                                                <p v-if="item.addr" class="text-[10px] text-scheme1-neonCyan flex items-center truncate max-w-[65%]"><i class="fa-solid fa-location-dot mr-1"></i>{{ item.addr }}</p>
+                                                <p v-if="item.location" class="text-[10px] text-scheme1-neonCyan flex items-center truncate max-w-[65%]"><i class="fa-solid fa-location-dot mr-1"></i>{{ item.location }}</p>
                                                 
-                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + (item.addr || item.location)" target="_blank" @click.stop class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-scheme1-neonCyan hover:bg-scheme1-neonCyan hover:text-white transition-colors shadow-sm border border-white/10">
+                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-scheme1-neonCyan hover:bg-scheme1-neonCyan hover:text-white transition-colors shadow-sm border border-white/10">
                                                     <i class="fa-solid fa-diamond-turn-right text-[10px]"></i>
                                                 </a>
                                             </div>
@@ -285,7 +278,7 @@
                     <h3 class="font-bold text-xl mb-4 pl-3 border-l-4 border-scheme1-neonPink text-white opacity-90 text-glow">🛍️ 必逛店舖 & 美食</h3>
                     <div class="space-y-4">
                         <div v-for="(shop, idx) in myData.shops" :key="idx" class="glass-card rounded-2xl p-4 flex items-center relative overflow-hidden group hover:border-scheme1-neonPink/50 transition-colors">
-                            <div :class="shop.color" class="w-12 h-12 rounded-full bg-white/5 border border-white/20 flex items-center justify-center flex-shrink-0 text-lg group-hover:scale-110 transition-transform shadow-inner">
+                            <div :class="getShopIconColor(shop.color)" class="w-12 h-12 rounded-full bg-white/5 border border-white/20 flex items-center justify-center flex-shrink-0 text-lg group-hover:scale-110 transition-transform shadow-inner">
                                 <i :class="['fa-solid', shop.icon]"></i>
                             </div>
                             <div class="flex-1 ml-4 mr-2">
@@ -394,7 +387,7 @@
                         </div>
                         <div>
                             <label class="text-xs text-scheme1-neonCyan font-bold uppercase">地點/地址</label>
-                            <input v-model="modalData.addr" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1">
+                            <input v-model="modalData.location" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1">
                         </div>
                          <div>
                             <label class="text-xs text-scheme1-neonCyan font-bold uppercase">圖片 URL (選填)</label>
@@ -430,69 +423,71 @@
                     time: '',
                     title: '',
                     desc: '',
-                    addr: '',
-                    img: '',
-                    location: ''
+                    location: '',
+                    img: ''
                 });
 
                 const myData = ref({
-                    flightOut: { date: '2025-12-24 (Wed)', dep: '10:00', arr: '12:30', airline: 'Cathay Pacific', no: 'CX360' },
-                    flightIn: { date: '2025-12-28 (Sun)', dep: '18:00', arr: '20:30', airline: 'Cathay Pacific', no: 'CX369' },
-                    hotel: {
-                        name: '上海艾迪遜酒店',
-                        engName: 'The Shanghai EDITION',
-                        address: '上海市黃浦區南京東路199號',
-                        image: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/164662377.jpg?k=a053307176565505640630667173261407014705431126275316043625645223&o=&hp=1',
-                        checkIn: '12-24 (Wed)',
-                        checkOut: '12-28 (Sun)'
-                    },
+                    title: "🎄 聖誕上海之旅 ✨", 
+                    
                     shops: [
-                        { name: 'Speak Low', type: '酒吧', area: '徐匯區', icon: 'martini-glass-citrus', color: 'text-scheme1-neonPink', tag: '亞洲前50' },
-                        { name: 'RAC Bar', type: '早午餐', area: '徐匯區', icon: 'utensils', color: 'text-scheme1-neonCyan', tag: '網紅店' },
-                        { name: 'Luneurs', type: '甜點', area: '多區', icon: 'ice-cream', color: 'text-scheme1-neonGold', tag: '焦糖海鹽' },
-                        { name: 'Short Sentence', type: '服飾', area: '安福路', icon: 'shirt', color: 'text-scheme1-neonPink' }
+                        { name: "姥姥家 Grandmas", type: "美食", area: "外灘", tag: "本幫菜", icon: "utensils", color: "text-orange-400" },
+                        { name: "M Stand", type: "咖啡", area: "新天地", tag: "網紅打卡", icon: "mug-hot", color: "text-white" },
+                        { name: "Haus Nowhere", type: "購物", area: "淮海中路", tag: "眼鏡/香氛", icon: "bag-shopping", color: "text-scheme1-neonCyan" },
+                        { name: "Peet's Coffee", type: "咖啡", area: "武康路", tag: "露台位", icon: "mug-saucer", color: "text-yellow-600" }
                     ],
+
+                    hotel: {
+                        name: "上海東錦江希爾頓逸林酒店",
+                        engName: "DoubleTree by Hilton Hotel Shanghai - Pudong",
+                        address: "上海市浦東新區東方路889號",
+                        checkIn: "12月23日 (二)",
+                        checkOut: "12月26日 (五)",
+                        image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1000&auto=format&fit=crop"
+                    },
+
+                    flightOut: { 
+                        from: "HKG", to: "PVG", 
+                        date: "2025/12/23 (二)", no: "MU726", 
+                        dep: "07:40", arr: "10:30", 
+                        airline: "中國東方航空" 
+                    },
+                    flightIn: { 
+                        from: "PVG", to: "HKG", 
+                        date: "2025/12/26 (五)", no: "MU725", 
+                        dep: "21:20", arr: "00:15", 
+                        airline: "中國東方航空" 
+                    },
                     days: [
                         {
-                            date: '12月24日 (三)', dateShort: '24 DEC',
+                            date: "12月23日 (二)", dateShort: "23", 
                             events: [
-                                { id: 1, time: '13:30', title: '抵達 & Check-in', desc: '辦理入住手續，稍作休息', location: 'The Shanghai EDITION', icon: 'hotel', addr: '南京東路199號' },
-                                { id: 2, time: '15:00', title: '南京東路步行街', desc: '感受聖誕氣氛，逛街購物', location: 'Nanjing Road Pedestrian Street', icon: 'bag-shopping', addr: '南京東路' },
-                                { id: 3, time: '18:00', title: '外灘夜景晚餐', desc: '米其林餐廳享受聖誕大餐，欣賞萬國建築群燈光', location: 'The Bund', icon: 'wine-glass', addr: '中山東一路', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/The_Bund_Shanghai_2019.jpg/1280px-The_Bund_Shanghai_2019.jpg' },
-                                { id: 4, time: '21:00', title: '外灘源聖誕市集', desc: '熱紅酒、特色小吃、手工藝品', location: 'Waitanyuan', icon: 'gifts', addr: '圓明園路' }
+                                { id: 1, time: "10:30", title: "抵達上海浦東 🛬", location: "上海浦東國際機場 T1", desc: "入境手續、領取行李，前往酒店Check-in。", weather: "cloudy", temp: "8°C" },
+                                { id: 2, time: "15:00", title: "浦東美術館 🎨", location: "浦東美術館", desc: "欣賞建築之美，窗口可直面外灘萬國建築群。", weather: "cloudy", temp: "9°C" },
+                                { id: 3, time: "18:00", title: "十六鋪碼頭 🌃", location: "十六鋪碼頭", desc: "漫步江邊或搭乘遊船，欣賞黃浦江璀璨夜景。", weather: "clear", temp: "5°C" }
                             ]
                         },
                         {
-                            date: '12月25日 (四)', dateShort: '25 DEC',
+                            date: "12月24日 (三)", dateShort: "24",
                             events: [
-                                { id: 5, time: '10:00', title: '上海迪士尼樂園', desc: '全天沉浸在聖誕童話世界，觀賞特別巡遊和煙火', location: 'Shanghai Disney Resort', icon: 'wand-magic-sparkles', addr: '浦東新區川沙新鎮', img: 'https://cdn1.parksmedia.wdprapps.disney.com/resize/mwImage/1/1600/900/75/dam/shdr/parks-and-tickets/shanghai-disneyland/shanghai-disneyland-enchanted-storybook-castle-mobile.jpg?1699660800000', weather: 'sunny', temp: '8°C' },
-                                { id: 6, time: '20:30', title: '迪士尼小鎮晚餐', desc: '樂園外有多種餐廳選擇', location: 'Disneytown', icon: 'burger', addr: '迪士尼度假區' }
+                                { id: 4, time: "10:00", title: "豫園 & 城隍廟 🧧", location: "豫園", desc: "江南古典園林與老上海祈福，品嚐南翔小籠包。", weather: "sunny", temp: "9°C" },
+                                { id: 5, time: "14:30", title: "新天地北里 🎄", location: "上海新天地", desc: "平安夜逛街，石庫門建築與現代聖誕裝飾完美融合。", weather: "sunny", temp: "10°C" },
+                                { id: 6, time: "19:00", title: "平安夜晚餐 🍷", location: "新天地北里", desc: "在充滿節日氣氛的餐廳享用聖誕大餐。", weather: "clear", temp: "6°C" }
                             ]
                         },
                         {
-                            date: '12月26日 (五)', dateShort: '26 DEC',
+                            date: "12月25日 (四)", dateShort: "25",
                             events: [
-                                { id: 7, time: '10:30', title: '武康路 & 安福路 City Walk', desc: '梧桐樹下漫步，打卡網紅店，參觀武康大樓', location: 'Wukang Road', icon: 'shoe-prints', addr: '武康路 / 安福路', weather: 'cloudy', temp: '6°C' },
-                                { id: 8, time: '13:00', title: 'RAC Bar 午餐', desc: '人氣法式煎餅和早午餐', location: 'RAC Bar', icon: 'utensils', addr: '安福路322號' },
-                                { id: 9, time: '15:00', title: '參觀 Pradasphere II 展覽 (如適用)', desc: '或在周邊特色買手店逛街', location: 'Start Museum', icon: 'palette', addr: '瑞寧路111號' },
-                                { id: 10, time: '19:30', title: 'Speak Low 酒吧', desc: '隱藏式地下酒吧，品嚐特色雞尾酒', location: 'Speak Low', icon: 'martini-glass-citrus', addr: '復興中路579號' }
+                                { id: 7, time: "10:00", title: "朱家角古鎮 🛶", location: "朱家角古鎮", desc: "上海威尼斯，乘手搖船遊覽放生橋與古巷(全日行程)。", weather: "sunny", temp: "11°C" },
+                                { id: 8, time: "17:00", title: "返回市區 🚌", location: "人民廣場", desc: "搭乘地鐵17號線返回市區休息。", weather: "clear", temp: "7°C" }
                             ]
                         },
                         {
-                            date: '12月27日 (六)', dateShort: '27 DEC',
+                            date: "12月26日 (五)", dateShort: "26",
                             events: [
-                                { id: 11, time: '11:00', title: '豫園 & 城隍廟', desc: '感受江南古典園林和傳統氛圍，品嚐小籠包', location: 'Yu Garden', icon: 'place-of-worship', addr: '福佑路168號' },
-                                { id: 12, time: '14:30', title: '新天地 & 一大會址', desc: '石庫門建築群，時尚與歷史交融', location: 'Xintiandi', icon: 'building', addr: '興業路' },
-                                { id: 13, time: '17:00', title: '陸家嘴三件套打卡', desc: '近距離感受摩天大樓，可選擇登頂', location: 'Lujiazui', icon: 'building-flag', addr: '陸家嘴環路' },
-                                { id: 14, time: '19:00', title: '浦東美術館看展 (可選)', desc: '或在江邊餐廳享用晚餐', location: 'Museum of Art Pudong', icon: 'palette', addr: '濱江大道2777號', img: 'https://images.adsttc.com/media/images/6102/8d2c/f91c/8117/6500/001b/large_jpg/05_MAP_©Hufton_Crow.jpg?1627557157' }
-                            ]
-                        },
-                         {
-                            date: '12月28日 (日)', dateShort: '28 DEC',
-                            events: [
-                                { id: 15, time: '11:00', title: 'Check-out & 寄存行李', desc: '享受酒店最後時光', location: 'The Shanghai EDITION', icon: 'hotel', addr: '南京東路199號' },
-                                { id: 16, time: '12:30', title: '靜安寺商圈最後採購', desc: '久光百貨、嘉里中心等', location: 'Jingan Temple', icon: 'bag-shopping', addr: '南京西路1686號' },
-                                { id: 17, time: '15:00', title: '前往浦東機場', desc: '預留充足時間', location: 'PVG Airport', icon: 'plane', addr: '浦東國際機場' }
+                                { id: 9, time: "10:30", title: "武康路 City Walk 🍂", location: "武康路歷史文化名街", desc: "打卡武康大樓，感受法租界梧桐樹下的浪漫。", weather: "cloudy", temp: "8°C" },
+                                { id: 10, time: "14:00", title: "田子坊 🛍️", location: "田子坊", desc: "穿梭老弄堂，購買特色文創與伴手禮。", weather: "cloudy", temp: "9°C" },
+                                { id: 11, time: "17:30", title: "前往機場 🚕", location: "上海浦東國際機場 T1", desc: "預留時間前往機場，準備搭乘21:20航班。", weather: "cloudy", temp: "7°C" }
                             ]
                         }
                     ]
@@ -503,9 +498,18 @@
                         case 'sunny': return 'fa-solid fa-sun text-scheme1-neonGold';
                         case 'cloudy': return 'fa-solid fa-cloud text-scheme1-textSub';
                         case 'rainy': return 'fa-solid fa-cloud-rain text-scheme1-neonCyan';
+                        case 'clear': return 'fa-solid fa-moon text-scheme1-neonGold';
                         default: return '';
                     }
                 };
+                
+                const getShopIconColor = (colorClass) => {
+                    // Mapping original colors to new dark theme visible classes
+                    if(colorClass.includes('orange')) return 'text-orange-400';
+                    if(colorClass.includes('yellow')) return 'text-yellow-400';
+                    if(colorClass.includes('scheme1-secondary')) return 'text-scheme1-neonCyan';
+                    return 'text-white';
+                }
 
                 const initSortable = () => {
                     if (sortableList.value) {
@@ -525,7 +529,7 @@
                  const openAddModal = () => {
                     isEditing.value = false;
                     editingEventIndex.value = null;
-                    modalData.value = { time: '', title: '', desc: '', addr: '', img: '', location: '' };
+                    modalData.value = { time: '', title: '', desc: '', location: '', img: '' };
                     showModal.value = true;
                 };
 
@@ -542,7 +546,7 @@
 
                 const saveEvent = () => {
                     if (!modalData.value.title) return alert('請填寫標題');
-                    const newEvent = { ...modalData.value, id: Date.now(), location: modalData.value.title }; 
+                    const newEvent = { ...modalData.value, id: Date.now() }; 
                     
                     if (isEditing.value) {
                         myData.value.days[currentDayIndex.value].events[editingEventIndex.value] = newEvent;
@@ -577,6 +581,7 @@
                     currentDayIndex,
                     myData,
                     getWeatherIcon,
+                    getShopIconColor,
                     sortableList,
                     showModal,
                     isEditing,
