@@ -7,7 +7,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+SC:wght@900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     
@@ -43,9 +43,6 @@
             overscroll-behavior: none;
             background-color: #0F172A;
             color: #FFFFFF;
-            -webkit-user-select: none; /* 防止長按選取文字 */
-            user-select: none;
-            -webkit-touch-callout: none; /* 防止長按跳出選單 */
         }
         
         #app {
@@ -74,13 +71,13 @@
 
         .glass-card {
             background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(8px);             
+            backdrop-filter: blur(8px);            
             border: 1px solid rgba(255, 255, 255, 0.12); 
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
         
         .glass-nav {
-            background: rgba(15, 23, 42, 0.85); 
+            background: rgba(15, 23, 42, 0.7); 
             backdrop-filter: blur(20px);
             border-top: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.6);
@@ -104,29 +101,9 @@
         }
 
         .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
-
-        /* --- 拖曳特效樣式 --- */
         
-        /* 拖曳時，原來位置留下的空位 */
-        .sortable-ghost { 
-            opacity: 0.1; 
-            border: 2px dashed rgba(255, 126, 226, 0.3);
-            border-radius: 0.75rem;
-        }
-
-        /* 正在被拖曳的物件 (懸浮效果) */
-        .sortable-drag { 
-            cursor: grabbing; 
-            opacity: 1 !important;
-            background: rgba(22, 30, 50, 0.95) !important; /* 深色背景防透視 */
-            backdrop-filter: blur(10px);
-            transform: scale(1.05); /* 稍微放大 */
-            box-shadow: 
-                0 20px 25px -5px rgba(0, 0, 0, 0.5), 
-                0 0 0 1px rgba(255, 126, 226, 0.5); /* 高亮邊框 */
-            z-index: 9999 !important;
-            border-radius: 0.75rem;
-        }
+        .sortable-ghost { opacity: 0.3; }
+        .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.15); transform: scale(1.02); z-index: 50; }
     </style>
 </head>
 <body>
@@ -218,10 +195,11 @@
                         <button v-for="(day, index) in myData.days" :key="index" @click="currentDayIndex = index" 
                             :class="currentDayIndex === index ? 'bg-scheme1-primary/90 text-white shadow-[0_0_15px_rgba(255,126,226,0.6)] border-transparent scale-105' : 'glass-card text-white/80 border-white/20'"
                             class="py-2 rounded-xl flex flex-col items-center justify-center transition-all duration-300 backdrop-blur-sm h-full">
+                            
                             <div class="flex flex-col items-center leading-none text-white w-full gap-0.5">
-                                <span class="text-[10px] uppercase tracking-wider font-bold opacity-80 mb-0.5">DAY {{ index + 1 }}</span>
+                                <span class="text-xs uppercase tracking-wider font-bold opacity-80 mb-0.5">DAY {{ index + 1 }}</span>
                                 <span class="text-3xl font-black drop-shadow-sm -my-1">{{ day.dayNum }}</span>
-                                <span class="text-[10px] font-bold opacity-80 mt-0.5">{{ day.weekday }}</span>
+                                <span class="text-xs font-bold opacity-80 mt-0.5">{{ day.weekday }}</span>
                             </div>
                         </button>
                     </div>
@@ -229,7 +207,7 @@
                     <div>
                         <h3 class="font-bold text-lg mb-4 text-white flex items-center justify-between opacity-90 pl-1 text-shadow-sm">
                             <div><span class="text-scheme1-primary mr-2"><i class="fa-solid fa-calendar-day"></i></span>{{ myData.days[currentDayIndex].date }}</div>
-                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-fingerprint mr-1"></i>長按卡片浮起後拖曳</span>
+                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-hand-pointer mr-1"></i>長按拖曳</span>
                         </h3>
                         
                         <div class="relative pl-4">
@@ -237,42 +215,42 @@
                             
                             <div ref="sortableList" class="space-y-3">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
-                                     class="relative group select-none transition-transform duration-200"
-                                     @click="openEditModal(idx)">
+                                     @click="openEditModal(idx)"
+                                     class="relative group cursor-pointer active:cursor-grabbing select-none">
                                     
-                                    <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm pointer-events-none"></div>
+                                    <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
                                     
-                                    <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-primary/40 active:scale-95">
+                                    <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-primary/40">
                                         
-                                        <div v-if="item.img" class="h-24 w-full relative overflow-hidden pointer-events-none">
-                                            <img :src="item.img" class="absolute inset-0 w-full h-full object-cover opacity-90">
+                                        <div v-if="item.img" class="h-24 w-full relative overflow-hidden">
+                                            <img :src="item.img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 select-none">
                                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                                             <div class="absolute bottom-2 left-3 right-3 flex justify-between items-end z-10">
                                                 <div class="flex items-center gap-2">
-                                                    <span class="bg-scheme1-primary text-white font-bold text-sm px-2 py-0.5 rounded shadow-[0_0_10px_#FF7EE2]">{{ item.time }}</span>
-                                                    <div class="flex items-center text-white text-xs gap-1 font-bold" v-if="item.weather">
+                                                    <span class="bg-scheme1-primary text-white font-bold text-sm px-2 py-0.5 rounded shadow-[0_0_10px_#FF7EE2] select-none">{{ item.time }}</span>
+                                                    <div class="flex items-center text-white text-xs gap-1 font-bold select-none" v-if="item.weather">
                                                         <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div v-else class="p-3 pb-0 flex justify-between items-center mb-1 pointer-events-none">
-                                            <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-sm px-2.5 py-0.5 rounded-full border border-scheme1-primary/30 shadow-[0_0_10px_rgba(255,126,226,0.4)]">{{ item.time }}</span>
-                                            <div class="flex items-center text-scheme1-textSub text-xs gap-1.5 font-bold" v-if="item.weather">
+                                        <div v-else class="p-3 pb-0 flex justify-between items-center mb-1">
+                                            <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-sm px-2.5 py-0.5 rounded-full border border-scheme1-primary/30 shadow-[0_0_10px_rgba(255,126,226,0.4)] select-none">{{ item.time }}</span>
+                                            <div class="flex items-center text-scheme1-textSub text-xs gap-1.5 font-bold select-none" v-if="item.weather">
                                                 <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                             </div>
                                         </div>
                                         
-                                        <div class="p-3 pt-1 relative pointer-events-none">
-                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md">{{ item.title }}</h4>
+                                        <div class="p-3 pt-1 relative">
+                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md select-text cursor-text">{{ item.title }}</h4>
                                             
-                                            <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2">{{ item.desc }}</p>
+                                            <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2 select-none">{{ item.desc }}</p>
                                             
                                             <div class="flex justify-between items-end mt-0.5">
-                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)]"></i>{{ item.location }}</p>
+                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
                                                 
-                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 pointer-events-auto">
+                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 select-none">
                                                     <i class="fa-solid fa-diamond-turn-right text-sm"></i>
                                                 </a>
                                             </div>
@@ -375,168 +353,370 @@
 
             </main>
 
-            <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center">
-                <nav class="glass-nav w-full h-16 px-1 flex justify-evenly items-center rounded-t-[2rem] pb-1 relative flex-shrink-0 animate-fade-in">
-                    <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                        <i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span>
+            <nav class="glass-nav h-16 px-1 flex justify-evenly items-center z-50 rounded-t-[2rem] pb-1 relative flex-shrink-0">
+                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span>
+                </button>
+                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span>
+                </button>
+                <div class="-mt-8 relative z-10">
+                    <button @click="currentTab = 'map'" class="bg-scheme1-bg text-scheme1-primary w-14 h-14 rounded-full shadow-[0_0_20px_rgba(255,126,226,0.4)] border-2 border-scheme1-primary/50 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all">
+                        <i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(255,126,226,1)]"></i>
                     </button>
-                    <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                        <i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span>
+                </div>
+                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span>
+                </button>
+                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span>
+                </button>
+            </nav>
+
+            <div v-if="showShopModal && selectedShop" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal" @click.self="closeShopModal">
+                <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col shadow-2xl border border-scheme1-primary/40">
+                    
+                    <button @click="closeShopModal" class="absolute top-4 right-4 text-white/60 hover:text-white transition-colors z-10">
+                        <i class="fa-solid fa-xmark text-xl"></i>
                     </button>
-                    <div class="-mt-8 relative z-10">
-                        <button @click="currentTab = 'map'" class="bg-scheme1-bg text-scheme1-primary w-14 h-14 rounded-full shadow-[0_0_20px_rgba(255,126,226,0.4)] border-2 border-scheme1-primary/50 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all">
-                            <i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(255,126,226,1)]"></i>
-                        </button>
+
+                    <div class="flex flex-col items-center text-center mb-6">
+                        <div :class="getShopIconColor(selectedShop.color)" class="w-16 h-16 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-3">
+                            <i :class="['fa-solid', selectedShop.icon]"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white font-deco tracking-wide select-text cursor-text">{{ selectedShop.name }}</h3>
+                        <span v-if="selectedShop.tag" class="mt-2 text-xs bg-scheme1-primary/20 text-scheme1-primary px-3 py-0.5 rounded-full border border-scheme1-primary/30 font-bold select-none">{{ selectedShop.tag }}</span>
                     </div>
-                    <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                        <i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span>
-                    </button>
-                    <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                        <i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span>
-                    </button>
-                </nav>
+
+                    <div class="space-y-4 text-sm flex-1 overflow-y-auto scrollbar-hide">
+                        <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-text cursor-text">
+                            <label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1 select-none">地址</label>
+                            <p class="text-white leading-relaxed"><i class="fa-solid fa-location-dot mr-2 text-scheme1-secondary select-none"></i>{{ selectedShop.address }}</p>
+                        </div>
+
+                        <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-none">
+                            <label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1">營業時間</label>
+                            <div class="text-white">
+                                <i class="fa-solid fa-clock mr-2 text-scheme1-secondary float-left mt-1"></i>
+                                <div class="overflow-hidden">
+                                    <div v-for="(line, idx) in selectedShop.hours.split('|')" :key="idx" class="block">
+                                        {{ line.trim() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-none" v-if="selectedShop.transport">
+                            <label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1">交通方式</label>
+                            <p class="text-white"><i class="fa-solid fa-train-subway mr-2 text-scheme1-secondary"></i>{{ selectedShop.transport }}</p>
+                        </div>
+                    </div>
+
+                    <a :href="'https://www.google.com/maps/search/?api=1&query=' + selectedShop.address" target="_blank" class="mt-6 w-full py-3 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-lg flex items-center justify-center gap-2 select-none">
+                        <i class="fa-solid fa-map-location-dot"></i> 開啟 Google Maps
+                    </a>
+                </div>
             </div>
+
+            <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal">
+                <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col max-h-[90vh] overflow-hidden border border-scheme1-primary/50">
+                    <h3 class="text-2xl font-bold text-center mb-4 text-white font-deco tracking-widest">{{ isEditing ? '編輯行程' : '新增行程' }}</h3>
+                    
+                    <div class="overflow-y-auto space-y-4 pr-1 scrollbar-hide flex-1">
+                        <div>
+                            <label class="text-xs text-scheme1-secondary font-bold uppercase">時間</label>
+                            <input v-model="modalData.time" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs text-scheme1-secondary font-bold uppercase">標題</label>
+                            <input v-model="modalData.title" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs text-scheme1-secondary font-bold uppercase">描述</label>
+                            <textarea v-model="modalData.desc" rows="3" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1 resize-none scrollbar-hide"></textarea>
+                        </div>
+                        <div>
+                            <label class="text-xs text-scheme1-secondary font-bold uppercase">地點/地址</label>
+                            <input v-model="modalData.location" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1">
+                        </div>
+                         <div>
+                            <label class="text-xs text-scheme1-secondary font-bold uppercase">圖片 URL (選填)</label>
+                            <input v-model="modalData.img" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1" placeholder="https://...">
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 mt-6 pt-4 border-t border-white/10">
+                        <button @click="closeModal" class="flex-1 py-2.5 rounded-xl border border-white/30 text-white hover:bg-white/10 transition-colors font-bold">取消</button>
+                        <button @click="saveEvent" class="flex-1 py-2.5 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-sm">{{ isEditing ? '儲存變更' : '新增' }}</button>
+                    </div>
+                    <button v-if="isEditing" @click="deleteEvent" class="absolute top-4 right-4 text-white/50 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        const { createApp, ref, nextTick, watch, onMounted } = Vue;
+        const { createApp, ref, computed, onMounted, nextTick } = Vue;
 
         createApp({
             setup() {
-                const currentTab = ref('schedule');
+                const currentTab = ref('flight'); // Default to flight tab
                 const currentDayIndex = ref(0);
                 
-                // Sortable 相關變數
+                const showModal = ref(false);
+                const isEditing = ref(false);
+                const editingEventIndex = ref(null);
+                
+                const showShopModal = ref(false);
+                const selectedShop = ref(null);
+
                 const sortableList = ref(null);
-                const sortableInstance = ref(null);
+                let sortableInstance = null;
+
+                const modalData = ref({ time: '', title: '', desc: '', location: '', img: '' });
 
                 const myData = ref({
-                    title: 'Xmas Shanghai',
-                    flightOut: { from: 'HKG', to: 'PVG', airline: 'CX', no: '368', date: 'Dec 24', dep: '09:30', arr: '12:05' },
-                    flightIn: { from: 'PVG', to: 'HKG', airline: 'CX', no: '367', date: 'Dec 28', dep: '13:20', arr: '16:05' },
-                    days: [
-                        { dayNum: '24', weekday: 'TUE', date: '12.24 Day 1', events: [
-                            { id: 1, time: '12:05', title: '抵達上海浦東', desc: '入境、領取行李、搭乘磁浮列車', location: 'PVG T1', weather: 'sunny', temp: '5°C' },
-                            { id: 2, time: '14:00', title: '飯店 Check-in', desc: '辦理入住，放下行李休息片刻', location: 'The Puli Hotel', weather: 'cloudy', temp: '6°C' },
-                            { id: 3, time: '16:00', title: '靜安寺散步', desc: '周邊逛街，嘉里中心，參觀藍瓶咖啡', location: 'JingAn Temple', weather: 'cloudy', temp: '5°C' },
-                            { id: 4, time: '18:30', title: '晚餐：榮寓', desc: '米其林一星本幫菜，需提前預約', location: 'West Nanjing Rd', img: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1974&auto=format&fit=crop' }
-                        ]},
-                        { dayNum: '25', weekday: 'WED', date: '12.25 Day 2', events: [
-                            { id: 5, time: '10:00', title: '外灘散步', desc: '欣賞萬國建築群，拍照留念', location: 'The Bund', weather: 'sunny', temp: '3°C' },
-                            { id: 6, time: '12:30', title: '午餐：Ultraviolet', desc: '感官餐廳體驗 (預約制)', location: 'Secret Location' },
-                            { id: 7, time: '15:30', title: '新天地', desc: '石庫門建築，下午茶', location: 'Xintiandi', weather: 'cloudy', temp: '4°C' }
-                        ]},
-                        { dayNum: '26', weekday: 'THU', date: '12.26 Day 3', events: [
-                            { id: 8, time: '11:00', title: '武康路', desc: '網紅街道，武康大樓', location: 'Wukang Rd' }
-                        ]},
-                        { dayNum: '27', weekday: 'FRI', date: '12.27 Day 4', events: [
-                             { id: 9, time: '10:00', title: '迪士尼樂園', desc: '聖誕特別遊行與煙火', location: 'Disney Resort', img: 'https://images.unsplash.com/photo-1559349887-217743936999?q=80&w=2670&auto=format&fit=crop' }
-                        ]}
-                    ],
+                    title: "🎄 聖誕上海之旅 ✨", 
+                    
                     shops: [
-                        { name: 'HARMAY 話梅', icon: 'bag-shopping', color: 'gray', hours: '10:00-22:00', tag: '美妝集合' },
-                        { name: 'Haus Shanghai', icon: 'glasses', color: 'blue', hours: '11:00-21:00', tag: 'Gentle Monster' },
-                        { name: 'Labelhood', icon: 'shirt', color: 'gray', hours: '12:00-20:00', tag: '設計師選品' },
-                        { name: 'Alimentari', icon: 'utensils', color: 'gray', hours: '09:00-23:00', tag: '義式雜貨' }
+                        { 
+                            name: "一尺花園（廣富林店）", 
+                            tag: "古宅花園", 
+                            address: "松江區廣富林路3088弄3號集賢坊01-03棟", 
+                            hours: "10:00 - 22:00", 
+                            transport: "巴士松江98路 / 松江15路 (廣富林路龍源路站) 下車步行5分鐘", 
+                            icon: "tree", 
+                            color: "text-green-400" 
+                        },
+                        { 
+                            name: "wabi cofe（愚園路店）", 
+                            tag: "日式庭院", 
+                            address: "長寧區愚園路1327號", 
+                            hours: "10:30 - 00:00", 
+                            transport: "地鐵中山公園站 8號出口", 
+                            icon: "mug-hot", 
+                            color: "text-yellow-600" 
+                        },
+                        { 
+                            name: "LCH Café", 
+                            tag: "復古風", 
+                            address: "上海市黃浦區南昌路274號-1號", 
+                            hours: "10:00-18:00 | 10:00-19:00", 
+                            transport: "地鐵陝西南路站 (1/10/12號線)", 
+                            icon: "martini-glass-citrus", 
+                            color: "text-pink-400" 
+                        }
                     ],
-                    hotel: { name: 'The Puli Hotel', engName: 'The Puli Hotel and Spa', address: '1 Changde Road, JingAn', checkIn: 'Dec 24', checkOut: 'Dec 28', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2670&auto=format&fit=crop' }
+
+                    hotel: {
+                        name: "上海東錦江希爾頓逸林酒店",
+                        engName: "DoubleTree by Hilton Shanghai - Pudong",
+                        address: "上海市浦東新區東方路889號",
+                        checkIn: "12月23日 (二)",
+                        checkOut: "12月26日 (五)",
+                        image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1000&auto=format&fit=crop"
+                    },
+
+                    flightOut: { 
+                        from: "HKG", to: "PVG", 
+                        date: "2025/12/23 (二)", no: "MU726", 
+                        dep: "07:40", arr: "10:30", 
+                        airline: "中國東方航空" 
+                    },
+                    flightIn: { 
+                        from: "PVG", to: "HKG", 
+                        date: "2025/12/26 (五)", no: "MU725", 
+                        dep: "21:20", arr: "00:15", 
+                        airline: "中國東方航空" 
+                    },
+                    days: [
+                        {
+                            date: "12月23日 (二)", dateShort: "23 DEC", weekday: "(二)", dayNum: "23",
+                            events: [
+                                { id: 1, time: "10:30", title: "抵達上海浦東 🛬", location: "上海市浦東新區浦東國際機場 T1", desc: "入境手續、領取行李，前往酒店Check-in。", weather: "cloudy", temp: "8°C" },
+                                { id: 101, time: "12:30", title: "辦理入住 🏨", location: "上海市浦東新區東方路889號", desc: "前往東錦江希爾頓逸林酒店 Check-in / 寄存行李。", icon: "hotel" },
+                                { id: 2, time: "15:00", title: "浦東美術館 🎨", location: "上海市浦東新區濱江大道2777號", desc: "欣賞建築之美，窗口可直面外灘萬國建築群。", weather: "cloudy", temp: "9°C" },
+                                { id: 3, time: "18:00", title: "十六鋪碼頭 🌃", location: "上海市黃浦區中山東二路551號", desc: "漫步江邊或搭乘遊船，欣賞黃浦江璀璨夜景。", weather: "clear", temp: "5°C" }
+                            ]
+                        },
+                        {
+                            date: "12月24日 (三)", dateShort: "24 DEC", weekday: "(三)", dayNum: "24",
+                            events: [
+                                { id: 4, time: "10:00", title: "豫園 & 城隍廟 🧧", location: "上海市黃浦區福佑路168號", desc: "江南古典園林與老上海祈福，品嚐南翔小籠包。", weather: "sunny", temp: "9°C" },
+                                { id: 5, time: "14:30", title: "新天地北里 🎄", location: "上海市黃浦區太倉路181號", desc: "平安夜逛街，石庫門建築與現代聖誕裝飾完美融合。", weather: "sunny", temp: "10°C" },
+                                { id: 6, time: "19:00", title: "平安夜晚餐 🍷", location: "上海市黃浦區新天地北里", desc: "在充滿節日氣氛的餐廳享用聖誕大餐。", weather: "clear", temp: "6°C" }
+                            ]
+                        },
+                        {
+                            date: "12月25日 (四)", dateShort: "25 DEC", weekday: "(四)", dayNum: "25",
+                            events: [
+                                { id: 7, time: "10:00", title: "朱家角古鎮 🛶", location: "上海市青浦區朱家角古鎮課植園路", desc: "上海威尼斯，乘手搖船遊覽放生橋與古巷(全日行程)。", weather: "sunny", temp: "11°C" },
+                                { id: 8, time: "17:00", title: "返回市區 🚌", location: "上海市黃浦區人民廣場", desc: "搭乘地鐵17號線返回市區休息。", weather: "clear", temp: "7°C" }
+                            ]
+                        },
+                        {
+                            date: "12月26日 (五)", dateShort: "26 DEC", weekday: "(五)", dayNum: "26",
+                            events: [
+                                { id: 102, time: "10:00", title: "辦理退房 👋", location: "上海市浦東新區東方路889號", desc: "Check-out 並寄存行李，開始最後一天行程。", icon: "suitcase" },
+                                { id: 9, time: "10:30", title: "武康路 City Walk 🍂", location: "上海市徐匯區武康路", desc: "打卡武康大樓(淮海中路1850號)，感受法租界梧桐樹下的浪漫。", weather: "cloudy", temp: "8°C" },
+                                { id: 10, time: "14:00", title: "田子坊 🛍️", location: "上海市黃浦區泰康路210號", desc: "穿梭老弄堂，購買特色文創與伴手禮。", weather: "cloudy", temp: "9°C" },
+                                { id: 11, time: "17:30", title: "前往機場 🚕", location: "上海市浦東新區浦東國際機場 T1", desc: "預留時間前往機場，準備搭乘21:20航班。", weather: "cloudy", temp: "7°C" }
+                            ]
+                        }
+                    ]
                 });
 
-                // 初始化 Sortable 功能
-                const initSortable = () => {
-                    // 如果已存在實例，先銷毀避免重複綁定
-                    if (sortableInstance.value) {
-                        sortableInstance.value.destroy();
-                        sortableInstance.value = null;
+                const getWeatherIcon = (weather) => {
+                    switch (weather) {
+                        case 'sunny': return 'fa-solid fa-sun text-scheme1-accent';
+                        case 'cloudy': return 'fa-solid fa-cloud text-scheme1-textSub';
+                        case 'rainy': return 'fa-solid fa-cloud-rain text-scheme1-secondary';
+                        case 'clear': return 'fa-solid fa-moon text-scheme1-accent';
+                        default: return '';
                     }
-
-                    // 等待 DOM 更新後綁定
-                    nextTick(() => {
-                        const el = sortableList.value;
-                        if (!el) return;
-
-                        sortableInstance.value = new Sortable(el, {
-                            animation: 250,
-                            delay: 350,          // 長按 350ms 後觸發拖曳
-                            delayOnTouchOnly: true, // 僅在觸控裝置啟用長按
-                            ghostClass: 'sortable-ghost', // 拖曳時原位置的樣式
-                            dragClass: 'sortable-drag',   // 拖曳中卡片的樣式
-                            forceFallback: true, // 強制使用 fallback，讓 CSS transform 生效
-                            onChoose: () => {
-                                // 當長按選取成功時，手機震動
-                                if (navigator.vibrate) navigator.vibrate(50);
-                            },
-                            onEnd: (evt) => {
-                                // 拖曳結束，更新 Vue 數據順序
-                                const dayEvents = myData.value.days[currentDayIndex.value].events;
-                                const item = dayEvents.splice(evt.oldIndex, 1)[0];
-                                dayEvents.splice(evt.newIndex, 0, item);
-                            }
-                        });
-                    });
                 };
-
-                // 當分頁切換或天數切換時，重新初始化拖曳功能
-                watch([currentTab, currentDayIndex], ([newTab]) => {
-                    if (newTab === 'schedule') {
-                        initSortable();
-                    }
-                });
-
-                // 組件掛載時初始化
-                onMounted(() => {
-                    if (currentTab.value === 'schedule') {
-                        initSortable();
-                    }
-                });
-
-                const getShopIconColor = (color) => {
-                    const map = { gray: 'text-gray-400', blue: 'text-blue-400' };
-                    return map[color] || 'text-white';
-                };
+                
+                const getShopIconColor = (colorClass) => {
+                    if(colorClass.includes('orange')) return 'text-orange-400';
+                    if(colorClass.includes('yellow')) return 'text-yellow-400';
+                    if(colorClass.includes('scheme1-secondary')) return 'text-scheme1-secondary';
+                    if(colorClass.includes('text-green-400')) return 'text-green-400';
+                    if(colorClass.includes('text-pink-400')) return 'text-pink-400';
+                    return 'text-white';
+                }
 
                 const getShopNameParts = (name) => {
-                    if(name.includes(' ')){
-                         const [main, ...sub] = name.split(' ');
-                         return { main, sub: sub.join(' ') };
+                    const parts = name.split(/[\(（]/);
+                    if (parts.length > 1) {
+                        return { 
+                            main: parts[0], 
+                            sub: '(' + parts[1].replace(/[\)）]/, '') + ')' 
+                        };
                     }
                     return { main: name, sub: '' };
                 };
 
                 const getSimpleHours = (hours) => {
-                     return hours.replace(/:00/g, '');
-                };
-                
-                const getWeatherIcon = (w) => {
-                    const map = { sunny: 'fa-solid fa-sun text-yellow-400', cloudy: 'fa-solid fa-cloud text-gray-300', rain: 'fa-solid fa-cloud-rain text-blue-300' };
-                    return map[w] || '';
+                    if (!hours) return '';
+                    let simple = hours.split('|')[0].trim();
+                    simple = simple.replace(/^(星期|週|周)[一二三四五六日至\s]+/, '').trim();
+                    return simple;
                 };
 
-                const openAddModal = () => {
-                    alert('新增功能：點擊後彈出表單');
+                const initSortable = () => {
+                    if (sortableList.value) {
+                        sortableInstance = new Sortable(sortableList.value, {
+                            animation: 150,
+                            delay: 150, // Updated delay to 150ms for easier drag
+                            delayOnTouchOnly: true, 
+                            touchStartThreshold: 5, 
+                            ghostClass: 'sortable-ghost',
+                            dragClass: 'sortable-drag',
+                            handle: '.group', 
+                            onEnd: (evt) => {
+                                const movedItem = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
+                                myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, movedItem);
+                                updateTimesAfterDrag(); 
+                            }
+                        });
+                    }
                 };
 
-                const openEditModal = (idx) => {
-                    console.log('Open edit for', idx);
+                const updateTimesAfterDrag = () => {
+                    const dayEvents = myData.value.days[currentDayIndex.value].events;
+                    // Sort times chronologically to maintain time slot structure
+                    const timeSlots = dayEvents.map(e => e.time).sort();
+                    
+                    dayEvents.forEach((event, index) => {
+                        event.time = timeSlots[index];
+                    });
+                };
+
+                 const openAddModal = () => {
+                    isEditing.value = false;
+                    editingEventIndex.value = null;
+                    modalData.value = { time: '', title: '', desc: '', location: '', img: '' };
+                    showModal.value = true;
+                };
+
+                const openEditModal = (index) => {
+                    isEditing.value = true;
+                    editingEventIndex.value = index;
+                    modalData.value = { ...myData.value.days[currentDayIndex.value].events[index] };
+                    showModal.value = true;
+                };
+
+                const closeModal = () => {
+                    showModal.value = false;
                 };
 
                 const openShopDetails = (shop) => {
-                    console.log('Shop', shop.name);
+                    selectedShop.value = shop;
+                    showShopModal.value = true;
                 };
+
+                const closeShopModal = () => {
+                    showShopModal.value = false;
+                    setTimeout(() => selectedShop.value = null, 200); 
+                };
+
+                const saveEvent = () => {
+                    if (!modalData.value.title) return alert('請填寫標題');
+                    const newEvent = { ...modalData.value, id: Date.now() }; 
+                    
+                    if (isEditing.value) {
+                        myData.value.days[currentDayIndex.value].events[editingEventIndex.value] = newEvent;
+                    } else {
+                        myData.value.days[currentDayIndex.value].events.push(newEvent);
+                    }
+                    closeModal();
+                    nextTick(() => {
+                        initSortable();
+                        updateTimesAfterDrag();
+                    }); 
+                };
+
+                const deleteEvent = () => {
+                    if (confirm('確定要刪除此行程嗎？')) {
+                        myData.value.days[currentDayIndex.value].events.splice(editingEventIndex.value, 1);
+                        closeModal();
+                        nextTick(() => initSortable());
+                    }
+                };
+
+                onMounted(() => {
+                    nextTick(() => {
+                        initSortable();
+                    });
+                });
+                
+                Vue.watch(currentDayIndex, () => {
+                     if (sortableInstance) sortableInstance.destroy();
+                     nextTick(() => initSortable());
+                });
 
                 return {
                     currentTab,
                     currentDayIndex,
                     myData,
-                    sortableList,
-                    getShopIconColor,
-                    getShopNameParts,
-                    getSimpleHours,
                     getWeatherIcon,
+                    getShopIconColor,
+                    getShopNameParts, 
+                    getSimpleHours,
+                    sortableList,
+                    showModal,
+                    isEditing,
+                    modalData,
                     openAddModal,
                     openEditModal,
-                    openShopDetails
+                    closeModal,
+                    saveEvent,
+                    deleteEvent,
+                    showShopModal,
+                    selectedShop,
+                    openShopDetails,
+                    closeShopModal
                 };
             }
         }).mount('#app');
