@@ -15,13 +15,13 @@
             theme: {
                 extend: {
                     colors: {
-                        // 回復 Mindful Palette No.162 深色系配色
+                        // 全新鮮明霓虹配色
                         p: { 
-                            white: '#F2F3F4',    
-                            beige: '#DED1C6',    // 副色 (米杏)
-                            mauve: '#A77693',    // 主色 (紫藕)
-                            midBlue: '#174871',  
-                            darkBlue: '#0F2D4D', // 深藍背景
+                            white: '#FFFFFF',    // 純白文字，對比最強
+                            apricot: '#FFC857',  // 鮮明金杏色 (替代原本的 beige)
+                            purple: '#E056FD',   // 鮮明霓虹紫 (替代原本的 mauve)
+                            midBlue: '#1E40AF',  // 更飽和的深藍
+                            darkBlue: '#0F172A', // 午夜深藍背景
                         }
                     },
                     fontFamily: { 
@@ -40,8 +40,8 @@
             height: 100dvh;
             overflow: hidden;
             overscroll-behavior: none;
-            background-color: #0F2D4D;
-            color: #F2F3F4;
+            background-color: #0F172A; /* 使用新的深背景色 */
+            color: #FFFFFF;
         }
         
         #app {
@@ -57,43 +57,44 @@
         .animate-spin-slow { animation: spin 12s linear infinite; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* 深色玻璃擬態 */
+        /* 深色玻璃擬態 - 邊框色更新 */
         .glass-card {
-            background: rgba(23, 72, 113, 0.4); /* 深藍半透 */
+            background: rgba(30, 64, 175, 0.3); /* 基於 midBlue 的半透 */
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(222, 209, 198, 0.15); /* 米杏色微光邊框 */
-            box-shadow: 0 8px 32px 0 rgba(15, 45, 77, 0.3);
+            border: 1px solid rgba(255, 200, 87, 0.2); /* 鮮明杏色微光邊框 */
+            box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.5);
         }
         
-        /* 導航列 */
+        /* 導航列 - 頂部邊框與光暈更新 */
         .glass-nav {
-            background: rgba(15, 45, 77, 0.8);
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(167, 118, 147, 0.2);
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
+            border-top: 1px solid rgba(224, 86, 253, 0.3); /* 鮮明紫色邊框 */
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.7);
         }
 
+        /* 裝飾圓圈 - 顏色更新 */
         .glass-deco {
-            background: rgba(167, 118, 147, 0.2);
+            background: rgba(224, 86, 253, 0.2);
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(222, 209, 198, 0.3);
-            box-shadow: 0 0 15px rgba(167, 118, 147, 0.3);
+            border: 1px solid rgba(255, 200, 87, 0.3);
+            box-shadow: 0 0 15px rgba(224, 86, 253, 0.4);
         }
         
         .glass-modal {
-            background: rgba(15, 45, 77, 0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
         }
 
-        /* 文字發光 */
-        .text-glow { text-shadow: 0 0 12px rgba(242, 243, 244, 0.6); }
-        .text-glow-mauve { text-shadow: 0 0 12px rgba(167, 118, 147, 0.6); }
+        /* 文字發光 - 顏色更新 */
+        .text-glow { text-shadow: 0 0 12px rgba(255, 255, 255, 0.7); }
+        .text-glow-purple { text-shadow: 0 0 15px rgba(224, 86, 253, 0.8); } /* 更強烈的紫色光暈 */
         
         /* 拖曳樣式 */
         .sortable-ghost { opacity: 0.3; }
-        .sortable-drag { cursor: grabbing; background: rgba(167, 118, 147, 0.3); }
+        .sortable-drag { cursor: grabbing; background: rgba(224, 86, 253, 0.3); }
     </style>
 </head>
 <body>
@@ -101,74 +102,74 @@
         <div class="w-full max-w-md h-full relative shadow-2xl flex flex-col overflow-hidden bg-transparent">
             
             <div class="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-p-darkBlue to-p-midBlue">
-                <div class="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] bg-p-mauve/15 rounded-full blur-[90px]"></div>
-                <div class="absolute bottom-[-10%] left-[-20%] w-[350px] h-[350px] bg-p-midBlue/30 rounded-full blur-[90px]"></div>
+                <div class="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] bg-p-purple/20 rounded-full blur-[100px]"></div>
+                <div class="absolute bottom-[-10%] left-[-20%] w-[350px] h-[350px] bg-p-midBlue/40 rounded-full blur-[100px]"></div>
             </div>
 
             <header class="bg-transparent p-3 pt-4 z-10 flex justify-between items-start relative flex-shrink-0">
                 <div class="relative z-10 pl-2 flex flex-col justify-center w-full">
-                    <h2 class="text-[10px] tracking-widest opacity-90 text-p-beige mb-0.5 font-deco font-bold rotate-1 drop-shadow-md leading-none">Wayne & Chloe | Shanghai 2025</h2>
+                    <h2 class="text-[10px] tracking-widest opacity-90 text-p-apricot mb-0.5 font-deco font-bold rotate-1 drop-shadow-md leading-none">Wayne & Chloe | Shanghai 2025</h2>
                     <h1 class="text-3xl font-deco tracking-tight text-white drop-shadow-lg font-bold mt-0.5 text-glow">
                         <span class="inline-block filter drop-shadow-none">🎄</span> 聖誕上海之旅 <span class="inline-block filter drop-shadow-none">✨</span>
                     </h1>
                 </div>
                 <div class="w-9 h-9 glass-deco rounded-full flex items-center justify-center shadow-inner flex-shrink-0 mr-2">
-                    <i class="fa-solid fa-plane-up text-p-beige animate-bounce text-xs"></i>
+                    <i class="fa-solid fa-plane-up text-p-apricot animate-bounce text-xs"></i>
                 </div>
             </header>
 
             <main class="flex-1 overflow-y-auto scrollbar-hide p-5 pb-24 space-y-6 relative z-10">
                 
                 <div v-if="currentTab === 'flight'" class="animate-fade-in space-y-5">
-                    <h3 class="text-xl font-bold text-p-white tracking-wide pl-1 border-l-4 border-p-mauve text-glow">航班資訊</h3>
+                    <h3 class="text-xl font-bold text-p-white tracking-wide pl-1 border-l-4 border-p-purple text-glow">航班資訊</h3>
                     
                     <div class="glass-card rounded-3xl p-5 relative overflow-hidden group">
-                        <div class="absolute top-4 left-4 bg-p-mauve text-white text-[10px] px-2 py-0.5 rounded-full font-bold tracking-widest shadow-md">去程 OUTBOUND</div>
+                        <div class="absolute top-4 left-4 bg-p-purple text-white text-[10px] px-2 py-0.5 rounded-full font-bold tracking-widest shadow-md shadow-p-purple/30">去程 OUTBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-6">
                             <div class="text-center">
                                 <div class="text-4xl font-black text-p-white font-heiti tracking-tighter text-glow">{{ myData.flightOut.from }}</div>
-                                <div class="text-xs text-p-beige mt-1">香港 T1</div>
+                                <div class="text-xs text-p-apricot mt-1">香港 T1</div>
                             </div>
                             <div class="flex-1 px-4 flex flex-col items-center">
-                                <div class="text-[10px] text-p-mauve mb-1">{{ myData.flightOut.airline }}</div>
-                                <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-p-beige/50 to-transparent relative">
-                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-p-mauve rounded-full shadow-[0_0_8px_#A77693]"></div>
+                                <div class="text-[10px] text-p-purple mb-1">{{ myData.flightOut.airline }}</div>
+                                <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-p-apricot/50 to-transparent relative">
+                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-p-purple rounded-full shadow-[0_0_8px_#E056FD]"></div>
                                 </div>
-                                <div class="text-[10px] text-p-beige mt-1">{{ myData.flightOut.no }}</div>
+                                <div class="text-[10px] text-p-apricot mt-1">{{ myData.flightOut.no }}</div>
                             </div>
                             <div class="text-center">
                                 <div class="text-4xl font-black text-p-white font-heiti tracking-tighter text-glow">{{ myData.flightOut.to }}</div>
-                                <div class="text-xs text-p-beige mt-1">浦東 T1</div>
+                                <div class="text-xs text-p-apricot mt-1">浦東 T1</div>
                             </div>
                         </div>
-                        <div class="flex justify-between text-sm pt-4 border-t border-p-beige/10">
-                            <div><span class="text-p-beige/60 text-xs mr-2">Dep</span><span class="font-bold text-p-mauve">{{ myData.flightOut.dep }}</span></div>
-                            <div><span class="text-p-beige/60 text-xs mr-2">Arr</span><span class="font-bold text-p-mauve">{{ myData.flightOut.arr }}</span></div>
+                        <div class="flex justify-between text-sm pt-4 border-t border-p-apricot/10">
+                            <div><span class="text-p-apricot/70 text-xs mr-2">Dep</span><span class="font-bold text-p-purple">{{ myData.flightOut.dep }}</span></div>
+                            <div><span class="text-p-apricot/70 text-xs mr-2">Arr</span><span class="font-bold text-p-purple">{{ myData.flightOut.arr }}</span></div>
                         </div>
                     </div>
 
                     <div class="glass-card rounded-3xl p-5 relative overflow-hidden group">
-                        <div class="absolute top-4 left-4 bg-p-beige text-p-darkBlue text-[10px] px-2 py-0.5 rounded-full font-bold tracking-widest shadow-md">回程 INBOUND</div>
+                        <div class="absolute top-4 left-4 bg-p-apricot text-p-darkBlue text-[10px] px-2 py-0.5 rounded-full font-bold tracking-widest shadow-md shadow-p-apricot/30">回程 INBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-6">
                             <div class="text-center">
                                 <div class="text-4xl font-black text-p-white font-heiti tracking-tighter text-glow">{{ myData.flightIn.from }}</div>
-                                <div class="text-xs text-p-beige mt-1">浦東 T1</div>
+                                <div class="text-xs text-p-apricot mt-1">浦東 T1</div>
                             </div>
                             <div class="flex-1 px-4 flex flex-col items-center">
-                                <div class="text-[10px] text-p-beige mb-1">{{ myData.flightIn.airline }}</div>
-                                <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-p-beige/50 to-transparent relative">
-                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-p-beige rounded-full"></div>
+                                <div class="text-[10px] text-p-apricot mb-1">{{ myData.flightIn.airline }}</div>
+                                <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-p-apricot/50 to-transparent relative">
+                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-p-apricot rounded-full shadow-[0_0_8px_#FFC857]"></div>
                                 </div>
-                                <div class="text-[10px] text-p-beige mt-1">{{ myData.flightIn.no }}</div>
+                                <div class="text-[10px] text-p-apricot mt-1">{{ myData.flightIn.no }}</div>
                             </div>
                             <div class="text-center">
                                 <div class="text-4xl font-black text-p-white font-heiti tracking-tighter text-glow">{{ myData.flightIn.to }}</div>
-                                <div class="text-xs text-p-beige mt-1">香港 T1</div>
+                                <div class="text-xs text-p-apricot mt-1">香港 T1</div>
                             </div>
                         </div>
-                        <div class="flex justify-between text-sm pt-4 border-t border-p-beige/10">
-                            <div><span class="text-p-beige/60 text-xs mr-2">Dep</span><span class="font-bold text-p-white">{{ myData.flightIn.dep }}</span></div>
-                            <div><span class="text-p-beige/60 text-xs mr-2">Arr</span><span class="font-bold text-p-white">{{ myData.flightIn.arr }}</span></div>
+                        <div class="flex justify-between text-sm pt-4 border-t border-p-apricot/10">
+                            <div><span class="text-p-apricot/70 text-xs mr-2">Dep</span><span class="font-bold text-p-white">{{ myData.flightIn.dep }}</span></div>
+                            <div><span class="text-p-apricot/70 text-xs mr-2">Arr</span><span class="font-bold text-p-white">{{ myData.flightIn.arr }}</span></div>
                         </div>
                     </div>
                 </div>
@@ -176,7 +177,7 @@
                 <div v-if="currentTab === 'schedule'" class="animate-fade-in space-y-6">
                     <div class="flex overflow-x-auto space-x-3 pb-2 scrollbar-hide px-1">
                         <button v-for="(day, index) in myData.days" :key="index" @click="currentDayIndex = index" 
-                            :class="currentDayIndex === index ? 'bg-p-mauve text-white shadow-lg shadow-p-mauve/30 border-transparent' : 'glass-card text-p-beige border-p-beige/20'"
+                            :class="currentDayIndex === index ? 'bg-p-purple text-white shadow-lg shadow-p-purple/40 border-transparent' : 'glass-card text-p-apricot border-p-apricot/20'"
                             class="flex-shrink-0 px-5 py-3 rounded-2xl flex flex-col items-center min-w-[70px] transition-all duration-300">
                             <span class="text-[10px] uppercase tracking-wider font-bold mb-0.5">Day {{ index + 1 }}</span>
                             <span class="font-black text-xl leading-none font-heiti">{{ day.dateShort }}</span>
@@ -186,31 +187,31 @@
                     <div>
                         <div class="flex items-center justify-between mb-5 px-1">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-p-mauve/20 flex items-center justify-center text-p-mauve border border-p-mauve/30">
+                                <div class="w-8 h-8 rounded-full bg-p-purple/20 flex items-center justify-center text-p-purple border border-p-purple/30">
                                     <i class="fa-regular fa-calendar"></i>
                                 </div>
                                 <h3 class="text-xl font-bold text-p-white text-glow">{{ myData.days[currentDayIndex].date }}</h3>
                             </div>
-                            <span class="text-[10px] text-p-beige/50">長按拖曳排序</span>
+                            <span class="text-[10px] text-p-apricot/50">長按拖曳排序</span>
                         </div>
                         
                         <div class="relative pl-2">
-                            <div class="absolute left-[3.5px] top-2 bottom-0 w-[1px] bg-p-beige/20 rounded-full"></div>
+                            <div class="absolute left-[3.5px] top-2 bottom-0 w-[1px] bg-p-apricot/20 rounded-full"></div>
                             
                             <div ref="sortableList" class="space-y-4">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
                                      @click="openEditModal(idx)"
                                      class="relative group cursor-pointer active:cursor-grabbing">
                                     
-                                    <div class="absolute -left-[17px] top-4 w-3 h-3 bg-p-darkBlue border-[3px] border-p-mauve rounded-full z-10 shadow-sm"></div>
+                                    <div class="absolute -left-[17px] top-4 w-3 h-3 bg-p-darkBlue border-[3px] border-p-purple rounded-full z-10 shadow-sm shadow-p-purple/50"></div>
                                     
-                                    <div class="glass-card rounded-2xl p-0 overflow-hidden group hover:border-p-mauve/40 transition-all duration-300">
+                                    <div class="glass-card rounded-2xl p-0 overflow-hidden group hover:border-p-purple/50 transition-all duration-300">
                                         
                                         <div v-if="item.img" class="h-24 w-full relative overflow-hidden">
                                             <img :src="item.img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                                             <div class="absolute inset-0 bg-gradient-to-t from-p-darkBlue/90 via-transparent to-transparent"></div>
                                             <div class="absolute bottom-2 left-3 flex items-center gap-2 z-10">
-                                                <span class="bg-p-mauve text-white font-bold text-[10px] px-2 py-0.5 rounded shadow">{{ item.time }}</span>
+                                                <span class="bg-p-purple text-white font-bold text-[10px] px-2 py-0.5 rounded shadow-md shadow-p-purple/30">{{ item.time }}</span>
                                                 <div class="flex items-center text-white text-[10px] gap-1 font-bold" v-if="item.weather">
                                                     <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                                 </div>
@@ -218,20 +219,20 @@
                                         </div>
 
                                         <div v-else class="p-4 pb-0 flex justify-between items-center mb-1">
-                                            <span class="bg-p-mauve/20 text-p-mauve font-bold text-[10px] px-2 py-0.5 rounded-full border border-p-mauve/30">{{ item.time }}</span>
-                                            <div class="flex items-center text-p-beige/70 text-[10px] gap-1.5" v-if="item.weather">
+                                            <span class="bg-p-purple/20 text-p-purple font-bold text-[10px] px-2 py-0.5 rounded-full border border-p-purple/30">{{ item.time }}</span>
+                                            <div class="flex items-center text-p-apricot/70 text-[10px] gap-1.5" v-if="item.weather">
                                                 <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                             </div>
                                         </div>
                                         
                                         <div class="p-4 pt-2 relative">
                                             <h4 class="font-bold text-lg text-p-white mb-1 leading-tight">{{ item.title }}</h4>
-                                            <div class="flex items-center text-xs text-p-mauve mb-2">
+                                            <div class="flex items-center text-xs text-p-purple mb-2">
                                                 <i class="fa-solid fa-location-dot mr-1.5"></i>{{ item.location }}
                                             </div>
-                                            <p class="text-sm text-p-beige/80 font-light leading-relaxed line-clamp-2">{{ item.desc }}</p>
+                                            <p class="text-sm text-p-apricot/80 font-light leading-relaxed line-clamp-2">{{ item.desc }}</p>
                                             
-                                            <a :href="'https://www.google.com/maps/search/?api=1&query=' + (item.addr || item.location)" target="_blank" @click.stop class="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-p-midBlue/50 flex items-center justify-center text-p-mauve hover:text-white hover:bg-p-mauve transition-all border border-p-beige/10">
+                                            <a :href="'https://www.google.com/maps/search/?api=1&query=' + (item.addr || item.location)" target="_blank" @click.stop class="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-p-midBlue/50 flex items-center justify-center text-p-purple hover:text-white hover:bg-p-purple transition-all border border-p-apricot/20 shadow-sm shadow-p-purple/20">
                                                 <i class="fa-solid fa-diamond-turn-right text-xs"></i>
                                             </a>
                                         </div>
@@ -239,7 +240,7 @@
                                 </div>
                             </div>
                             
-                            <button @click="openAddModal" class="w-full py-3 mt-6 rounded-xl border border-dashed border-p-mauve/40 text-p-mauve/70 hover:bg-p-mauve/10 hover:text-p-mauve hover:border-p-mauve transition-all font-bold flex items-center justify-center gap-2">
+                            <button @click="openAddModal" class="w-full py-3 mt-6 rounded-xl border border-dashed border-p-purple/40 text-p-purple/70 hover:bg-p-purple/10 hover:text-p-purple hover:border-p-purple transition-all font-bold flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-plus"></i> 新增行程
                             </button>
                         </div>
@@ -247,30 +248,30 @@
                 </div>
 
                 <div v-if="currentTab === 'map'" class="animate-fade-in h-full flex flex-col items-center justify-center pt-10 pb-20">
-                    <div class="glass-card w-40 h-40 rounded-full flex items-center justify-center mb-8 border border-p-mauve/30 shadow-[0_0_40px_rgba(167,118,147,0.2)]">
-                        <i class="fa-solid fa-map-location-dot text-6xl text-p-mauve"></i>
+                    <div class="glass-card w-40 h-40 rounded-full flex items-center justify-center mb-8 border border-p-purple/30 shadow-[0_0_40px_rgba(224,86,253,0.3)]">
+                        <i class="fa-solid fa-map-location-dot text-6xl text-p-purple drop-shadow-[0_0_10px_rgba(224,86,253,0.5)]"></i>
                     </div>
                     <h3 class="text-2xl font-bold text-p-white mb-3 text-glow">探索地圖</h3>
-                    <p class="text-p-beige text-sm text-center font-light px-10">點擊行程卡片上的地點即可開啟導航</p>
+                    <p class="text-p-apricot text-sm text-center font-light px-10">點擊行程卡片上的地點即可開啟導航</p>
                 </div>
 
                 <div v-if="currentTab === 'shops'" class="animate-fade-in space-y-4">
-                    <h3 class="text-xl font-bold text-p-white pl-1 border-l-4 border-p-mauve text-glow">精選店舖</h3>
+                    <h3 class="text-xl font-bold text-p-white pl-1 border-l-4 border-p-purple text-glow">精選店舖</h3>
                     <div class="grid grid-cols-2 gap-4">
                         <div v-for="(shop, idx) in myData.shops" :key="idx" class="glass-card rounded-2xl p-4 flex flex-col items-center text-center gap-3 group hover:-translate-y-1 transition-transform duration-300">
-                            <div class="w-12 h-12 rounded-full flex items-center justify-center text-xl mb-1 shadow-lg" :class="idx % 2 === 0 ? 'bg-p-mauve/20 text-p-mauve border border-p-mauve/30' : 'bg-p-beige/20 text-p-beige border border-p-beige/30'">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center text-xl mb-1 shadow-lg" :class="idx % 2 === 0 ? 'bg-p-purple/20 text-p-purple border border-p-purple/30 shadow-p-purple/20' : 'bg-p-apricot/20 text-p-apricot border border-p-apricot/30 shadow-p-apricot/20'">
                                 <i :class="['fa-solid', shop.icon]"></i>
                             </div>
                             <div>
                                 <h4 class="font-bold text-p-white text-sm mb-1">{{ shop.name }}</h4>
-                                <div class="text-[10px] text-p-beige/70 border border-p-beige/20 rounded-full px-2 py-0.5 inline-block">{{ shop.area }}</div>
+                                <div class="text-[10px] text-p-apricot/70 border border-p-apricot/20 rounded-full px-2 py-0.5 inline-block">{{ shop.area }}</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div v-if="currentTab === 'hotel'" class="animate-fade-in space-y-5">
-                    <h3 class="text-xl font-bold text-p-white pl-1 border-l-4 border-p-beige text-glow">住宿資訊</h3>
+                    <h3 class="text-xl font-bold text-p-white pl-1 border-l-4 border-p-apricot text-glow">住宿資訊</h3>
                     
                     <div class="glass-card rounded-3xl overflow-hidden group">
                         <div class="h-56 relative">
@@ -279,27 +280,27 @@
                             
                             <div class="absolute bottom-4 left-4 right-4">
                                 <div class="flex gap-1 mb-2">
-                                    <i class="fa-solid fa-star text-xs text-p-beige"></i>
-                                    <i class="fa-solid fa-star text-xs text-p-beige"></i>
-                                    <i class="fa-solid fa-star text-xs text-p-beige"></i>
-                                    <i class="fa-solid fa-star text-xs text-p-beige"></i>
+                                    <i class="fa-solid fa-star text-xs text-p-apricot"></i>
+                                    <i class="fa-solid fa-star text-xs text-p-apricot"></i>
+                                    <i class="fa-solid fa-star text-xs text-p-apricot"></i>
+                                    <i class="fa-solid fa-star text-xs text-p-apricot"></i>
                                 </div>
                                 <h2 class="text-2xl font-bold text-p-white mb-1 shadow-sm text-glow">{{ myData.hotel.name }}</h2>
-                                <p class="text-xs text-p-beige flex items-center"><i class="fa-solid fa-location-dot mr-1"></i>{{ myData.hotel.address }}</p>
+                                <p class="text-xs text-p-apricot flex items-center"><i class="fa-solid fa-location-dot mr-1"></i>{{ myData.hotel.address }}</p>
                             </div>
                         </div>
                         
-                        <div class="p-5 flex justify-between text-center border-t border-p-beige/10">
+                        <div class="p-5 flex justify-between text-center border-t border-p-apricot/10">
                             <div>
-                                <div class="text-xs text-p-beige/60 uppercase tracking-widest mb-1">Check-in</div>
-                                <div class="text-xl font-bold text-p-mauve text-glow-mauve">14:00</div>
-                                <div class="text-[10px] text-p-beige mt-1">{{ myData.hotel.checkIn }}</div>
+                                <div class="text-xs text-p-apricot/60 uppercase tracking-widest mb-1">Check-in</div>
+                                <div class="text-xl font-bold text-p-purple text-glow-purple">14:00</div>
+                                <div class="text-[10px] text-p-apricot mt-1">{{ myData.hotel.checkIn }}</div>
                             </div>
-                            <div class="w-[1px] bg-p-beige/20"></div>
+                            <div class="w-[1px] bg-p-apricot/20"></div>
                             <div>
-                                <div class="text-xs text-p-beige/60 uppercase tracking-widest mb-1">Check-out</div>
+                                <div class="text-xs text-p-apricot/60 uppercase tracking-widest mb-1">Check-out</div>
                                 <div class="text-xl font-bold text-p-white text-glow">12:00</div>
-                                <div class="text-[10px] text-p-beige mt-1">{{ myData.hotel.checkOut }}</div>
+                                <div class="text-[10px] text-p-apricot mt-1">{{ myData.hotel.checkOut }}</div>
                             </div>
                         </div>
                     </div>
@@ -308,67 +309,67 @@
             </main>
 
             <nav class="glass-nav h-20 px-6 flex justify-between items-center z-20 rounded-t-[2.5rem] pb-2 relative flex-shrink-0">
-                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-p-mauve scale-110 drop-shadow-md' : 'text-p-beige/40 hover:text-p-beige'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
+                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-p-purple scale-110 drop-shadow-[0_0_8px_rgba(224,86,253,0.6)]' : 'text-p-apricot/50 hover:text-p-apricot'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
                     <i class="fa-solid fa-plane-departure text-xl"></i>
                     <span class="text-[10px] font-bold">航班</span>
                 </button>
-                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-p-mauve scale-110 drop-shadow-md' : 'text-p-beige/40 hover:text-p-beige'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
+                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-p-purple scale-110 drop-shadow-[0_0_8px_rgba(224,86,253,0.6)]' : 'text-p-apricot/50 hover:text-p-apricot'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
                     <i class="fa-solid fa-clipboard-list text-xl"></i>
                     <span class="text-[10px] font-bold">行程</span>
                 </button>
                 <div class="-mt-10 relative z-10">
-                    <button @click="currentTab = 'map'" class="bg-gradient-to-tr from-p-midBlue to-p-mauve text-white w-14 h-14 rounded-full shadow-lg shadow-p-mauve/40 border-[3px] border-p-midBlue flex items-center justify-center transform transition-transform active:scale-95">
-                        <i class="fa-solid fa-map text-2xl"></i>
+                    <button @click="currentTab = 'map'" class="bg-gradient-to-tr from-p-midBlue to-p-purple text-white w-14 h-14 rounded-full shadow-lg shadow-p-purple/50 border-[3px] border-p-midBlue flex items-center justify-center transform transition-transform active:scale-95">
+                        <i class="fa-solid fa-map text-2xl animate-pulse"></i>
                     </button>
                 </div>
-                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-p-mauve scale-110 drop-shadow-md' : 'text-p-beige/40 hover:text-p-beige'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
+                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-p-purple scale-110 drop-shadow-[0_0_8px_rgba(224,86,253,0.6)]' : 'text-p-apricot/50 hover:text-p-apricot'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
                     <i class="fa-solid fa-store text-xl"></i>
                     <span class="text-[10px] font-bold">店舖</span>
                 </button>
-                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-p-mauve scale-110 drop-shadow-md' : 'text-p-beige/40 hover:text-p-beige'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
+                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-p-purple scale-110 drop-shadow-[0_0_8px_rgba(224,86,253,0.6)]' : 'text-p-apricot/50 hover:text-p-apricot'" class="flex flex-col items-center gap-1 w-12 transition-all duration-300">
                     <i class="fa-solid fa-bed text-xl"></i>
                     <span class="text-[10px] font-bold">住宿</span>
                 </button>
             </nav>
 
             <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal">
-                <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col max-h-[90vh] overflow-hidden border border-p-mauve/50">
+                <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col max-h-[90vh] overflow-hidden border border-p-purple/50">
                     <h3 class="text-2xl font-bold text-center mb-4 text-p-white text-glow">{{ isEditing ? '編輯行程' : '新增行程' }}</h3>
                     
                     <div class="overflow-y-auto space-y-4 pr-1 scrollbar-hide flex-1">
                         <div>
-                            <label class="text-xs text-p-beige font-bold uppercase">時間</label>
-                            <input v-model="modalData.time" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-p-mauve outline-none mt-1">
+                            <label class="text-xs text-p-apricot font-bold uppercase">時間</label>
+                            <input v-model="modalData.time" type="text" class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors">
                         </div>
                         <div>
-                            <label class="text-xs text-p-beige font-bold uppercase">標題</label>
-                            <input v-model="modalData.title" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-p-mauve outline-none mt-1">
+                            <label class="text-xs text-p-apricot font-bold uppercase">標題</label>
+                            <input v-model="modalData.title" type="text" class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors">
                         </div>
                         <div>
-                            <label class="text-xs text-p-beige font-bold uppercase">地點 (導航用)</label>
-                            <input v-model="modalData.location" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-p-mauve outline-none mt-1">
+                            <label class="text-xs text-p-apricot font-bold uppercase">地點 (導航用)</label>
+                            <input v-model="modalData.location" type="text" class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors">
                         </div>
                         <div>
-                            <label class="text-xs text-p-beige font-bold uppercase">地址 (顯示用)</label>
-                            <input v-model="modalData.addr" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-p-mauve outline-none mt-1">
+                            <label class="text-xs text-p-apricot font-bold uppercase">地址 (顯示用)</label>
+                            <input v-model="modalData.addr" type="text" class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors">
                         </div>
                         <div>
-                            <label class="text-xs text-p-beige font-bold uppercase">圖片網址</label>
-                            <input v-model="modalData.img" type="text" placeholder="https://..." class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-p-mauve outline-none mt-1">
+                            <label class="text-xs text-p-apricot font-bold uppercase">圖片網址</label>
+                            <input v-model="modalData.img" type="text" placeholder="https://..." class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors">
                         </div>
-                        <div v-if="modalData.img" class="h-32 rounded-lg overflow-hidden border border-white/20">
+                        <div v-if="modalData.img" class="h-32 rounded-lg overflow-hidden border border-p-apricot/30">
                             <img :src="modalData.img" class="w-full h-full object-cover">
                         </div>
                         <div>
-                            <label class="text-xs text-p-beige font-bold uppercase">詳細描述</label>
-                            <textarea v-model="modalData.desc" rows="3" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-p-mauve outline-none mt-1"></textarea>
+                            <label class="text-xs text-p-apricot font-bold uppercase">詳細描述</label>
+                            <textarea v-model="modalData.desc" rows="3" class="w-full bg-white/10 border border-p-apricot/30 rounded-lg p-2 text-white focus:border-p-purple outline-none mt-1 transition-colors"></textarea>
                         </div>
                     </div>
 
-                    <div class="flex gap-3 mt-6 pt-4 border-t border-white/10">
-                        <button v-if="isEditing" @click="deleteEvent" class="flex-1 py-3 rounded-xl bg-red-500/80 text-white font-bold hover:bg-red-500">刪除</button>
-                        <button @click="showModal = false" class="flex-1 py-3 rounded-xl bg-white/10 text-white font-bold hover:bg-white/20">取消</button>
-                        <button @click="saveEvent" class="flex-1 py-3 rounded-xl bg-p-mauve text-white font-bold hover:bg-white hover:text-p-mauve shadow-lg">儲存</button>
+                    <div class="flex gap-3 mt-6 pt-4 border-t border-p-apricot/20">
+                        <button v-if="isEditing" @click="deleteEvent" class="flex-1 py-3 rounded-xl bg-red-500/80 text-white font-bold hover:bg-red-500 transition-colors">刪除</button>
+                        <button @click="showModal = false" class="flex-1 py-3 rounded-xl bg-white/10 text-white font-bold hover:bg-white/20 transition-colors">取消</button>
+                        <button @click="saveEvent" class="flex-1 py-3 rounded-xl bg-p-purple text-white font-bold hover:bg-white hover:text-p-purple shadow-lg shadow-p-purple/30 transition-all">儲存</button>
                     </div>
                 </div>
             </div>
@@ -394,8 +395,8 @@
                 checkIn: "12月23日", checkOut: "12月26日",
                 image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1000&auto=format&fit=crop"
             },
-            flightOut: { from: "HKG", to: "PVG", date: "2025/12/23", no: "MU726", dep: "07:40", arr: "10:30", airline: "東方航空" },
-            flightIn: { from: "PVG", to: "HKG", date: "2025/12/26", no: "MU725", dep: "21:20", arr: "00:15", airline: "東方航空" },
+            flightOut: { from: "HKG", to: "PVG", date: "2025/12/23", no: "MU726", dep: "07:40", arr: "10:30", airline: "中國東方航空" },
+            flightIn: { from: "PVG", to: "HKG", date: "2025/12/26", no: "MU725", dep: "21:20", arr: "00:15", airline: "中國東方航空" },
             days: [
                 {
                     date: "12月23日 (二)", dateShort: "23", 
@@ -431,7 +432,6 @@
             ]
         };
 
-        const { createApp, ref, onMounted, nextTick, watch } = Vue;
         createApp({
             setup() {
                 const currentTab = ref('schedule');
@@ -446,9 +446,10 @@
 
                 const getWeatherIcon = (type) => {
                     const t = type ? type.toLowerCase() : '';
-                    if (t.includes('sun') || t.includes('clear')) return 'fa-solid fa-sun text-p-beige'; 
-                    if (t.includes('cloud')) return 'fa-solid fa-cloud text-p-beige/60';
-                    return 'fa-solid fa-cloud-sun text-p-beige';
+                    // 更新天氣圖標顏色為鮮明杏色
+                    if (t.includes('sun') || t.includes('clear')) return 'fa-solid fa-sun text-p-apricot'; 
+                    if (t.includes('cloud')) return 'fa-solid fa-cloud text-p-apricot/60';
+                    return 'fa-solid fa-cloud-sun text-p-apricot';
                 };
 
                 const initSortable = () => {
