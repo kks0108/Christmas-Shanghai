@@ -103,7 +103,8 @@
         .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
         
         .sortable-ghost { opacity: 0.3; }
-        .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.15); transform: scale(1.02); }
+        /* 拖曳時的效果 */
+        .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.15); transform: scale(1.02); z-index: 50; }
     </style>
 </head>
 <body>
@@ -194,12 +195,12 @@
                     <div class="flex overflow-x-auto space-x-3 pb-1 scrollbar-hide px-1">
                         <button v-for="(day, index) in myData.days" :key="index" @click="currentDayIndex = index" 
                             :class="currentDayIndex === index ? 'bg-scheme1-primary text-white shadow-[0_0_15px_rgba(255,126,226,0.6)] border-transparent scale-105' : 'glass-card text-scheme1-textSub border-white/20'"
-                            class="flex-shrink-0 px-4 py-2 rounded-xl flex flex-col items-center min-w-[65px] transition-all duration-300 backdrop-blur-sm">
-                            <div class="flex flex-col items-center leading-tight">
-                                <span class="text-[10px] uppercase tracking-wider font-bold opacity-80">Day {{ index + 1 }}</span>
-                                <span class="text-xs font-bold mt-0.5">{{ day.weekday }}</span>
+                            class="flex-shrink-0 px-4 py-2 rounded-xl flex flex-col items-center min-w-[75px] transition-all duration-300 backdrop-blur-sm">
+                            <div class="flex flex-col items-center leading-tight py-1">
+                                <span class="text-sm uppercase tracking-wider font-black mb-0.5">Day {{ index + 1 }}</span>
+                                <span class="font-bold text-lg leading-tight">{{ day.dateShort }}</span>
+                                <span class="text-[10px] opacity-80 mt-0.5">{{ day.weekday }}</span>
                             </div>
-                            <span class="font-black text-xl leading-tight mt-1">{{ day.dateShort }}</span>
                         </button>
                     </div>
 
@@ -460,7 +461,7 @@
 
         createApp({
             setup() {
-                const currentTab = ref('flight'); // Default to flight tab
+                const currentTab = ref('flight'); // Default tab set to flight
                 const currentDayIndex = ref(0);
                 
                 const showModal = ref(false);
@@ -483,7 +484,7 @@
                             name: "一尺花園（廣富林店）", 
                             tag: "古宅花園", 
                             address: "松江區廣富林路3088弄3號集賢坊01-03棟", 
-                            hours: "星期一至日 10am - 10pm", 
+                            hours: "星期一至日 10:00 - 22:00", // Updated to 24h
                             transport: "巴士松江98路 / 松江15路 (廣富林路龍源路站) 下車步行5分鐘", 
                             icon: "tree", 
                             color: "text-green-400" 
@@ -492,7 +493,7 @@
                             name: "wabi cofe（愚園路店）", 
                             tag: "日式庭院", 
                             address: "長寧區愚園路1327號", 
-                            hours: "星期一至日 10:30am - 12am", 
+                            hours: "星期一至日 10:30 - 00:00", // Updated to 24h
                             transport: "地鐵中山公園站 8號出口", 
                             icon: "mug-hot", 
                             color: "text-yellow-600" 
@@ -501,7 +502,7 @@
                             name: "LCH Café", 
                             tag: "復古風", 
                             address: "上海市黃浦區南昌路274號-1號", 
-                            hours: "週一至四 10:00-18:00 | 週五至日 10:00-19:00", 
+                            hours: "週一至四 10:00-18:00 | 週五至日 10:00-19:00", // Already 24h
                             transport: "地鐵陝西南路站 (1/10/12號線)", 
                             icon: "martini-glass-citrus", 
                             color: "text-pink-400" 
@@ -531,7 +532,7 @@
                     },
                     days: [
                         {
-                            date: "12月23日 (二)", dateShort: "23", weekday: "(二)",
+                            date: "12月23日", dateShort: "23 DEC", weekday: "(二)",
                             events: [
                                 { id: 1, time: "10:30", title: "抵達上海浦東 🛬", location: "上海市浦東新區浦東國際機場 T1", desc: "入境手續、領取行李，前往酒店Check-in。", weather: "cloudy", temp: "8°C" },
                                 { id: 2, time: "15:00", title: "浦東美術館 🎨", location: "上海市浦東新區濱江大道2777號", desc: "欣賞建築之美，窗口可直面外灘萬國建築群。", weather: "cloudy", temp: "9°C" },
@@ -539,7 +540,7 @@
                             ]
                         },
                         {
-                            date: "12月24日 (三)", dateShort: "24", weekday: "(三)",
+                            date: "12月24日", dateShort: "24 DEC", weekday: "(三)",
                             events: [
                                 { id: 4, time: "10:00", title: "豫園 & 城隍廟 🧧", location: "上海市黃浦區福佑路168號", desc: "江南古典園林與老上海祈福，品嚐南翔小籠包。", weather: "sunny", temp: "9°C" },
                                 { id: 5, time: "14:30", title: "新天地北里 🎄", location: "上海市黃浦區太倉路181號", desc: "平安夜逛街，石庫門建築與現代聖誕裝飾完美融合。", weather: "sunny", temp: "10°C" },
@@ -547,14 +548,14 @@
                             ]
                         },
                         {
-                            date: "12月25日 (四)", dateShort: "25", weekday: "(四)",
+                            date: "12月25日", dateShort: "25 DEC", weekday: "(四)",
                             events: [
                                 { id: 7, time: "10:00", title: "朱家角古鎮 🛶", location: "上海市青浦區朱家角古鎮課植園路", desc: "上海威尼斯，乘手搖船遊覽放生橋與古巷(全日行程)。", weather: "sunny", temp: "11°C" },
                                 { id: 8, time: "17:00", title: "返回市區 🚌", location: "上海市黃浦區人民廣場", desc: "搭乘地鐵17號線返回市區休息。", weather: "clear", temp: "7°C" }
                             ]
                         },
                         {
-                            date: "12月26日 (五)", dateShort: "26", weekday: "(五)",
+                            date: "12月26日", dateShort: "26 DEC", weekday: "(五)",
                             events: [
                                 { id: 9, time: "10:30", title: "武康路 City Walk 🍂", location: "上海市徐匯區武康路", desc: "打卡武康大樓(淮海中路1850號)，感受法租界梧桐樹下的浪漫。", weather: "cloudy", temp: "8°C" },
                                 { id: 10, time: "14:00", title: "田子坊 🛍️", location: "上海市黃浦區泰康路210號", desc: "穿梭老弄堂，購買特色文創與伴手禮。", weather: "cloudy", temp: "9°C" },
