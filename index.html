@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&family=Noto+Sans+SC:wght@900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+SC:wght@900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -29,7 +29,6 @@
                     fontFamily: { 
                         sans: ['Noto Sans TC', 'sans-serif'],
                         deco: ['Zen Maru Gothic', 'sans-serif'], 
-                        // 確保 heiti 使用 Noto Sans SC 以呈現極粗效果
                         heiti: ['Noto Sans SC', 'Heiti SC', 'SimHei', 'sans-serif']
                     }
                 }
@@ -137,7 +136,7 @@
                             <div class="flex-1 px-2 text-center flex flex-col items-center"><div class="text-xs text-scheme1-primary font-bold">{{ myData.flightOut.airline }}</div><i class="fa-solid fa-plane text-white text-xl block my-1 drop-shadow-md"></i><div class="border-b-2 border-dotted border-white/40 w-full h-1"></div><div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.flightOut.no }}</div></div>
                             <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti">{{ myData.flightOut.to }}</div><div class="text-sm text-scheme1-accent font-bold mt-1 tracking-wide">上海浦東 T1</div></div>
                         </div>
-                        <div class="bg-white/5 rounded-xl p-3 flex justify-between items-start text-sm border border-white/10">
+                        <div class="bg-white/5 rounded-xl p-3 flex justify-between items-start text-sm border border-white/20">
                             <div><span class="text-xs text-scheme1-textSub/80 font-bold block">Date</span>{{ myData.flightOut.date }}</div>
                             <div class="flex gap-4">
                                 <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Dep</span><span class="font-bold text-scheme1-primary text-xl">{{ myData.flightOut.dep }}</span></div>
@@ -224,7 +223,7 @@
                                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                                             <div class="absolute bottom-2 left-3 right-3 flex justify-between items-end z-10">
                                                 <div class="flex items-center gap-2">
-                                                    <span class="bg-scheme1-primary text-white font-bold text-xs px-2 py-0.5 rounded shadow">{{ item.time }}</span>
+                                                    <span class="bg-scheme1-primary text-white font-bold text-sm px-2 py-0.5 rounded shadow">{{ item.time }}</span>
                                                     <div class="flex items-center text-white text-xs gap-1 font-bold" v-if="item.weather">
                                                         <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                                     </div>
@@ -233,7 +232,7 @@
                                         </div>
 
                                         <div v-else class="p-3 pb-0 flex justify-between items-center mb-1">
-                                            <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-xs px-2.5 py-0.5 rounded-full border border-scheme1-primary/30">{{ item.time }}</span>
+                                            <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-sm px-2.5 py-0.5 rounded-full border border-scheme1-primary/30">{{ item.time }}</span>
                                             <div class="flex items-center text-scheme1-textSub text-xs gap-1.5 font-bold" v-if="item.weather">
                                                 <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                             </div>
@@ -245,7 +244,7 @@
                                             <p class="text-xs text-scheme1-textSub/90 mb-1 leading-snug font-bold line-clamp-2">{{ item.desc }}</p>
                                             
                                             <div class="flex justify-between items-end mt-2">
-                                                <p v-if="item.location" class="text-xs text-scheme1-secondary flex items-center truncate max-w-[65%]"><i class="fa-solid fa-location-dot mr-1"></i>{{ item.location }}</p>
+                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex items-center truncate max-w-[65%]"><i class="fa-solid fa-location-dot mr-1 text-xs"></i>{{ item.location }}</p>
                                                 
                                                 <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20">
                                                     <i class="fa-solid fa-diamond-turn-right text-sm"></i>
@@ -460,32 +459,32 @@
                         {
                             date: "12月23日 (二)", dateShort: "23", 
                             events: [
-                                { id: 1, time: "10:30", title: "抵達上海浦東 🛬", location: "上海浦東國際機場 T1", desc: "入境手續、領取行李，前往酒店Check-in。", weather: "cloudy", temp: "8°C" },
-                                { id: 2, time: "15:00", title: "浦東美術館 🎨", location: "浦東美術館", desc: "欣賞建築之美，窗口可直面外灘萬國建築群。", weather: "cloudy", temp: "9°C" },
-                                { id: 3, time: "18:00", title: "十六鋪碼頭 🌃", location: "十六鋪碼頭", desc: "漫步江邊或搭乘遊船，欣賞黃浦江璀璨夜景。", weather: "clear", temp: "5°C" }
+                                { id: 1, time: "10:30", title: "抵達上海浦東 🛬", location: "上海市浦東新區浦東國際機場 T1", desc: "入境手續、領取行李，前往酒店Check-in。", weather: "cloudy", temp: "8°C" },
+                                { id: 2, time: "15:00", title: "浦東美術館 🎨", location: "上海市浦東新區濱江大道2777號", desc: "欣賞建築之美，窗口可直面外灘萬國建築群。", weather: "cloudy", temp: "9°C" },
+                                { id: 3, time: "18:00", title: "十六鋪碼頭 🌃", location: "上海市黃浦區中山東二路551號", desc: "漫步江邊或搭乘遊船，欣賞黃浦江璀璨夜景。", weather: "clear", temp: "5°C" }
                             ]
                         },
                         {
                             date: "12月24日 (三)", dateShort: "24",
                             events: [
-                                { id: 4, time: "10:00", title: "豫園 & 城隍廟 🧧", location: "豫園", desc: "江南古典園林與老上海祈福，品嚐南翔小籠包。", weather: "sunny", temp: "9°C" },
-                                { id: 5, time: "14:30", title: "新天地北里 🎄", location: "上海新天地", desc: "平安夜逛街，石庫門建築與現代聖誕裝飾完美融合。", weather: "sunny", temp: "10°C" },
-                                { id: 6, time: "19:00", title: "平安夜晚餐 🍷", location: "新天地北里", desc: "在充滿節日氣氛的餐廳享用聖誕大餐。", weather: "clear", temp: "6°C" }
+                                { id: 4, time: "10:00", title: "豫園 & 城隍廟 🧧", location: "上海市黃浦區福佑路168號", desc: "江南古典園林與老上海祈福，品嚐南翔小籠包。", weather: "sunny", temp: "9°C" },
+                                { id: 5, time: "14:30", title: "新天地北里 🎄", location: "上海市黃浦區太倉路181號", desc: "平安夜逛街，石庫門建築與現代聖誕裝飾完美融合。", weather: "sunny", temp: "10°C" },
+                                { id: 6, time: "19:00", title: "平安夜晚餐 🍷", location: "上海市黃浦區新天地北里", desc: "在充滿節日氣氛的餐廳享用聖誕大餐。", weather: "clear", temp: "6°C" }
                             ]
                         },
                         {
                             date: "12月25日 (四)", dateShort: "25",
                             events: [
-                                { id: 7, time: "10:00", title: "朱家角古鎮 🛶", location: "朱家角古鎮", desc: "上海威尼斯，乘手搖船遊覽放生橋與古巷(全日行程)。", weather: "sunny", temp: "11°C" },
-                                { id: 8, time: "17:00", title: "返回市區 🚌", location: "人民廣場", desc: "搭乘地鐵17號線返回市區休息。", weather: "clear", temp: "7°C" }
+                                { id: 7, time: "10:00", title: "朱家角古鎮 🛶", location: "上海市青浦區朱家角古鎮課植園路", desc: "上海威尼斯，乘手搖船遊覽放生橋與古巷(全日行程)。", weather: "sunny", temp: "11°C" },
+                                { id: 8, time: "17:00", title: "返回市區 🚌", location: "上海市黃浦區人民廣場", desc: "搭乘地鐵17號線返回市區休息。", weather: "clear", temp: "7°C" }
                             ]
                         },
                         {
                             date: "12月26日 (五)", dateShort: "26",
                             events: [
-                                { id: 9, time: "10:30", title: "武康路 City Walk 🍂", location: "武康路歷史文化名街", desc: "打卡武康大樓，感受法租界梧桐樹下的浪漫。", weather: "cloudy", temp: "8°C" },
-                                { id: 10, time: "14:00", title: "田子坊 🛍️", location: "田子坊", desc: "穿梭老弄堂，購買特色文創與伴手禮。", weather: "cloudy", temp: "9°C" },
-                                { id: 11, time: "17:30", title: "前往機場 🚕", location: "上海浦東國際機場 T1", desc: "預留時間前往機場，準備搭乘21:20航班。", weather: "cloudy", temp: "7°C" }
+                                { id: 9, time: "10:30", title: "武康路 City Walk 🍂", location: "上海市徐匯區武康路", desc: "打卡武康大樓(淮海中路1850號)，感受法租界梧桐樹下的浪漫。", weather: "cloudy", temp: "8°C" },
+                                { id: 10, time: "14:00", title: "田子坊 🛍️", location: "上海市黃浦區泰康路210號", desc: "穿梭老弄堂，購買特色文創與伴手禮。", weather: "cloudy", temp: "9°C" },
+                                { id: 11, time: "17:30", title: "前往機場 🚕", location: "上海市浦東新區浦東國際機場 T1", desc: "預留時間前往機場，準備搭乘21:20航班。", weather: "cloudy", temp: "7°C" }
                             ]
                         }
                     ]
