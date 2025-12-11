@@ -96,8 +96,8 @@
         }
 
         .glass-modal {
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.85); /* 稍微深一點的背景讓詳情更清楚 */
+            backdrop-filter: blur(25px);
         }
 
         .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
@@ -276,37 +276,19 @@
 
                 <div v-if="currentTab === 'shops'" class="animate-fade-in">
                     <h3 class="font-bold text-xl mb-4 pl-3 border-l-4 border-scheme1-primary text-white opacity-90 text-shadow-sm font-deco tracking-wide">🛍️ 必逛店舖 & 美食</h3>
-                    <div class="space-y-4">
-                        <div v-for="(shop, idx) in myData.shops" :key="idx" class="glass-card rounded-2xl p-4 flex flex-col relative overflow-hidden group hover:border-scheme1-primary/50 transition-colors select-none">
-                            <div class="flex items-center mb-2">
-                                <div :class="getShopIconColor(shop.color)" class="w-10 h-10 rounded-full bg-white/5 border border-white/20 flex items-center justify-center flex-shrink-0 text-lg shadow-inner">
-                                    <i :class="['fa-solid', shop.icon]"></i>
-                                </div>
-                                <div class="ml-3 flex-1">
-                                    <div class="flex justify-between items-center">
-                                        <h4 class="font-bold text-white text-lg drop-shadow-sm select-text cursor-text">{{ shop.name }}</h4>
-                                        <a :href="'https://www.google.com/maps/search/?api=1&query=' + shop.address" target="_blank" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20">
-                                            <i class="fa-solid fa-diamond-turn-right text-xs"></i>
-                                        </a>
-                                    </div>
-                                    <span v-if="shop.tag" class="text-[10px] bg-scheme1-primary/10 text-scheme1-primary px-1.5 py-0.5 rounded border border-scheme1-primary/20 font-bold inline-block">{{ shop.tag }}</span>
-                                </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div v-for="(shop, idx) in myData.shops" :key="idx" 
+                             @click="openShopDetails(shop)"
+                             class="glass-card rounded-2xl p-4 flex flex-col items-center justify-center text-center relative overflow-hidden group hover:border-scheme1-primary/50 transition-colors select-none cursor-pointer aspect-square">
+                            
+                            <div :class="getShopIconColor(shop.color)" class="w-10 h-10 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-lg shadow-inner mb-2 group-hover:scale-110 transition-transform">
+                                <i :class="['fa-solid', shop.icon]"></i>
                             </div>
                             
-                            <div class="space-y-1.5 text-sm">
-                                <div class="flex items-start text-scheme1-secondary">
-                                    <i class="fa-solid fa-location-dot mt-1 mr-2 text-xs opacity-80"></i>
-                                    <span class="leading-snug select-text cursor-text">{{ shop.address }}</span>
-                                </div>
-                                <div class="flex items-center text-scheme1-textSub/80">
-                                    <i class="fa-solid fa-clock mr-2 text-xs opacity-80"></i>
-                                    <span>{{ shop.hours }}</span>
-                                </div>
-                                <div class="flex items-center text-scheme1-textSub/80" v-if="shop.transport">
-                                    <i class="fa-solid fa-train-subway mr-2 text-xs opacity-80"></i>
-                                    <span class="text-xs">{{ shop.transport }}</span>
-                                </div>
-                            </div>
+                            <h4 class="font-bold text-white text-base leading-tight mb-1 drop-shadow-sm line-clamp-2">{{ shop.name }}</h4>
+                            <p class="text-xs text-scheme1-textSub/70 mb-2 font-bold">{{ shop.hours.split(' ')[0] }}...</p>
+                            
+                            <span v-if="shop.tag" class="text-[10px] bg-scheme1-primary/10 text-scheme1-primary px-2 py-0.5 rounded-full border border-scheme1-primary/20 font-bold">{{ shop.tag }}</span>
                         </div>
                     </div>
                 </div>
@@ -413,6 +395,44 @@
                 </div>
             </div>
 
+            <div v-if="showShopModal && selectedShop" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal" @click.self="closeShopModal">
+                <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col shadow-2xl border border-scheme1-primary/40">
+                    
+                    <button @click="closeShopModal" class="absolute top-4 right-4 text-white/60 hover:text-white transition-colors z-10">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+
+                    <div class="flex flex-col items-center text-center mb-6">
+                        <div :class="getShopIconColor(selectedShop.color)" class="w-16 h-16 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-3">
+                            <i :class="['fa-solid', selectedShop.icon]"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white font-deco tracking-wide select-text cursor-text">{{ selectedShop.name }}</h3>
+                        <span v-if="selectedShop.tag" class="mt-2 text-xs bg-scheme1-primary/20 text-scheme1-primary px-3 py-0.5 rounded-full border border-scheme1-primary/30 font-bold select-none">{{ selectedShop.tag }}</span>
+                    </div>
+
+                    <div class="space-y-4 text-sm flex-1 overflow-y-auto scrollbar-hide">
+                        <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-text cursor-text">
+                            <label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1 select-none">地址</label>
+                            <p class="text-white leading-relaxed"><i class="fa-solid fa-location-dot mr-2 text-scheme1-secondary select-none"></i>{{ selectedShop.address }}</p>
+                        </div>
+
+                        <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-none">
+                            <label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1">營業時間</label>
+                            <p class="text-white"><i class="fa-solid fa-clock mr-2 text-scheme1-secondary"></i>{{ selectedShop.hours }}</p>
+                        </div>
+
+                        <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-none" v-if="selectedShop.transport">
+                            <label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1">交通方式</label>
+                            <p class="text-white"><i class="fa-solid fa-train-subway mr-2 text-scheme1-secondary"></i>{{ selectedShop.transport }}</p>
+                        </div>
+                    </div>
+
+                    <a :href="'https://www.google.com/maps/search/?api=1&query=' + selectedShop.address" target="_blank" class="mt-6 w-full py-3 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-lg flex items-center justify-center gap-2 select-none">
+                        <i class="fa-solid fa-map-location-dot"></i> 開啟 Google Maps
+                    </a>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -423,9 +443,16 @@
             setup() {
                 const currentTab = ref('schedule');
                 const currentDayIndex = ref(0);
+                
+                // 行程編輯 Modal 狀態
                 const showModal = ref(false);
                 const isEditing = ref(false);
                 const editingEventIndex = ref(null);
+                
+                // 店舖詳情 Modal 狀態
+                const showShopModal = ref(false);
+                const selectedShop = ref(null);
+
                 const sortableList = ref(null);
                 let sortableInstance = null;
 
@@ -445,8 +472,8 @@
                             name: "一尺花園 (廣富林店)", 
                             tag: "古宅花園", 
                             address: "松江區廣富林路3088弄3號集賢坊01-03棟", 
-                            hours: "10:00 - 22:00", 
-                            transport: "巴士松江98路 / 松江15路 (廣富林路龍源路站)", 
+                            hours: "星期一至日 10am - 10pm", 
+                            transport: "巴士松江98路 / 松江15路 (廣富林路龍源路站) 下車步行5分鐘", 
                             icon: "tree", 
                             color: "text-green-400" 
                         },
@@ -454,7 +481,7 @@
                             name: "wabi cofe (愚園路店)", 
                             tag: "日式庭院", 
                             address: "長寧區愚園路1327號", 
-                            hours: "10:30 - 00:00", 
+                            hours: "星期一至日 10:30am - 12am", 
                             transport: "地鐵中山公園站 8號出口", 
                             icon: "mug-hot", 
                             color: "text-yellow-600" 
@@ -462,8 +489,8 @@
                         { 
                             name: "LCH Café", 
                             tag: "復古風", 
-                            address: "黃浦區南昌路274號-1號", 
-                            hours: "週一至四 10-18 | 週五至日 10-19", 
+                            address: "上海市黃浦區南昌路274號-1號", 
+                            hours: "週一至四 10:00-18:00 | 週五至日 10:00-19:00", 
                             transport: "地鐵陝西南路站 (1/10/12號線)", 
                             icon: "martini-glass-citrus", 
                             color: "text-pink-400" 
@@ -549,9 +576,9 @@
                     if (sortableList.value) {
                         sortableInstance = new Sortable(sortableList.value, {
                             animation: 150,
-                            delay: 250, // 延遲 250ms 才觸發拖曳，避免捲動誤觸
-                            delayOnTouchOnly: true, // 僅在觸控裝置上啟用延遲
-                            touchStartThreshold: 5, // 容許手指微小移動，不視為拖曳取消
+                            delay: 250, 
+                            delayOnTouchOnly: true, 
+                            touchStartThreshold: 5, 
                             ghostClass: 'sortable-ghost',
                             dragClass: 'sortable-drag',
                             handle: '.group', 
@@ -579,6 +606,17 @@
 
                 const closeModal = () => {
                     showModal.value = false;
+                };
+
+                // 店舖詳情 Modal 邏輯
+                const openShopDetails = (shop) => {
+                    selectedShop.value = shop;
+                    showShopModal.value = true;
+                };
+
+                const closeShopModal = () => {
+                    showShopModal.value = false;
+                    setTimeout(() => selectedShop.value = null, 200); // 動畫延遲清理
                 };
 
                 const saveEvent = () => {
@@ -627,7 +665,12 @@
                     openEditModal,
                     closeModal,
                     saveEvent,
-                    deleteEvent
+                    deleteEvent,
+                    // 新增店舖 Modal 相關
+                    showShopModal,
+                    selectedShop,
+                    openShopDetails,
+                    closeShopModal
                 };
             }
         }).mount('#app');
