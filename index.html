@@ -7,7 +7,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+SC:wght@900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     
@@ -43,6 +43,9 @@
             overscroll-behavior: none;
             background-color: #0F172A;
             color: #FFFFFF;
+            /* 防止 iOS 長按選取文字 */
+            -webkit-user-select: none;
+            user-select: none;
         }
         
         #app {
@@ -59,17 +62,6 @@
         .animate-spin-slow { animation: spin 10s linear infinite; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* 晃動動畫 (編輯模式) */
-        @keyframes jiggle {
-            0% { transform: rotate(-0.5deg); }
-            50% { transform: rotate(0.5deg); }
-            100% { transform: rotate(-0.5deg); }
-        }
-        .animate-jiggle {
-            animation: jiggle 0.25s infinite linear;
-            cursor: grab;
-        }
-
         .shanghai-bg {
             background-color: #0F172A;
             background-image: 
@@ -82,13 +74,13 @@
 
         .glass-card {
             background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(8px);            
+            backdrop-filter: blur(8px);             
             border: 1px solid rgba(255, 255, 255, 0.12); 
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
         
         .glass-nav {
-            background: rgba(15, 23, 42, 0.7); 
+            background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(20px);
             border-top: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.6);
@@ -106,15 +98,34 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
-        .glass-modal {
-            background: rgba(15, 23, 42, 0.85); 
-            backdrop-filter: blur(25px);
-        }
-
         .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
         
-        .sortable-ghost { opacity: 0.3; }
-        .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.15); transform: scale(1.02); z-index: 50; }
+        /* --- SortableJS 關鍵樣式 --- */
+        
+        /* 拖曳時，原位置的佔位符樣式 */
+        .sortable-ghost { 
+            opacity: 0.1; 
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.75rem;
+        }
+
+        /* 正在被拖曳的項目 (懸浮效果) */
+        .sortable-drag { 
+            cursor: grabbing; 
+            opacity: 1 !important;
+            background: rgba(30, 41, 59, 0.95) !important; /* 深色背景確保看不透 */
+            backdrop-filter: blur(10px);
+            transform: scale(1.05) rotate(2deg); /* 放大並稍微傾斜 */
+            box-shadow: 
+                0 20px 25px -5px rgba(0, 0, 0, 0.5), 
+                0 8px 10px -6px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 126, 226, 0.5); /* Primary color border */
+            z-index: 9999 !important; /* 確保在最上層 */
+            border-radius: 0.75rem;
+        }
+        
+        /* 隱藏拖曳時可能出現的藍色選取框 */
+        * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body>
@@ -139,7 +150,6 @@
                 
                 <div v-if="currentTab === 'flight'" class="animate-fade-in space-y-4">
                     <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-primary text-white text-shadow-sm font-deco tracking-wide">✈️ 航班資訊</h3>
-                    
                     <div class="glass-card rounded-2xl p-4 relative overflow-hidden group">
                         <div class="absolute top-3 left-3 bg-scheme1-primary/20 border border-scheme1-primary/80 text-scheme1-primary text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest">去程 OUTBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-4">
@@ -155,50 +165,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="glass-card rounded-2xl p-4 relative overflow-hidden group">
-                        <div class="absolute top-3 left-3 bg-scheme1-secondary/20 border border-scheme1-secondary/80 text-scheme1-secondary text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest">回程 INBOUND</div>
-                        <div class="mt-8 flex justify-between items-center mb-4">
-                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti">{{ myData.flightIn.from }}</div><div class="text-sm text-scheme1-accent font-bold mt-1 tracking-wide">上海浦東 T1</div></div>
-                            <div class="flex-1 px-2 text-center flex flex-col items-center"><div class="text-xs text-scheme1-secondary font-bold">{{ myData.flightIn.airline }}</div><i class="fa-solid fa-plane text-white text-xl block my-1 rotate-180 drop-shadow-md"></i><div class="border-b-2 border-dotted border-white/40 w-full h-1"></div><div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.flightIn.no }}</div></div>
-                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti">{{ myData.flightIn.to }}</div><div class="text-sm text-scheme1-accent font-bold mt-1 tracking-wide">香港 T1</div></div>
-                        </div>
-                        <div class="bg-white/5 rounded-xl p-3 flex justify-between items-start text-sm border border-white/20">
-                            <div><span class="text-xs text-scheme1-textSub/80 font-bold block">Date</span>{{ myData.flightIn.date }}</div>
-                            <div class="flex gap-4">
-                                <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Dep</span><span class="font-bold text-scheme1-secondary text-xl">{{ myData.flightIn.dep }}</span></div>
-                                <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Arr</span><span class="font-bold text-scheme1-secondary text-xl">{{ myData.flightIn.arr }}</span><span class="text-[10px] text-scheme1-primary block mt-0.5 font-bold">+1 Day</span></div>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="glass-card rounded-xl p-4">
-                        <h4 class="text-base font-bold text-white mb-3 flex items-center text-shadow-sm"><i class="fa-solid fa-suitcase-rolling mr-2 text-scheme1-accent"></i> 行李限額</h4>
-                        <div class="flex flex-col gap-3">
-                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-suitcase text-scheme1-primary text-2xl drop-shadow-md"></i></div>
-                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">託運行李</span><span class="text-[10px] bg-scheme1-primary/20 text-scheme1-primary border border-scheme1-primary/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold"><i class="fa-solid fa-weight-scale text-[10px] mr-1"></i>23kg <span class="mx-1 text-white/30">|</span> 158cm</div>
-                                </div>
-                            </div>
-                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-briefcase text-scheme1-secondary text-2xl drop-shadow-md"></i></div>
-                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">手提行李</span><span class="text-[10px] bg-scheme1-secondary/20 text-scheme1-secondary border border-scheme1-secondary/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">7kg <span class="mx-1 text-white/30">|</span> 20x40x55cm</div>
-                                </div>
-                            </div>
-                             <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-bag-shopping text-scheme1-accent text-2xl drop-shadow-md"></i></div>
-                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">隨身物品</span><span class="text-[10px] bg-scheme1-accent/20 text-scheme1-accent border border-scheme1-accent/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">小型手袋 / 筆電包</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div v-if="currentTab === 'schedule'" class="animate-fade-in space-y-4">
                     
@@ -217,67 +184,50 @@
                     <div>
                         <h3 class="font-bold text-lg mb-4 text-white flex items-center justify-between opacity-90 pl-1 text-shadow-sm">
                             <div><span class="text-scheme1-primary mr-2"><i class="fa-solid fa-calendar-day"></i></span>{{ myData.days[currentDayIndex].date }}</div>
-                            <span v-if="!isReordering" class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300 animate-pulse"><i class="fa-solid fa-hand-pointer mr-1"></i>長按編輯</span>
-                            <span v-else class="text-[10px] bg-scheme1-primary text-black px-2 py-1 rounded font-bold"><i class="fa-solid fa-arrows-up-down-left-right mr-1"></i>拖曳排序中</span>
+                            <span v-if="!isDragging" class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-fingerprint mr-1"></i>長按卡片拖曳排序</span>
+                            <span v-else class="text-[10px] bg-scheme1-primary text-black px-2 py-1 rounded font-bold animate-pulse"><i class="fa-solid fa-arrows-up-down mr-1"></i>排序中...</span>
                         </h3>
                         
                         <div class="relative pl-4">
                             <div class="absolute left-[3.5px] top-2 bottom-0 w-[2px] bg-white/20 rounded-full"></div>
                             
-                            <div ref="sortableList" class="space-y-3">
+                            <div ref="sortableList" class="space-y-3 pb-4">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
-                                     @click="!isReordering && openEditModal(idx)"
-                                     @touchstart="startLongPress" 
-                                     @touchend="cancelLongPress" 
-                                     @touchmove="cancelLongPress"
-                                     @mousedown="startLongPress" 
-                                     @mouseup="cancelLongPress" 
-                                     @mouseleave="cancelLongPress"
-                                     :class="{'animate-jiggle': isReordering}"
-                                     class="relative group select-none transition-transform duration-200">
+                                     class="relative group select-none transition-transform duration-200"
+                                     :data-id="item.id">
                                     
-                                    <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
+                                    <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm pointer-events-none"></div>
                                     
-                                    <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-primary/40">
+                                    <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 active:scale-95">
                                         
-                                        <div v-if="item.img" class="h-24 w-full relative overflow-hidden">
-                                            <img :src="item.img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 select-none pointer-events-none">
+                                        <div v-if="item.img" class="h-24 w-full relative overflow-hidden pointer-events-none">
+                                            <img :src="item.img" class="absolute inset-0 w-full h-full object-cover opacity-90">
                                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                                             <div class="absolute bottom-2 left-3 right-3 flex justify-between items-end z-10">
                                                 <div class="flex items-center gap-2">
-                                                    <span class="bg-scheme1-primary text-white font-bold text-sm px-2 py-0.5 rounded shadow-[0_0_10px_#FF7EE2] select-none">{{ item.time }}</span>
-                                                    <div class="flex items-center text-white text-xs gap-1 font-bold select-none" v-if="item.weather">
-                                                        <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
-                                                    </div>
+                                                    <span class="bg-scheme1-primary text-white font-bold text-sm px-2 py-0.5 rounded shadow-[0_0_10px_#FF7EE2]">{{ item.time }}</span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div v-else class="p-3 pb-0 flex justify-between items-center mb-1">
-                                            <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-sm px-2.5 py-0.5 rounded-full border border-scheme1-primary/30 shadow-[0_0_10px_rgba(255,126,226,0.4)] select-none">{{ item.time }}</span>
-                                            <div class="flex items-center text-scheme1-textSub text-xs gap-1.5 font-bold select-none" v-if="item.weather">
-                                                <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
-                                            </div>
+                                        <div v-else class="p-3 pb-0 flex justify-between items-center mb-1 pointer-events-none">
+                                            <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-sm px-2.5 py-0.5 rounded-full border border-scheme1-primary/30 shadow-[0_0_10px_rgba(255,126,226,0.4)]">{{ item.time }}</span>
                                         </div>
                                         
-                                        <div class="p-3 pt-1 relative">
-                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md" :class="isReordering ? 'pointer-events-none' : 'select-text cursor-text'">{{ item.title }}</h4>
-                                            
-                                            <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2 select-none pointer-events-none">{{ item.desc }}</p>
-                                            
+                                        <div class="p-3 pt-1 relative pointer-events-none">
+                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md">{{ item.title }}</h4>
+                                            <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2">{{ item.desc }}</p>
                                             <div class="flex justify-between items-end mt-0.5">
-                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight" :class="isReordering ? 'pointer-events-none' : 'select-text cursor-text'"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
-                                                
-                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 select-none">
-                                                    <i class="fa-solid fa-diamond-turn-right text-sm"></i>
-                                                </a>
+                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight">
+                                                    <i class="fa-solid fa-location-dot mr-1 text-xs"></i>{{ item.location }}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <button @click="openAddModal" class="w-full py-3 mt-4 mb-4 rounded-xl border-2 border-dashed border-scheme1-primary/30 text-scheme1-primary/70 hover:bg-scheme1-primary/10 hover:border-scheme1-primary hover:text-scheme1-primary transition-all font-bold flex items-center justify-center gap-2" v-if="!isReordering">
+                            <button @click="openAddModal" class="w-full py-3 mt-2 rounded-xl border-2 border-dashed border-scheme1-primary/30 text-scheme1-primary/70 hover:bg-scheme1-primary/10 hover:border-scheme1-primary hover:text-scheme1-primary transition-all font-bold flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-plus"></i> 新增行程
                             </button>
                         </div>
@@ -285,7 +235,7 @@
                 </div>
 
                 <div v-if="currentTab === 'map'" class="animate-fade-in h-full flex flex-col items-center justify-center pt-10 pb-20">
-                    <div class="glass-card p-6 rounded-3xl mb-6 animate-bounce relative backdrop-blur-xl border border-scheme1-primary/40 shadow-[0_0_30px_rgba(255,126,226,0.3)]">
+                     <div class="glass-card p-6 rounded-3xl mb-6 animate-bounce relative backdrop-blur-xl border border-scheme1-primary/40 shadow-[0_0_30px_rgba(255,126,226,0.3)]">
                          <div class="absolute inset-0 bg-scheme1-primary/10 rounded-3xl blur-xl -z-10"></div>
                         <i class="fa-solid fa-map-location-dot text-7xl text-scheme1-primary drop-shadow-[0_0_15px_rgba(255,126,226,0.6)]"></i>
                     </div>
@@ -295,488 +245,144 @@
 
                 <div v-if="currentTab === 'shops'" class="animate-fade-in">
                     <h3 class="font-bold text-xl mb-4 pl-3 border-l-4 border-scheme1-primary text-white opacity-90 text-shadow-sm font-deco tracking-wide">🛍️ 必逛店舖 & 美食</h3>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div v-for="(shop, idx) in myData.shops" :key="idx" 
-                             @click="openShopDetails(shop)"
-                             class="glass-card rounded-2xl p-4 flex flex-col items-center justify-center text-center relative overflow-hidden group hover:border-scheme1-primary/50 transition-colors select-none cursor-pointer aspect-square">
-                            
-                            <div :class="getShopIconColor(shop.color)" class="w-10 h-10 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-lg shadow-inner mb-2 group-hover:scale-110 transition-transform">
+                     <div class="grid grid-cols-2 gap-4">
+                        <div v-for="(shop, idx) in myData.shops" :key="idx" class="glass-card rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+                            <div :class="getShopIconColor(shop.color)" class="w-10 h-10 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-lg shadow-inner mb-2">
                                 <i :class="['fa-solid', shop.icon]"></i>
                             </div>
-                            
-                            <div class="mb-2 w-full">
-                                <h4 class="font-bold text-white text-base leading-tight drop-shadow-sm">
-                                    {{ getShopNameParts(shop.name).main }}
-                                </h4>
-                                <p v-if="getShopNameParts(shop.name).sub" class="text-xs text-scheme1-textSub/90 mt-0.5">
-                                    {{ getShopNameParts(shop.name).sub }}
-                                </p>
-                            </div>
-
-                            <div class="flex items-center justify-center text-[10px] text-scheme1-secondary font-bold bg-white/5 px-2 py-1 rounded-full mb-2 w-full">
-                                <i class="fa-solid fa-clock mr-1.5"></i>
-                                <span class="truncate">{{ getSimpleHours(shop.hours) }}</span>
-                            </div>
-                            
-                            <span v-if="shop.tag" class="text-[10px] bg-scheme1-primary/10 text-scheme1-primary px-2 py-0.5 rounded-full border border-scheme1-primary/20 font-bold">{{ shop.tag }}</span>
+                            <h4 class="font-bold text-white text-base leading-tight drop-shadow-sm">{{ shop.name }}</h4>
                         </div>
-                    </div>
+                     </div>
                 </div>
 
                 <div v-if="currentTab === 'hotel'" class="animate-fade-in space-y-4">
                     <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-secondary text-white opacity-90 text-shadow-sm font-deco tracking-wide">🏨 住宿資訊</h3>
-                    <div class="glass-card rounded-2xl overflow-hidden">
-                        <div class="h-48 relative flex items-end overflow-hidden group">
-                            <img :src="myData.hotel.image" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70" alt="Hotel Room">
-                            <div class="absolute inset-0 bg-gradient-to-t from-scheme1-bg via-scheme1-bg/40 to-transparent"></div>
-                            <div class="relative z-10 p-5 w-full text-white">
-                                <div class="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white/90 text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-white/10 select-none">
-                                    4晚 ✨
-                                </div>
-                                <h2 class="text-2xl font-black leading-tight mb-1 text-white shadow-sm text-shadow-sm">{{ myData.hotel.name }}</h2>
-                                <p class="text-sm text-white/90 font-bold truncate">{{ myData.hotel.engName }}</p>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <div class="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
-                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-dumbbell mr-1"></i>健身房</span>
-                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-person-swimming mr-1"></i>恆溫泳池</span>
-                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-wifi mr-1"></i>免費WiFi</span>
-                            </div>
-                            <div class="bg-white/5 rounded-xl p-3 mb-4 flex items-start border border-white/10">
-                                <i class="fa-solid fa-location-dot text-scheme1-secondary mt-1 mr-2.5 text-lg drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]"></i>
-                                <div class="flex-1">
-                                    <p class="text-base text-white font-bold mb-1 leading-snug">{{ myData.hotel.address }}</p>
-                                    <a :href="'https://www.google.com/maps/search/?api=1&query=' + myData.hotel.name" target="_blank" class="text-xs text-scheme1-primary font-bold flex items-center gap-1 hover:underline">
-                                        開啟 Google Maps <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-3 text-center">
-                                <div class="bg-white/5 rounded-lg p-3 border border-white/10">
-                                    <div class="text-xs text-scheme1-textSub mb-1 uppercase tracking-wide font-black">Check-in</div>
-                                    <div class="font-bold text-scheme1-primary text-xl">14:00</div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.hotel.checkIn }}</div>
-                                </div>
-                                <div class="bg-white/5 rounded-lg p-3 border border-white/10">
-                                    <div class="text-xs text-scheme1-textSub mb-1 uppercase tracking-wide font-black">Check-out</div>
-                                    <div class="font-bold text-scheme1-secondary text-xl">12:00</div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.hotel.checkOut }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="glass-card rounded-2xl p-4"><h2 class="text-xl font-bold">{{ myData.hotel.name }}</h2></div>
                 </div>
 
             </main>
 
             <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center">
-                <nav v-if="!isReordering" class="glass-nav w-full h-16 px-1 flex justify-evenly items-center rounded-t-[2rem] pb-1 relative flex-shrink-0 animate-fade-in">
-                    <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                        <i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span>
-                    </button>
-                    <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                        <i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span>
-                    </button>
+                <nav class="glass-nav w-full h-16 px-1 flex justify-evenly items-center rounded-t-[2rem] pb-1 relative flex-shrink-0 animate-fade-in">
+                    <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary' : 'text-scheme1-textSub/40'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px]">航班</span></button>
+                    <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary' : 'text-scheme1-textSub/40'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px]">行程</span></button>
                     <div class="-mt-8 relative z-10">
-                        <button @click="currentTab = 'map'" class="bg-scheme1-bg text-scheme1-primary w-14 h-14 rounded-full shadow-[0_0_20px_rgba(255,126,226,0.4)] border-2 border-scheme1-primary/50 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all">
-                            <i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(255,126,226,1)]"></i>
-                        </button>
+                        <button @click="currentTab = 'map'" class="bg-scheme1-bg text-scheme1-primary w-14 h-14 rounded-full shadow-lg border-2 border-scheme1-primary/50 flex items-center justify-center"><i class="fa-solid fa-map text-3xl"></i></button>
                     </div>
-                    <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                        <i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span>
-                    </button>
-                    <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                        <i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span>
-                    </button>
+                    <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary' : 'text-scheme1-textSub/40'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px]">店舖</span></button>
+                    <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary' : 'text-scheme1-textSub/40'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px]">住宿</span></button>
                 </nav>
-
-                <button v-else @click="toggleReorderMode" class="mb-6 px-8 py-3 bg-scheme1-primary text-scheme1-bg rounded-full font-bold shadow-[0_0_20px_rgba(255,126,226,0.8)] animate-bounce z-50">
-                    <i class="fa-solid fa-check mr-2"></i>完成排序
-                </button>
             </div>
-
-            <div v-if="showShopModal && selectedShop" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal" @click.self="closeShopModal">
-                <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col shadow-2xl border border-scheme1-primary/40">
-                    
-                    <button @click="closeShopModal" class="absolute top-4 right-4 text-white/60 hover:text-white transition-colors z-10">
-                        <i class="fa-solid fa-xmark text-xl"></i>
-                    </button>
-
-                    <div class="flex flex-col items-center text-center mb-6">
-                        <div :class="getShopIconColor(selectedShop.color)" class="w-16 h-16 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-3">
-                            <i :class="['fa-solid', selectedShop.icon]"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white font-deco tracking-wide select-text cursor-text">{{ selectedShop.name }}</h3>
-                        <span v-if="selectedShop.tag" class="mt-2 text-xs bg-scheme1-primary/20 text-scheme1-primary px-3 py-0.5 rounded-full border border-scheme1-primary/30 font-bold select-none">{{ selectedShop.tag }}</span>
-                    </div>
-
-                    <div class="space-y-4 text-sm flex-1 overflow-y-auto scrollbar-hide">
-                        <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-text cursor-text">
-                            <label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1 select-none">地址</label>
-                            <p class="text-white leading-relaxed"><i class="fa-solid fa-location-dot mr-2 text-scheme1-secondary select-none"></i>{{ selectedShop.address }}</p>
-                        </div>
-
-                        <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-none">
-                            <label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1">營業時間</label>
-                            <div class="text-white">
-                                <i class="fa-solid fa-clock mr-2 text-scheme1-secondary float-left mt-1"></i>
-                                <div class="overflow-hidden">
-                                    <div v-for="(line, idx) in selectedShop.hours.split('|')" :key="idx" class="block">
-                                        {{ line.trim() }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-none" v-if="selectedShop.transport">
-                            <label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1">交通方式</label>
-                            <p class="text-white"><i class="fa-solid fa-train-subway mr-2 text-scheme1-secondary"></i>{{ selectedShop.transport }}</p>
-                        </div>
-                    </div>
-
-                    <a :href="'https://www.google.com/maps/search/?api=1&query=' + selectedShop.address" target="_blank" class="mt-6 w-full py-3 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-lg flex items-center justify-center gap-2 select-none">
-                        <i class="fa-solid fa-map-location-dot"></i> 開啟 Google Maps
-                    </a>
-                </div>
-            </div>
-
-            <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal">
-                <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col max-h-[90vh] overflow-hidden border border-scheme1-primary/50">
-                    <h3 class="text-2xl font-bold text-center mb-4 text-white font-deco tracking-widest">{{ isEditing ? '編輯行程' : '新增行程' }}</h3>
-                    
-                    <div class="overflow-y-auto space-y-4 pr-1 scrollbar-hide flex-1">
-                        <div>
-                            <label class="text-xs text-scheme1-secondary font-bold uppercase">時間</label>
-                            <input v-model="modalData.time" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1">
-                        </div>
-                        <div>
-                            <label class="text-xs text-scheme1-secondary font-bold uppercase">標題</label>
-                            <input v-model="modalData.title" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1">
-                        </div>
-                        <div>
-                            <label class="text-xs text-scheme1-secondary font-bold uppercase">描述</label>
-                            <textarea v-model="modalData.desc" rows="3" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1 resize-none scrollbar-hide"></textarea>
-                        </div>
-                        <div>
-                            <label class="text-xs text-scheme1-secondary font-bold uppercase">地點/地址</label>
-                            <input v-model="modalData.location" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1">
-                        </div>
-                         <div>
-                            <label class="text-xs text-scheme1-secondary font-bold uppercase">圖片 URL (選填)</label>
-                            <input v-model="modalData.img" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-primary outline-none mt-1" placeholder="https://...">
-                        </div>
-                    </div>
-
-                    <div class="flex gap-3 mt-6 pt-4 border-t border-white/10">
-                        <button @click="closeModal" class="flex-1 py-2.5 rounded-xl border border-white/30 text-white hover:bg-white/10 transition-colors font-bold">取消</button>
-                        <button @click="saveEvent" class="flex-1 py-2.5 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-sm">{{ isEditing ? '儲存變更' : '新增' }}</button>
-                    </div>
-                    <button v-if="isEditing" @click="deleteEvent" class="absolute top-4 right-4 text-white/50 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
         </div>
     </div>
 
     <script>
-        const { createApp, ref, computed, onMounted, nextTick } = Vue;
+        const { createApp, ref, computed, watch, nextTick } = Vue;
 
         createApp({
             setup() {
-                const currentTab = ref('flight'); // Default to flight tab
+                const currentTab = ref('schedule'); // Default to schedule to test
                 const currentDayIndex = ref(0);
-                
-                const showModal = ref(false);
-                const isEditing = ref(false);
-                const editingEventIndex = ref(null);
-                
-                const showShopModal = ref(false);
-                const selectedShop = ref(null);
-
+                const isDragging = ref(false);
+                const sortableInstance = ref(null);
                 const sortableList = ref(null);
-                let sortableInstance = null;
-                const isReordering = ref(false); // 新增狀態：是否在編輯排序模式
-                let longPressTimer = null; // 長按計時器
 
-                const modalData = ref({ time: '', title: '', desc: '', location: '', img: '' });
-
+                // Mock Data (Simplified for brevity)
                 const myData = ref({
-                    title: "🎄 聖誕上海之旅 ✨", 
-                    
-                    shops: [
-                        { 
-                            name: "一尺花園（廣富林店）", 
-                            tag: "古宅花園", 
-                            address: "松江區廣富林路3088弄3號集賢坊01-03棟", 
-                            hours: "10:00 - 22:00", 
-                            transport: "巴士松江98路 / 松江15路 (廣富林路龍源路站) 下車步行5分鐘", 
-                            icon: "tree", 
-                            color: "text-green-400" 
-                        },
-                        { 
-                            name: "wabi cofe（愚園路店）", 
-                            tag: "日式庭院", 
-                            address: "長寧區愚園路1327號", 
-                            hours: "10:30 - 00:00", 
-                            transport: "地鐵中山公園站 8號出口", 
-                            icon: "mug-hot", 
-                            color: "text-yellow-600" 
-                        },
-                        { 
-                            name: "LCH Café", 
-                            tag: "復古風", 
-                            address: "上海市黃浦區南昌路274號-1號", 
-                            hours: "10:00-18:00 | 10:00-19:00", 
-                            transport: "地鐵陝西南路站 (1/10/12號線)", 
-                            icon: "martini-glass-citrus", 
-                            color: "text-pink-400" 
-                        }
-                    ],
-
-                    hotel: {
-                        name: "上海東錦江希爾頓逸林酒店",
-                        engName: "DoubleTree by Hilton Shanghai - Pudong",
-                        address: "上海市浦東新區東方路889號",
-                        checkIn: "12月23日 (二)",
-                        checkOut: "12月26日 (五)",
-                        image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1000&auto=format&fit=crop"
-                    },
-
-                    flightOut: { 
-                        from: "HKG", to: "PVG", 
-                        date: "2025/12/23 (二)", no: "MU726", 
-                        dep: "07:40", arr: "10:30", 
-                        airline: "中國東方航空" 
-                    },
-                    flightIn: { 
-                        from: "PVG", to: "HKG", 
-                        date: "2025/12/26 (五)", no: "MU725", 
-                        dep: "21:20", arr: "00:15", 
-                        airline: "中國東方航空" 
-                    },
+                    title: 'Xmas Shanghai',
+                    flightOut: { from: 'HKG', to: 'PVG', airline: 'CX', no: '368', date: 'Dec 24', dep: '09:30', arr: '12:05' },
                     days: [
-                        {
-                            date: "12月23日 (二)", dateShort: "23 DEC", weekday: "(二)", dayNum: "23",
-                            events: [
-                                { id: 1, time: "10:30", title: "抵達上海浦東 🛬", location: "上海市浦東新區浦東國際機場 T1", desc: "入境手續、領取行李，前往酒店Check-in。", weather: "cloudy", temp: "8°C" },
-                                { id: 101, time: "12:30", title: "辦理入住 🏨", location: "上海市浦東新區東方路889號", desc: "前往東錦江希爾頓逸林酒店 Check-in / 寄存行李。", icon: "hotel" },
-                                { id: 2, time: "15:00", title: "浦東美術館 🎨", location: "上海市浦東新區濱江大道2777號", desc: "欣賞建築之美，窗口可直面外灘萬國建築群。", weather: "cloudy", temp: "9°C" },
-                                { id: 3, time: "18:00", title: "十六鋪碼頭 🌃", location: "上海市黃浦區中山東二路551號", desc: "漫步江邊或搭乘遊船，欣賞黃浦江璀璨夜景。", weather: "clear", temp: "5°C" }
-                            ]
-                        },
-                        {
-                            date: "12月24日 (三)", dateShort: "24 DEC", weekday: "(三)", dayNum: "24",
-                            events: [
-                                { id: 4, time: "10:00", title: "豫園 & 城隍廟 🧧", location: "上海市黃浦區福佑路168號", desc: "江南古典園林與老上海祈福，品嚐南翔小籠包。", weather: "sunny", temp: "9°C" },
-                                { id: 5, time: "14:30", title: "新天地北里 🎄", location: "上海市黃浦區太倉路181號", desc: "平安夜逛街，石庫門建築與現代聖誕裝飾完美融合。", weather: "sunny", temp: "10°C" },
-                                { id: 6, time: "19:00", title: "平安夜晚餐 🍷", location: "上海市黃浦區新天地北里", desc: "在充滿節日氣氛的餐廳享用聖誕大餐。", weather: "clear", temp: "6°C" }
-                            ]
-                        },
-                        {
-                            date: "12月25日 (四)", dateShort: "25 DEC", weekday: "(四)", dayNum: "25",
-                            events: [
-                                { id: 7, time: "10:00", title: "朱家角古鎮 🛶", location: "上海市青浦區朱家角古鎮課植園路", desc: "上海威尼斯，乘手搖船遊覽放生橋與古巷(全日行程)。", weather: "sunny", temp: "11°C" },
-                                { id: 8, time: "17:00", title: "返回市區 🚌", location: "上海市黃浦區人民廣場", desc: "搭乘地鐵17號線返回市區休息。", weather: "clear", temp: "7°C" }
-                            ]
-                        },
-                        {
-                            date: "12月26日 (五)", dateShort: "26 DEC", weekday: "(五)", dayNum: "26",
-                            events: [
-                                { id: 102, time: "10:00", title: "辦理退房 👋", location: "上海市浦東新區東方路889號", desc: "Check-out 並寄存行李，開始最後一天行程。", icon: "suitcase" },
-                                { id: 9, time: "10:30", title: "武康路 City Walk 🍂", location: "上海市徐匯區武康路", desc: "打卡武康大樓(淮海中路1850號)，感受法租界梧桐樹下的浪漫。", weather: "cloudy", temp: "8°C" },
-                                { id: 10, time: "14:00", title: "田子坊 🛍️", location: "上海市黃浦區泰康路210號", desc: "穿梭老弄堂，購買特色文創與伴手禮。", weather: "cloudy", temp: "9°C" },
-                                { id: 11, time: "17:30", title: "前往機場 🚕", location: "上海市浦東新區浦東國際機場 T1", desc: "預留時間前往機場，準備搭乘21:20航班。", weather: "cloudy", temp: "7°C" }
-                            ]
-                        }
-                    ]
+                        { dayNum: '24', weekday: 'TUE', date: '12.24 Day 1', events: [
+                            { id: 1, time: '12:05', title: '抵達上海浦東', desc: '入境、領取行李', location: 'PVG T1' },
+                            { id: 2, time: '14:00', title: '飯店 Check-in', desc: '辦理入住，放下行李休息', location: 'The Puli Hotel' },
+                            { id: 3, time: '16:00', title: '靜安寺散步', desc: '周邊逛街，嘉里中心', location: 'JingAn Temple' },
+                            { id: 4, time: '18:30', title: '晚餐：榮寓', desc: '米其林一星本幫菜', location: 'West Nanjing Rd' }
+                        ]},
+                        { dayNum: '25', weekday: 'WED', date: '12.25 Day 2', events: [
+                            { id: 5, time: '10:00', title: '外灘散步', desc: '欣賞萬國建築群', location: 'The Bund' },
+                            { id: 6, time: '12:30', title: '午餐：Ultraviolet', desc: '感官餐廳體驗', location: 'Secret Location' }
+                        ]}
+                    ],
+                    shops: [
+                        { name: 'HARMAY 話梅', icon: 'bag-shopping', color: 'gray' },
+                        { name: 'Haus Shanghai', icon: 'glasses', color: 'blue' }
+                    ],
+                    hotel: { name: 'The Puli Hotel', engName: 'The Puli Hotel and Spa', address: '1 Changde Road, JingAn', checkIn: 'Dec 24', checkOut: 'Dec 28', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2670&auto=format&fit=crop' }
                 });
 
-                const getWeatherIcon = (weather) => {
-                    switch (weather) {
-                        case 'sunny': return 'fa-solid fa-sun text-scheme1-accent';
-                        case 'cloudy': return 'fa-solid fa-cloud text-scheme1-textSub';
-                        case 'rainy': return 'fa-solid fa-cloud-rain text-scheme1-secondary';
-                        case 'clear': return 'fa-solid fa-moon text-scheme1-accent';
-                        default: return '';
-                    }
-                };
-                
-                const getShopIconColor = (colorClass) => {
-                    if(colorClass.includes('orange')) return 'text-orange-400';
-                    if(colorClass.includes('yellow')) return 'text-yellow-400';
-                    if(colorClass.includes('scheme1-secondary')) return 'text-scheme1-secondary';
-                    if(colorClass.includes('text-green-400')) return 'text-green-400';
-                    if(colorClass.includes('text-pink-400')) return 'text-pink-400';
-                    return 'text-white';
-                }
-
-                const getShopNameParts = (name) => {
-                    const parts = name.split(/[\(（]/);
-                    if (parts.length > 1) {
-                        return { 
-                            main: parts[0], 
-                            sub: '(' + parts[1].replace(/[\)）]/, '') + ')' 
-                        };
-                    }
-                    return { main: name, sub: '' };
-                };
-
-                const getSimpleHours = (hours) => {
-                    if (!hours) return '';
-                    let simple = hours.split('|')[0].trim();
-                    simple = simple.replace(/^(星期|週|周)[一二三四五六日至\s]+/, '').trim();
-                    return simple;
-                };
-
-                // 長按邏輯
-                const startLongPress = () => {
-                    if (isReordering.value) return; // 已經是編輯模式就不用計時了
-                    longPressTimer = setTimeout(() => {
-                        toggleReorderMode();
-                    }, 500); // 0.5秒長按觸發
-                };
-
-                const cancelLongPress = () => {
-                    if (longPressTimer) {
-                        clearTimeout(longPressTimer);
-                        longPressTimer = null;
-                    }
-                };
-
-                const toggleReorderMode = () => {
-                    isReordering.value = !isReordering.value;
-                    if (sortableInstance) {
-                        // 編輯模式下啟用 sortable，否則禁用
-                        sortableInstance.option('disabled', !isReordering.value);
-                    }
-                };
-
+                // Function to initialize SortableJS
                 const initSortable = () => {
-                    if (sortableList.value) {
-                        sortableInstance = new Sortable(sortableList.value, {
-                            animation: 150,
-                            disabled: true, // 預設禁用，等長按觸發
-                            ghostClass: 'sortable-ghost',
-                            dragClass: 'sortable-drag',
-                            // handle: '.group', // 移除 handle，讓整個卡片可拖
+                    if (sortableInstance.value) sortableInstance.value.destroy();
+                    
+                    // 確保 DOM 已經渲染
+                    nextTick(() => {
+                        const el = sortableList.value;
+                        if (!el) return;
+
+                        sortableInstance.value = new Sortable(el, {
+                            animation: 250,
+                            delay: 300,        // 長按 300ms 後觸發
+                            delayOnTouchOnly: true, // 僅在觸控裝置啟用 delay
+                            ghostClass: 'sortable-ghost', // 佔位符樣式
+                            dragClass: 'sortable-drag',   // 拖曳中樣式
+                            forceFallback: true, // 關鍵：強制使用 fallback，實現脫離文檔流的懸浮效果
+                            onChoose: () => {
+                                // 觸發震動
+                                if (navigator.vibrate) navigator.vibrate(50);
+                            },
+                            onStart: () => {
+                                isDragging.value = true;
+                                if (navigator.vibrate) navigator.vibrate(80);
+                            },
                             onEnd: (evt) => {
-                                const movedItem = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
-                                myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, movedItem);
-                                updateTimesAfterDrag(); 
+                                isDragging.value = false;
+                                // 更新數據
+                                const dayEvents = myData.value.days[currentDayIndex.value].events;
+                                const item = dayEvents.splice(evt.oldIndex, 1)[0];
+                                dayEvents.splice(evt.newIndex, 0, item);
                             }
                         });
-                    }
-                };
-
-                const updateTimesAfterDrag = () => {
-                    const dayEvents = myData.value.days[currentDayIndex.value].events;
-                    // Sort times chronologically to maintain time slot structure
-                    const timeSlots = dayEvents.map(e => e.time).sort();
-                    
-                    dayEvents.forEach((event, index) => {
-                        event.time = timeSlots[index];
                     });
                 };
 
-                 const openAddModal = () => {
-                    isEditing.value = false;
-                    editingEventIndex.value = null;
-                    modalData.value = { time: '', title: '', desc: '', location: '', img: '' };
-                    showModal.value = true;
-                };
-
-                const openEditModal = (index) => {
-                    isEditing.value = true;
-                    editingEventIndex.value = index;
-                    modalData.value = { ...myData.value.days[currentDayIndex.value].events[index] };
-                    showModal.value = true;
-                };
-
-                const closeModal = () => {
-                    showModal.value = false;
-                };
-
-                const openShopDetails = (shop) => {
-                    selectedShop.value = shop;
-                    showShopModal.value = true;
-                };
-
-                const closeShopModal = () => {
-                    showShopModal.value = false;
-                    setTimeout(() => selectedShop.value = null, 200); 
-                };
-
-                const saveEvent = () => {
-                    if (!modalData.value.title) return alert('請填寫標題');
-                    const newEvent = { ...modalData.value, id: Date.now() }; 
-                    
-                    if (isEditing.value) {
-                        myData.value.days[currentDayIndex.value].events[editingEventIndex.value] = newEvent;
-                    } else {
-                        myData.value.days[currentDayIndex.value].events.push(newEvent);
-                    }
-                    closeModal();
-                    nextTick(() => {
-                        // initSortable(); // 不需重新 init，只要更新數據
-                        updateTimesAfterDrag();
-                    }); 
-                };
-
-                const deleteEvent = () => {
-                    if (confirm('確定要刪除此行程嗎？')) {
-                        myData.value.days[currentDayIndex.value].events.splice(editingEventIndex.value, 1);
-                        closeModal();
-                        // nextTick(() => initSortable());
-                    }
-                };
-
-                onMounted(() => {
-                    nextTick(() => {
-                        initSortable();
-                    });
-                });
-                
-                // 監聽 Tab 切換，確保 Sortable 在 Schedule Tab 正確初始化
-                Vue.watch(currentTab, (newTab) => {
+                // Watchers to re-init sortable
+                watch(currentTab, (newTab) => {
                     if (newTab === 'schedule') {
-                         nextTick(() => initSortable());
+                        initSortable();
                     }
                 });
 
-                Vue.watch(currentDayIndex, () => {
-                     // 切換天數時，先銷毀舊的 instance 再重新建立
-                     if (sortableInstance) sortableInstance.destroy();
-                     isReordering.value = false; // 切換天數重置編輯模式
-                     nextTick(() => initSortable());
+                watch(currentDayIndex, () => {
+                    if (currentTab.value === 'schedule') {
+                        initSortable();
+                    }
                 });
+
+                // Init on mount if starting on schedule tab
+                Vue.onMounted(() => {
+                    if (currentTab.value === 'schedule') {
+                        initSortable();
+                    }
+                });
+
+                // Helpers
+                const getShopIconColor = (color) => {
+                    const map = { gray: 'text-gray-400', blue: 'text-blue-400' };
+                    return map[color] || 'text-white';
+                };
+                
+                const openAddModal = () => {
+                    alert('新增功能尚未實作');
+                };
 
                 return {
                     currentTab,
                     currentDayIndex,
                     myData,
-                    getWeatherIcon,
-                    getShopIconColor,
-                    getShopNameParts, 
-                    getSimpleHours,
                     sortableList,
-                    showModal,
-                    isEditing,
-                    modalData,
-                    openAddModal,
-                    openEditModal,
-                    closeModal,
-                    saveEvent,
-                    deleteEvent,
-                    showShopModal,
-                    selectedShop,
-                    openShopDetails,
-                    closeShopModal,
-                    isReordering,
-                    startLongPress,
-                    cancelLongPress,
-                    toggleReorderMode
+                    isDragging,
+                    getShopIconColor,
+                    openAddModal
                 };
             }
         }).mount('#app');
