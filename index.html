@@ -105,10 +105,6 @@
         .sortable-ghost { opacity: 0.3; }
         .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.15); transform: scale(1.02); z-index: 50; }
         
-        /* 晃動動畫 */
-        @keyframes jiggle { 0% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } 100% { transform: rotate(-1deg); } }
-        .animate-jiggle { animation: jiggle 0.25s infinite linear; cursor: grab; }
-        
         /* Loader */
         .loader { border: 3px solid rgba(255,255,255,0.1); border-left-color: #FF7EE2; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -169,6 +165,33 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="glass-card rounded-xl p-4">
+                        <h4 class="text-base font-bold text-white mb-3 flex items-center text-shadow-sm"><i class="fa-solid fa-suitcase-rolling mr-2 text-scheme1-accent"></i> 行李限額</h4>
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-suitcase text-scheme1-primary text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">託運行李</span><span class="text-[10px] bg-scheme1-primary/20 text-scheme1-primary border border-scheme1-primary/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold"><i class="fa-solid fa-weight-scale text-[10px] mr-1"></i>23kg <span class="mx-1 text-white/30">|</span> 158cm</div>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-briefcase text-scheme1-secondary text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">手提行李</span><span class="text-[10px] bg-scheme1-secondary/20 text-scheme1-secondary border border-scheme1-secondary/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">7kg <span class="mx-1 text-white/30">|</span> 20x40x55cm</div>
+                                </div>
+                            </div>
+                             <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-bag-shopping text-scheme1-accent text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">隨身物品</span><span class="text-[10px] bg-scheme1-accent/20 text-scheme1-accent border border-scheme1-accent/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">小型手袋 / 筆電包</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div v-if="currentTab === 'schedule' && myData.days" class="animate-fade-in space-y-4">
@@ -187,8 +210,7 @@
                     <div>
                         <h3 class="font-bold text-lg mb-4 text-white flex items-center justify-between opacity-90 pl-1 text-shadow-sm">
                             <div><span class="text-scheme1-primary mr-2"><i class="fa-solid fa-calendar-day"></i></span>{{ myData.days[currentDayIndex].date }}</div>
-                            <span v-if="!isReordering" class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-hand-pointer mr-1"></i>長按編輯</span>
-                            <span v-else class="text-[10px] bg-scheme1-primary text-black px-2 py-1 rounded font-bold animate-pulse">拖曳模式</span>
+                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-hand-pointer mr-1"></i>長按拖曳</span>
                         </h3>
                         
                         <div class="relative pl-4">
@@ -196,10 +218,7 @@
                             
                             <div ref="sortableList" class="space-y-3 pb-24">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
-                                     @click="!isReordering && openEditModal(idx)"
-                                     @touchstart="startLongPress" @touchend="cancelLongPress" @touchmove="cancelLongPress"
-                                     @mousedown="startLongPress" @mouseup="cancelLongPress" @mouseleave="cancelLongPress"
-                                     :class="{'animate-jiggle': isReordering}"
+                                     @click="openEditModal(idx)"
                                      class="relative group select-none transition-transform duration-200">
                                     <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
                                     
@@ -223,10 +242,10 @@
                                             </div>
                                         </div>
                                         <div class="p-3 pt-1 relative">
-                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md" :class="isReordering ? 'pointer-events-none' : 'select-text cursor-text'">{{ item.title }}</h4>
+                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md select-text cursor-text">{{ item.title }}</h4>
                                             <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2 select-none pointer-events-none">{{ item.desc }}</p>
                                             <div class="flex justify-between items-end mt-0.5">
-                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight" :class="isReordering ? 'pointer-events-none' : 'select-text cursor-text'"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
+                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
                                                 <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 select-none">
                                                     <i class="fa-solid fa-diamond-turn-right text-sm"></i>
                                                 </a>
@@ -236,7 +255,7 @@
                                 </div>
                             </div>
                             
-                            <button @click="openAddModal" class="w-full py-3 mt-4 mb-4 rounded-xl border-2 border-dashed border-scheme1-primary/30 text-scheme1-primary/70 hover:bg-scheme1-primary/10 hover:border-scheme1-primary hover:text-scheme1-primary transition-all font-bold flex items-center justify-center gap-2" v-if="!isReordering">
+                            <button @click="openAddModal" class="w-full py-3 mt-4 mb-4 rounded-xl border-2 border-dashed border-scheme1-primary/30 text-scheme1-primary/70 hover:bg-scheme1-primary/10 hover:border-scheme1-primary hover:text-scheme1-primary transition-all font-bold flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-plus"></i> 新增行程
                             </button>
                         </div>
@@ -278,22 +297,15 @@
                         <div class="h-48 relative flex items-end overflow-hidden group">
                             <img :src="myData.hotel.image" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70" alt="Hotel Room">
                             <div class="absolute inset-0 bg-gradient-to-t from-scheme1-bg via-scheme1-bg/40 to-transparent"></div>
-                            
                             <div class="absolute top-3 right-3 bg-black/40 backdrop-blur-md text-white/90 text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-white/10 select-none z-20">
                                 4晚 ✨
                             </div>
-
                             <div class="relative z-10 p-5 w-full text-white">
                                 <h2 class="text-2xl font-black leading-tight mb-1 text-white shadow-sm text-shadow-sm">{{ myData.hotel.name }}</h2>
                                 <p class="text-sm text-white/90 font-bold truncate">{{ myData.hotel.engName }}</p>
                             </div>
                         </div>
                         <div class="p-5">
-                            <div class="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
-                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-dumbbell mr-1"></i>健身房</span>
-                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-person-swimming mr-1"></i>恆溫泳池</span>
-                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-wifi mr-1"></i>免費WiFi</span>
-                            </div>
                             <div class="bg-white/5 rounded-xl p-3 mb-4 flex items-start border border-white/10">
                                 <i class="fa-solid fa-location-dot text-scheme1-secondary mt-1 mr-2.5 text-lg drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]"></i>
                                 <div class="flex-1">
@@ -322,14 +334,13 @@
             </main>
 
             <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
-                <nav v-if="!isReordering" class="glass-nav w-full h-16 px-1 flex justify-evenly items-center rounded-t-[2rem] pb-1 relative flex-shrink-0 animate-fade-in pointer-events-auto">
+                <nav class="glass-nav w-full h-16 px-1 flex justify-evenly items-center rounded-t-[2rem] pb-1 relative flex-shrink-0 animate-fade-in pointer-events-auto">
                     <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span></button>
                     <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span></button>
                     <div class="-mt-8 relative z-10"><button @click="currentTab = 'map'" class="bg-scheme1-bg text-scheme1-primary w-14 h-14 rounded-full shadow-[0_0_20px_rgba(255,126,226,0.4)] border-2 border-scheme1-primary/50 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all"><i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(255,126,226,1)]"></i></button></div>
                     <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span></button>
                     <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span></button>
                 </nav>
-                <button v-else @click="toggleReorderMode" class="mb-6 px-8 py-3 bg-scheme1-primary text-scheme1-bg rounded-full font-bold shadow-[0_0_20px_rgba(255,126,226,0.8)] animate-bounce z-50 pointer-events-auto cursor-pointer border-2 border-white/20"><i class="fa-solid fa-check mr-2"></i>完成排序</button>
             </div>
 
             <div v-if="showShopModal && selectedShop" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal" @click.self="closeShopModal">
@@ -456,8 +467,6 @@
                 const selectedShop = ref(null);
                 const sortableList = ref(null);
                 let sortableInstance = null;
-                const isReordering = ref(false); 
-                let longPressTimer = null; 
                 const isLoading = ref(true);
                 const isUploading = ref(false);
                 
@@ -556,24 +565,16 @@
                     return simple;
                 };
 
-                const startLongPress = () => {
-                    if (isReordering.value) return;
-                    longPressTimer = setTimeout(() => { toggleReorderMode(); }, 500); 
-                };
-
-                const cancelLongPress = () => {
-                    if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
-                };
-
-                const toggleReorderMode = () => {
-                    isReordering.value = !isReordering.value;
-                    if (sortableInstance) { sortableInstance.option('disabled', !isReordering.value); }
-                };
-
                 const initSortable = () => {
                     if (sortableList.value) {
                         sortableInstance = new Sortable(sortableList.value, {
-                            animation: 150, delay: 0, disabled: !isReordering.value, ghostClass: 'sortable-ghost', dragClass: 'sortable-drag',
+                            animation: 150,
+                            delay: 200, // Long press to drag
+                            delayOnTouchOnly: true, 
+                            touchStartThreshold: 5, 
+                            ghostClass: 'sortable-ghost',
+                            dragClass: 'sortable-drag',
+                            // No handle, entire card is draggable after delay
                             onEnd: (evt) => {
                                 const movedItem = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
                                 myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, movedItem);
@@ -630,12 +631,12 @@
 
                 onMounted(() => { initSync(); });
                 Vue.watch(currentTab, (newTab) => { if (newTab === 'schedule') { nextTick(() => initSortable()); } });
-                Vue.watch(currentDayIndex, () => { if (sortableInstance) sortableInstance.destroy(); isReordering.value = false; nextTick(() => initSortable()); });
+                Vue.watch(currentDayIndex, () => { if (sortableInstance) sortableInstance.destroy(); nextTick(() => initSortable()); });
 
                 return {
                     currentTab, currentDayIndex, myData, getWeatherIcon, getShopIconColor, getShopNameParts, getSimpleHours, sortableList, showModal, isEditing, modalData,
                     openAddModal, openEditModal, closeModal, saveEvent, deleteEvent, showShopModal, selectedShop, openShopDetails, closeShopModal,
-                    isReordering, startLongPress, cancelLongPress, toggleReorderMode, isLoading, isUploading, handleFileUpload
+                    isLoading, isUploading, handleFileUpload
                 };
             }
         }).mount('#app');
