@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>聖誕上海之旅 2025 (共享版)</title>
+    <title>聖誕上海之旅 2025</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+SC:wght@900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     
     <script>
@@ -14,36 +16,99 @@
             theme: {
                 extend: {
                     colors: {
-                        scheme1: { bg: '#0F172A', primary: '#FF7EE2', secondary: '#22D3EE', accent: '#FDE047', textMain: '#FFFFFF', textSub: '#E2E8F0' }
+                        scheme1: { 
+                            bg: '#0F172A',        
+                            primary: '#FF7EE2',   
+                            secondary: '#22D3EE', 
+                            accent: '#FDE047',    
+                            textMain: '#FFFFFF',
+                            textSub: '#E2E8F0',
+                            cardBg: 'rgba(255, 255, 255, 0.1)' 
+                        }
                     },
-                    fontFamily: { sans: ['Noto Sans TC', 'sans-serif'], deco: ['Zen Maru Gothic', 'sans-serif'], heiti: ['Noto Sans SC', 'sans-serif'] }
+                    fontFamily: { 
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                        deco: ['Zen Maru Gothic', 'sans-serif'], 
+                        heiti: ['Noto Sans SC', 'Heiti SC', 'SimHei', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
     <style>
-        html, body { height: 100%; height: 100dvh; overflow: hidden; overscroll-behavior: none; background-color: #0F172A; color: #FFFFFF; }
-        #app { height: 100%; height: 100dvh; width: 100%; display: flex; justify-content: center; }
+        html, body {
+            height: 100%;
+            height: 100dvh;
+            overflow: hidden;
+            overscroll-behavior: none;
+            background-color: #0F172A;
+            color: #FFFFFF;
+        }
+        
+        #app {
+            height: 100%;
+            height: 100dvh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .animate-spin-slow { animation: spin 10s linear infinite; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         .shanghai-bg {
             background-color: #0F172A;
-            background-image: linear-gradient(to bottom, rgba(30, 27, 75, 0.2), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1548266652-99cf27701ced?q=80&w=2670&auto=format&fit=crop');
-            background-size: cover; background-position: center; background-repeat: no-repeat;
+            background-image: 
+                linear-gradient(to bottom, rgba(30, 27, 75, 0.2), rgba(15, 23, 42, 0.85)),
+                url('https://images.unsplash.com/photo-1548266652-99cf27701ced?q=80&w=2670&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
-        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); }
-        .glass-nav { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.6); }
-        .glass-header { background: rgba(15, 23, 42, 0.15); backdrop-filter: blur(6px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .glass-modal { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(25px); }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(8px);            
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.7); 
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .glass-header {
+            background: rgba(15, 23, 42, 0.15); 
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-deco {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.85); 
+            backdrop-filter: blur(25px);
+        }
+
         .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+        
         .sortable-ghost { opacity: 0.3; }
         .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.15); transform: scale(1.02); z-index: 50; }
+        
         /* 晃動動畫 */
         @keyframes jiggle { 0% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } 100% { transform: rotate(-1deg); } }
         .animate-jiggle { animation: jiggle 0.25s infinite linear; cursor: grab; }
+        
         /* Loader */
         .loader { border: 3px solid rgba(255,255,255,0.1); border-left-color: #FF7EE2; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -63,7 +128,7 @@
                     </h1>
                 </div>
                 <div class="w-9 h-9 glass-card rounded-full flex items-center justify-center shadow-inner flex-shrink-0 mr-2 border border-white/30">
-                     <div v-if="isLoading" class="loader"></div>
+                    <div v-if="isLoading" class="loader"></div>
                     <i v-else class="fa-solid fa-cloud text-scheme1-secondary text-xs"></i>
                 </div>
             </header>
@@ -213,13 +278,22 @@
                         <div class="h-48 relative flex items-end overflow-hidden group">
                             <img :src="myData.hotel.image" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70" alt="Hotel Room">
                             <div class="absolute inset-0 bg-gradient-to-t from-scheme1-bg via-scheme1-bg/40 to-transparent"></div>
-                            <div class="absolute top-3 right-3 bg-black/40 backdrop-blur-md text-white/90 text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-white/10 select-none z-20">4晚 ✨</div>
+                            
+                            <div class="absolute top-3 right-3 bg-black/40 backdrop-blur-md text-white/90 text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-white/10 select-none z-20">
+                                4晚 ✨
+                            </div>
+
                             <div class="relative z-10 p-5 w-full text-white">
                                 <h2 class="text-2xl font-black leading-tight mb-1 text-white shadow-sm text-shadow-sm">{{ myData.hotel.name }}</h2>
                                 <p class="text-sm text-white/90 font-bold truncate">{{ myData.hotel.engName }}</p>
                             </div>
                         </div>
                         <div class="p-5">
+                            <div class="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
+                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-dumbbell mr-1"></i>健身房</span>
+                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-person-swimming mr-1"></i>恆溫泳池</span>
+                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-wifi mr-1"></i>免費WiFi</span>
+                            </div>
                             <div class="bg-white/5 rounded-xl p-3 mb-4 flex items-start border border-white/10">
                                 <i class="fa-solid fa-location-dot text-scheme1-secondary mt-1 mr-2.5 text-lg drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]"></i>
                                 <div class="flex-1">
@@ -304,30 +378,11 @@
     <script type="module">
         import { createApp, ref, onMounted, nextTick, watch } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
         
-        // --- 1. Firebase Imports ---
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, doc, setDoc, onSnapshot, enableIndexedDbPersistence } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
-        // --- 2. Firebase Configuration (請填入您的 Config) ---
-        // 【// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBwb7dBlg8wgEYsksn-YR6GA-iik_D9MfY",
-  authDomain: "christmas-shanghai.firebaseapp.com",
-  projectId: "christmas-shanghai",
-  storageBucket: "christmas-shanghai.firebasestorage.app",
-  messagingSenderId: "75094011030",
-  appId: "1:75094011030:web:b4a9bbcd7633d6165466b7"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);】
-        // 範例：
+        // 【在此填入您的 Firebase Config】
         const firebaseConfig = {
              apiKey: "YOUR_API_KEY",
              authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -340,13 +395,10 @@ const app = initializeApp(firebaseConfig);】
         let db = null;
         let storage = null;
         
-        // --- 3. Initialize Firebase ---
         try {
             const app = initializeApp(firebaseConfig);
             db = getFirestore(app);
             storage = getStorage(app);
-
-            // Enable Offline Persistence
             enableIndexedDbPersistence(db).catch((err) => {
                 if (err.code == 'failed-precondition') {
                     console.log('Multiple tabs open, persistence can only be enabled in one tab at a a time.');
@@ -354,12 +406,10 @@ const app = initializeApp(firebaseConfig);】
                     console.log('The current browser does not support all of the features required to enable persistence');
                 }
             });
-
         } catch (e) {
             console.error("Firebase Init Error (Check Config):", e);
         }
 
-        // --- 4. Default Data (Used as initial state or fallback) ---
         const defaultData = {
             title: "🎄 聖誕上海之旅 2025", 
             shops: [
@@ -397,7 +447,7 @@ const app = initializeApp(firebaseConfig);】
 
         createApp({
             setup() {
-                const currentTab = ref('flight'); 
+                const currentTab = ref('flight');
                 const currentDayIndex = ref(0);
                 const showModal = ref(false);
                 const isEditing = ref(false);
@@ -408,87 +458,52 @@ const app = initializeApp(firebaseConfig);】
                 let sortableInstance = null;
                 const isReordering = ref(false); 
                 let longPressTimer = null; 
-                
-                // 新增：載入狀態與圖片上傳狀態
                 const isLoading = ref(true);
                 const isUploading = ref(false);
                 
                 const myData = ref(defaultData); 
                 const modalData = ref({ time: '', title: '', desc: '', location: '', img: '' });
 
-                // --- 5. Firebase Logic ---
-
-                // Sync with Firestore
                 const initSync = () => {
                     if (!db) {
                         console.warn("Firestore not initialized, using local data.");
                         isLoading.value = false;
                         return;
                     }
-
                     const tripDocRef = doc(db, "trips", "shanghai2025");
-                    
                     onSnapshot(tripDocRef, (docSnap) => {
                         if (docSnap.exists()) {
-                            // Merge with default structure to prevent errors if fields are missing
                             myData.value = { ...defaultData, ...docSnap.data() };
-                            // Ensure days structure is robust
                             if (!myData.value.days) myData.value.days = defaultData.days;
                         } else {
-                            // First time: save default data
                             setDoc(tripDocRef, defaultData);
                         }
                         isLoading.value = false;
-                        // Re-init sortable after DOM update
-                        nextTick(() => {
-                             if(currentTab.value === 'schedule') initSortable();
-                        });
-                    }, (error) => {
-                        console.error("Sync Error:", error);
-                        isLoading.value = false;
-                    });
+                        nextTick(() => { if(currentTab.value === 'schedule') initSortable(); });
+                    }, (error) => { console.error("Sync Error:", error); isLoading.value = false; });
                 };
 
                 const updateTripData = () => {
                     if (!db) return;
-                    // Deep copy to remove Vue reactive proxies before sending to Firestore
                     const dataToSave = JSON.parse(JSON.stringify(myData.value));
-                    setDoc(doc(db, "trips", "shanghai2025"), dataToSave)
-                        .catch(e => console.error("Save Error:", e));
+                    setDoc(doc(db, "trips", "shanghai2025"), dataToSave).catch(e => console.error("Save Error:", e));
                 };
 
-                // Image Compression & Upload
                 const handleFileUpload = async (event) => {
                     const file = event.target.files[0];
                     if (!file) return;
-
-                    if (!storage) {
-                        alert("Storage not configured.");
-                        return;
-                    }
-
+                    if (!storage) { alert("Storage not configured."); return; }
                     isUploading.value = true;
                     try {
-                        // 1. Compress Image (Frontend)
                         const compressedBlob = await compressImage(file);
-                        
-                        // 2. Upload to Firebase Storage
                         const fileName = `images/${Date.now()}_${file.name}`;
                         const imgRef = storageRef(storage, fileName);
-                        
                         await uploadBytes(imgRef, compressedBlob);
                         const url = await getDownloadURL(imgRef);
-                        
                         modalData.value.img = url;
-                    } catch (error) {
-                        console.error("Upload failed:", error);
-                        alert("圖片上傳失敗");
-                    } finally {
-                        isUploading.value = false;
-                    }
+                    } catch (error) { console.error("Upload failed:", error); alert("圖片上傳失敗"); } finally { isUploading.value = false; }
                 };
 
-                // Simple Canvas Compression helper
                 const compressImage = (file) => {
                     return new Promise((resolve, reject) => {
                         const img = new Image();
@@ -496,25 +511,16 @@ const app = initializeApp(firebaseConfig);】
                         img.onload = () => {
                             const canvas = document.createElement('canvas');
                             const ctx = canvas.getContext('2d');
-                            const maxWidth = 800; // Resize to max 800px width
+                            const maxWidth = 800; 
                             const scaleSize = maxWidth / img.width;
-                            
                             canvas.width = maxWidth;
                             canvas.height = img.height * scaleSize;
-                            
                             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                            
-                            // Export as WebP quality 0.8
-                            canvas.toBlob((blob) => {
-                                if (blob) resolve(blob);
-                                else reject(new Error("Canvas blob error"));
-                            }, 'image/webp', 0.8);
+                            canvas.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error("Canvas blob error")); }, 'image/webp', 0.8);
                         };
                         img.onerror = (e) => reject(e);
                     });
                 };
-
-                // --- Existing Logic ---
 
                 const getWeatherIcon = (weather) => {
                     switch (weather) {
@@ -552,38 +558,27 @@ const app = initializeApp(firebaseConfig);】
 
                 const startLongPress = () => {
                     if (isReordering.value) return;
-                    longPressTimer = setTimeout(() => {
-                        toggleReorderMode();
-                    }, 500); 
+                    longPressTimer = setTimeout(() => { toggleReorderMode(); }, 500); 
                 };
 
                 const cancelLongPress = () => {
-                    if (longPressTimer) {
-                        clearTimeout(longPressTimer);
-                        longPressTimer = null;
-                    }
+                    if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
                 };
 
                 const toggleReorderMode = () => {
                     isReordering.value = !isReordering.value;
-                    if (sortableInstance) {
-                        sortableInstance.option('disabled', !isReordering.value);
-                    }
+                    if (sortableInstance) { sortableInstance.option('disabled', !isReordering.value); }
                 };
 
                 const initSortable = () => {
                     if (sortableList.value) {
                         sortableInstance = new Sortable(sortableList.value, {
-                            animation: 150,
-                            delay: 0, // In edit mode, instant drag
-                            disabled: !isReordering.value,
-                            ghostClass: 'sortable-ghost',
-                            dragClass: 'sortable-drag',
+                            animation: 150, delay: 0, disabled: !isReordering.value, ghostClass: 'sortable-ghost', dragClass: 'sortable-drag',
                             onEnd: (evt) => {
                                 const movedItem = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
                                 myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, movedItem);
                                 updateTimesAfterDrag(); 
-                                updateTripData(); // Save to Firebase after drag
+                                updateTripData(); 
                             }
                         });
                     }
@@ -592,9 +587,7 @@ const app = initializeApp(firebaseConfig);】
                 const updateTimesAfterDrag = () => {
                     const dayEvents = myData.value.days[currentDayIndex.value].events;
                     const timeSlots = dayEvents.map(e => e.time).sort();
-                    dayEvents.forEach((event, index) => {
-                        event.time = timeSlots[index];
-                    });
+                    dayEvents.forEach((event, index) => { event.time = timeSlots[index]; });
                 };
 
                  const openAddModal = () => {
@@ -611,91 +604,38 @@ const app = initializeApp(firebaseConfig);】
                     showModal.value = true;
                 };
 
-                const closeModal = () => {
-                    showModal.value = false;
-                };
-
-                const openShopDetails = (shop) => {
-                    selectedShop.value = shop;
-                    showShopModal.value = true;
-                };
-
-                const closeShopModal = () => {
-                    showShopModal.value = false;
-                    setTimeout(() => selectedShop.value = null, 200); 
-                };
+                const closeModal = () => { showModal.value = false; };
+                const openShopDetails = (shop) => { selectedShop.value = shop; showShopModal.value = true; };
+                const closeShopModal = () => { showShopModal.value = false; setTimeout(() => selectedShop.value = null, 200); };
 
                 const saveEvent = () => {
                     if (!modalData.value.title) return alert('請填寫標題');
                     const newEvent = { ...modalData.value, id: Date.now() }; 
-                    
                     if (isEditing.value) {
                         myData.value.days[currentDayIndex.value].events[editingEventIndex.value] = newEvent;
                     } else {
                         myData.value.days[currentDayIndex.value].events.push(newEvent);
                     }
                     closeModal();
-                    
-                    // Logic update
-                    nextTick(() => {
-                        updateTimesAfterDrag();
-                        updateTripData(); // Save to Firebase
-                    });
+                    nextTick(() => { updateTimesAfterDrag(); updateTripData(); }); 
                 };
 
                 const deleteEvent = () => {
                     if (confirm('確定要刪除此行程嗎？')) {
                         myData.value.days[currentDayIndex.value].events.splice(editingEventIndex.value, 1);
                         closeModal();
-                        updateTripData(); // Save to Firebase
+                        updateTripData(); 
                     }
                 };
 
-                onMounted(() => {
-                    initSync(); // Start Firebase Sync
-                });
-                
-                Vue.watch(currentTab, (newTab) => {
-                    if (newTab === 'schedule') {
-                         nextTick(() => initSortable());
-                    }
-                });
-
-                Vue.watch(currentDayIndex, () => {
-                     if (sortableInstance) sortableInstance.destroy();
-                     isReordering.value = false; 
-                     nextTick(() => initSortable());
-                });
+                onMounted(() => { initSync(); });
+                Vue.watch(currentTab, (newTab) => { if (newTab === 'schedule') { nextTick(() => initSortable()); } });
+                Vue.watch(currentDayIndex, () => { if (sortableInstance) sortableInstance.destroy(); isReordering.value = false; nextTick(() => initSortable()); });
 
                 return {
-                    currentTab,
-                    currentDayIndex,
-                    myData,
-                    getWeatherIcon,
-                    getShopIconColor,
-                    getShopNameParts, 
-                    getSimpleHours,
-                    sortableList,
-                    showModal,
-                    isEditing,
-                    modalData,
-                    openAddModal,
-                    openEditModal,
-                    closeModal,
-                    saveEvent,
-                    deleteEvent,
-                    showShopModal,
-                    selectedShop,
-                    openShopDetails,
-                    closeShopModal,
-                    isReordering,
-                    startLongPress,
-                    cancelLongPress,
-                    toggleReorderMode,
-                    // Firebase related
-                    isLoading,
-                    isUploading,
-                    handleFileUpload
+                    currentTab, currentDayIndex, myData, getWeatherIcon, getShopIconColor, getShopNameParts, getSimpleHours, sortableList, showModal, isEditing, modalData,
+                    openAddModal, openEditModal, closeModal, saveEvent, deleteEvent, showShopModal, selectedShop, openShopDetails, closeShopModal,
+                    isReordering, startLongPress, cancelLongPress, toggleReorderMode, isLoading, isUploading, handleFileUpload
                 };
             }
         }).mount('#app');
