@@ -195,7 +195,6 @@
                         <button v-for="(day, index) in myData.days" :key="index" @click="currentDayIndex = index" 
                             :class="currentDayIndex === index ? 'bg-scheme1-primary/90 text-white shadow-[0_0_15px_rgba(255,126,226,0.6)] border-transparent scale-105' : 'glass-card text-white/80 border-white/20'"
                             class="py-2 rounded-xl flex flex-col items-center justify-center transition-all duration-300 backdrop-blur-sm h-full">
-                            
                             <div class="flex flex-col items-center leading-none text-white w-full">
                                 <span class="text-xs font-bold tracking-wider mb-0.5 opacity-90">DAY {{ index + 1 }}</span>
                                 <span class="text-3xl font-black my-0.5 drop-shadow-sm">{{ day.dayNum }}</span>
@@ -353,6 +352,26 @@
 
             </main>
 
+            <nav class="glass-nav h-16 px-1 flex justify-evenly items-center z-50 rounded-t-[2rem] pb-1 relative flex-shrink-0">
+                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span>
+                </button>
+                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span>
+                </button>
+                <div class="-mt-8 relative z-10">
+                    <button @click="currentTab = 'map'" class="bg-scheme1-bg text-scheme1-primary w-14 h-14 rounded-full shadow-[0_0_20px_rgba(255,126,226,0.4)] border-2 border-scheme1-primary/50 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all">
+                        <i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(255,126,226,1)]"></i>
+                    </button>
+                </div>
+                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span>
+                </button>
+                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
+                    <i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span>
+                </button>
+            </nav>
+
             <div v-if="showShopModal && selectedShop" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal" @click.self="closeShopModal">
                 <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col shadow-2xl border border-scheme1-primary/40">
                     
@@ -482,7 +501,7 @@
                             name: "LCH Café", 
                             tag: "復古風", 
                             address: "上海市黃浦區南昌路274號-1號", 
-                            hours: "週一至四 10:00-18:00 | 週五至日 10:00-19:00", // 24h
+                            hours: "10:00-18:00 | 10:00-19:00", // 24h, removed text prefix for cleaner card
                             transport: "地鐵陝西南路站 (1/10/12號線)", 
                             icon: "martini-glass-citrus", 
                             color: "text-pink-400" 
