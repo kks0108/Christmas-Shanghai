@@ -89,18 +89,23 @@
         .text-glow-gold { text-shadow: 0 0 10px rgba(253, 224, 71, 0.9); }
         .text-glow-cyan { text-shadow: 0 0 10px rgba(34, 211, 238, 0.9); }
 
-        /* --- 修改了這裡的背景設定 --- */
+        /* --- 背景樣式：完美復刻您的圖片風格 --- */
         .aurora-bg {
             background-color: #0F172A;
-            /* 使用 Unsplash 的上海圖片，並疊加一個藍紫色的半透明漸變層以確保文字可讀性 */
+            /* 1. 使用 linear-gradient 疊加一層藍紫色漸變，模擬您圖片中的濾鏡效果
+               2. 使用 Unsplash 高畫質上海夜景圖 (ID: photo-1506353266980-73cbe71050dc)
+            */
             background-image: 
-                linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(58, 13, 99, 0.7)),
-                url('https://images.unsplash.com/photo-1506353266980-73cbe71050dc?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+                linear-gradient(to bottom, rgba(88, 101, 242, 0.3), rgba(49, 15, 89, 0.6)),
+                url('https://images.unsplash.com/photo-1506353266980-73cbe71050dc?q=80&w=2940&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            
+            /* 如果您希望背景像您原本的圖片一樣有點模糊，可以取消下面這行的註解 */
+            /* filter: blur(2px); transform: scale(1.02); */
         }
-        /* --------------------------- */
+        /* -------------------------------------- */
 
         .sortable-ghost { opacity: 0.3; }
         .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.2); }
@@ -110,10 +115,11 @@
     <div id="app" class="font-sans font-medium text-scheme1-textMain">
         <div class="w-full max-w-md h-full relative shadow-2xl flex flex-col overflow-hidden bg-transparent">
             
-            <div class="absolute inset-0 z-0 aurora-bg pointer-events-none">
-                <div class="absolute top-[-10%] right-[-15%] w-[400px] h-[400px] bg-scheme1-neonPink/20 rounded-full blur-[80px]"></div>
-                <div class="absolute bottom-[-10%] left-[-15%] w-[350px] h-[350px] bg-scheme1-neonCyan/15 rounded-full blur-[80px]"></div>
-                <div class="absolute top-[30%] left-[20%] w-[150px] h-[150px] bg-purple-500/20 rounded-full blur-[60px]"></div>
+            <div class="absolute inset-0 z-0 aurora-bg pointer-events-none"></div>
+
+            <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <div class="absolute top-[-10%] right-[-15%] w-[400px] h-[400px] bg-scheme1-neonPink/10 rounded-full blur-[80px]"></div>
+                <div class="absolute bottom-[-10%] left-[-15%] w-[350px] h-[350px] bg-scheme1-neonCyan/10 rounded-full blur-[80px]"></div>
             </div>
 
             <header class="bg-transparent text-white p-2 pt-7 shadow-none z-10 flex justify-between items-center relative flex-shrink-0">
