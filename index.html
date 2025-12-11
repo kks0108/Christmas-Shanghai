@@ -195,10 +195,11 @@
                         <button v-for="(day, index) in myData.days" :key="index" @click="currentDayIndex = index" 
                             :class="currentDayIndex === index ? 'bg-scheme1-primary/90 text-white shadow-[0_0_15px_rgba(255,126,226,0.6)] border-transparent scale-105' : 'glass-card text-white/80 border-white/20'"
                             class="py-2 rounded-xl flex flex-col items-center justify-center transition-all duration-300 backdrop-blur-sm h-full">
-                            <div class="flex flex-col items-center leading-none text-white w-full gap-0.5">
-                                <span class="text-[10px] uppercase tracking-wider font-bold opacity-80">DAY {{ index + 1 }}</span>
-                                <span class="text-3xl font-black drop-shadow-sm">{{ day.dayNum }}</span>
-                                <span class="text-[10px] font-bold opacity-80">{{ day.weekday }}</span>
+                            
+                            <div class="flex flex-col items-center leading-none text-white w-full">
+                                <span class="text-[10px] uppercase tracking-wider font-bold opacity-80 scale-90 mb-0.5">DAY {{ index + 1 }}</span>
+                                <span class="text-3xl font-black drop-shadow-sm -my-1">{{ day.dayNum }}</span>
+                                <span class="text-[10px] font-bold opacity-80 scale-90 mt-0.5">{{ day.weekday }}</span>
                             </div>
                         </button>
                     </div>
@@ -215,14 +216,12 @@
                             <div ref="sortableList" class="space-y-3">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
                                      @click="openEditModal(idx)"
-                                     class="relative group cursor-pointer active:cursor-grabbing select-none">
-                                    
-                                    <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
+                                     class="relative group cursor-pointer active:cursor-grabbing select-none"> <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
                                     
                                     <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-primary/40">
                                         
                                         <div v-if="item.img" class="h-24 w-full relative overflow-hidden">
-                                            <img :src="item.img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90">
+                                            <img :src="item.img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 select-none">
                                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                                             <div class="absolute bottom-2 left-3 right-3 flex justify-between items-end z-10">
                                                 <div class="flex items-center gap-2">
@@ -247,7 +246,7 @@
                                             <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2 select-none">{{ item.desc }}</p>
                                             
                                             <div class="flex justify-between items-end mt-0.5">
-                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)]"></i>{{ item.location }}</p>
+                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text"><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
                                                 
                                                 <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 select-none">
                                                     <i class="fa-solid fa-diamond-turn-right text-sm"></i>
@@ -312,7 +311,7 @@
                             <img :src="myData.hotel.image" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70" alt="Hotel Room">
                             <div class="absolute inset-0 bg-gradient-to-t from-scheme1-bg via-scheme1-bg/40 to-transparent"></div>
                             <div class="relative z-10 p-5 w-full text-white">
-                                <div class="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white/90 text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-white/10">
+                                <div class="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white/90 text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-white/10 select-none">
                                     4晚 ✨
                                 </div>
                                 <h2 class="text-2xl font-black leading-tight mb-1 text-white shadow-sm text-shadow-sm">{{ myData.hotel.name }}</h2>
@@ -460,7 +459,7 @@
 
         createApp({
             setup() {
-                const currentTab = ref('flight'); // Default to flight
+                const currentTab = ref('flight'); 
                 const currentDayIndex = ref(0);
                 
                 const showModal = ref(false);
@@ -483,7 +482,7 @@
                             name: "一尺花園（廣富林店）", 
                             tag: "古宅花園", 
                             address: "松江區廣富林路3088弄3號集賢坊01-03棟", 
-                            hours: "10:00 - 22:00", // 24h
+                            hours: "10:00 - 22:00", 
                             transport: "巴士松江98路 / 松江15路 (廣富林路龍源路站) 下車步行5分鐘", 
                             icon: "tree", 
                             color: "text-green-400" 
@@ -492,7 +491,7 @@
                             name: "wabi cofe（愚園路店）", 
                             tag: "日式庭院", 
                             address: "長寧區愚園路1327號", 
-                            hours: "10:30 - 00:00", // 24h
+                            hours: "10:30 - 00:00", 
                             transport: "地鐵中山公園站 8號出口", 
                             icon: "mug-hot", 
                             color: "text-yellow-600" 
@@ -534,7 +533,6 @@
                             date: "12月23日 (二)", dateShort: "23 DEC", weekday: "(二)", dayNum: "23",
                             events: [
                                 { id: 1, time: "10:30", title: "抵達上海浦東 🛬", location: "上海市浦東新區浦東國際機場 T1", desc: "入境手續、領取行李，前往酒店Check-in。", weather: "cloudy", temp: "8°C" },
-                                { id: 101, time: "12:30", title: "辦理入住 🏨", location: "上海市浦東新區東方路889號", desc: "前往東錦江希爾頓逸林酒店 Check-in / 寄存行李。", icon: "hotel" },
                                 { id: 2, time: "15:00", title: "浦東美術館 🎨", location: "上海市浦東新區濱江大道2777號", desc: "欣賞建築之美，窗口可直面外灘萬國建築群。", weather: "cloudy", temp: "9°C" },
                                 { id: 3, time: "18:00", title: "十六鋪碼頭 🌃", location: "上海市黃浦區中山東二路551號", desc: "漫步江邊或搭乘遊船，欣賞黃浦江璀璨夜景。", weather: "clear", temp: "5°C" }
                             ]
@@ -557,7 +555,6 @@
                         {
                             date: "12月26日 (五)", dateShort: "26 DEC", weekday: "(五)", dayNum: "26",
                             events: [
-                                { id: 102, time: "10:00", title: "辦理退房 👋", location: "上海市浦東新區東方路889號", desc: "Check-out 並寄存行李，開始最後一天行程。", icon: "suitcase" },
                                 { id: 9, time: "10:30", title: "武康路 City Walk 🍂", location: "上海市徐匯區武康路", desc: "打卡武康大樓(淮海中路1850號)，感受法租界梧桐樹下的浪漫。", weather: "cloudy", temp: "8°C" },
                                 { id: 10, time: "14:00", title: "田子坊 🛍️", location: "上海市黃浦區泰康路210號", desc: "穿梭老弄堂，購買特色文創與伴手禮。", weather: "cloudy", temp: "9°C" },
                                 { id: 11, time: "17:30", title: "前往機場 🚕", location: "上海市浦東新區浦東國際機場 T1", desc: "預留時間前往機場，準備搭乘21:20航班。", weather: "cloudy", temp: "7°C" }
@@ -616,21 +613,17 @@
                             onEnd: (evt) => {
                                 const movedItem = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
                                 myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, movedItem);
-                                updateTimesAfterDrag(); // 自動更新時間
+                                updateTimesAfterDrag(); 
                             }
                         });
                     }
                 };
 
-                // 自動重新分配時間
                 const updateTimesAfterDrag = () => {
                     const dayEvents = myData.value.days[currentDayIndex.value].events;
-                    // 1. 取出所有現有的時間 (並排序，確保時間流是順的)
-                    // 注意：這裡假設我們希望保留 "時間槽"，只是活動換了。
-                    // 所以我們把所有時間拿出來，從小到大排好。
+                    // Sort times chronologically to maintain time slot structure
                     const timeSlots = dayEvents.map(e => e.time).sort();
                     
-                    // 2. 依序塞回新的活動順序中
                     dayEvents.forEach((event, index) => {
                         event.time = timeSlots[index];
                     });
@@ -676,7 +669,7 @@
                     closeModal();
                     nextTick(() => {
                         initSortable();
-                        updateTimesAfterDrag(); // 新增時也排序一下時間 (可選)
+                        updateTimesAfterDrag();
                     }); 
                 };
 
