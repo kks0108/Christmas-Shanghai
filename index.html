@@ -213,7 +213,8 @@
                         <div class="relative pl-4">
                             <div class="absolute left-[3.5px] top-2 bottom-0 w-[2px] bg-white/20 rounded-full"></div>
                             
-                            <div ref="sortableList" class="space-y-3"> <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
+                            <div ref="sortableList" class="space-y-3">
+                                <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
                                      @click="openEditModal(idx)"
                                      class="relative group cursor-pointer active:cursor-grabbing">
                                     
@@ -249,20 +250,20 @@
                                             <div class="flex justify-between items-end mt-1">
                                                 <p v-if="item.addr" class="text-[10px] text-scheme1-neonCyan flex items-center truncate max-w-[65%]"><i class="fa-solid fa-location-dot mr-1"></i>{{ item.addr }}</p>
                                                 
-                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + (item.addr || item.location)" target="_blank" @click.stop class="bg-white/10 hover:bg-scheme1-neonCyan hover:text-black text-white text-[10px] px-2 py-1 rounded border border-white/20 transition-colors flex items-center gap-1">
-                                                    <i class="fa-solid fa-map-location-dot"></i> 導航
+                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + (item.addr || item.location)" target="_blank" @click.stop class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-scheme1-neonCyan hover:bg-scheme1-neonCyan hover:text-white transition-colors shadow-sm border border-white/10">
+                                                    <i class="fa-solid fa-diamond-turn-right text-[10px]"></i>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
+                            <button @click="openAddModal" class="w-full py-3 mt-4 mb-4 rounded-xl border-2 border-dashed border-scheme1-neonPink/30 text-scheme1-neonPink/70 hover:bg-scheme1-neonPink/10 hover:border-scheme1-neonPink hover:text-scheme1-neonPink transition-all font-bold flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-plus"></i> 新增行程
+                            </button>
                         </div>
                     </div>
-                    
-                    <button @click="openAddModal" class="fixed bottom-20 right-4 w-12 h-12 bg-scheme1-neonPink text-white rounded-full shadow-[0_0_15px_rgba(255,126,226,0.5)] flex items-center justify-center z-50 transition-all border border-white/30 opacity-30 hover:opacity-100 hover:scale-110">
-                        <i class="fa-solid fa-plus text-xl"></i>
-                    </button>
                 </div>
 
                 <div v-if="currentTab === 'map'" class="animate-fade-in h-full flex flex-col items-center justify-center pt-10 pb-20">
