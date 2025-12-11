@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Noto+Sans+SC:wght@400;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Caveat:wght@700&display=swap" rel="stylesheet">
     
     <script>
@@ -53,12 +52,10 @@
             justify-content: center;
         }
 
-        /* 隱藏 Scrollbar */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        
         .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        .animate-spin-slow { animation: spin 8s linear infinite; }
+        .animate-spin-slow { animation: spin 10s linear infinite; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         /* 玻璃擬態 */
@@ -109,7 +106,6 @@
             background-size: 150% 150%;
         }
 
-        /* 拖曳時的樣式 */
         .sortable-ghost { opacity: 0.3; }
         .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.2); }
     </style>
@@ -140,28 +136,63 @@
                 
                 <div v-if="currentTab === 'flight'" class="animate-fade-in space-y-4">
                     <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-neonPink text-white text-glow">✈️ 航班資訊</h3>
+                    
                     <div class="glass-card rounded-2xl p-4 relative overflow-hidden group">
-                        <div class="absolute top-3 left-3 bg-scheme1-neonPink/20 border border-scheme1-neonPink/80 text-scheme1-neonPink text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest">去程 OUTBOUND</div>
+                        <div class="absolute top-3 left-3 bg-scheme1-neonPink/20 border border-scheme1-neonPink/80 text-scheme1-neonPink text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest shadow-[0_0_15px_rgba(255,126,226,0.4)]">去程 OUTBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-4">
-                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">HKG</div></div>
-                            <div class="flex-1 px-2 text-center flex flex-col items-center"><i class="fa-solid fa-plane text-white text-xl block my-1"></i><div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.flightOut.no }}</div></div>
-                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">PVG</div></div>
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">HKG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">香港 T1</div></div>
+                            <div class="flex-1 px-2 text-center flex flex-col items-center"><div class="text-xs text-scheme1-neonPink font-bold">{{ myData.flightOut.airline }}</div><i class="fa-solid fa-plane text-white text-xl block my-1 drop-shadow-md"></i><div class="border-b-2 border-dotted border-white/40 w-full h-1"></div><div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.flightOut.no }}</div></div>
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">PVG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">上海浦東 T1</div></div>
                         </div>
                         <div class="bg-white/5 rounded-xl p-3 flex justify-between items-start text-sm border border-white/20">
                             <div><span class="text-xs text-scheme1-textSub/80 font-bold block">Date</span>{{ myData.flightOut.date }}</div>
-                            <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Time</span><span class="font-bold text-scheme1-neonPink text-xl">{{ myData.flightOut.dep }} - {{ myData.flightOut.arr }}</span></div>
+                            <div class="flex gap-4">
+                                <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Dep</span><span class="font-bold text-scheme1-neonPink text-xl">{{ myData.flightOut.dep }}</span></div>
+                                <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Arr</span><span class="font-bold text-scheme1-neonPink text-xl">{{ myData.flightOut.arr }}</span></div>
+                            </div>
                         </div>
                     </div>
+
                     <div class="glass-card rounded-2xl p-4 relative overflow-hidden group">
-                        <div class="absolute top-3 left-3 bg-scheme1-neonCyan/20 border border-scheme1-neonCyan/80 text-scheme1-neonCyan text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest">回程 INBOUND</div>
+                        <div class="absolute top-3 left-3 bg-scheme1-neonCyan/20 border border-scheme1-neonCyan/80 text-scheme1-neonCyan text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.4)]">回程 INBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-4">
-                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">PVG</div></div>
-                            <div class="flex-1 px-2 text-center flex flex-col items-center"><i class="fa-solid fa-plane text-white text-xl block my-1 rotate-180"></i><div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.flightIn.no }}</div></div>
-                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">HKG</div></div>
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">PVG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">上海浦東 T1</div></div>
+                            <div class="flex-1 px-2 text-center flex flex-col items-center"><div class="text-xs text-scheme1-neonCyan font-bold">{{ myData.flightIn.airline }}</div><i class="fa-solid fa-plane text-white text-xl block my-1 rotate-180 drop-shadow-md"></i><div class="border-b-2 border-dotted border-white/40 w-full h-1"></div><div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.flightIn.no }}</div></div>
+                            <div class="text-center w-1/3"><div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg font-heiti text-glow">HKG</div><div class="text-sm text-scheme1-neonGold font-bold mt-1 tracking-wide">香港 T1</div></div>
                         </div>
                         <div class="bg-white/5 rounded-xl p-3 flex justify-between items-start text-sm border border-white/20">
                             <div><span class="text-xs text-scheme1-textSub/80 font-bold block">Date</span>{{ myData.flightIn.date }}</div>
-                            <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Time</span><span class="font-bold text-scheme1-neonCyan text-xl">{{ myData.flightIn.dep }} - {{ myData.flightIn.arr }}</span></div>
+                            <div class="flex gap-4">
+                                <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Dep</span><span class="font-bold text-scheme1-neonCyan text-xl">{{ myData.flightIn.dep }}</span></div>
+                                <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Arr</span><span class="font-bold text-scheme1-neonCyan text-xl">{{ myData.flightIn.arr }}</span><span class="text-[10px] text-scheme1-neonPink block mt-0.5 font-bold text-glow-pink">+1 Day</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-4">
+                        <h4 class="text-base font-bold text-white mb-3 flex items-center text-glow"><i class="fa-solid fa-suitcase-rolling mr-2 text-scheme1-neonGold"></i> 行李限額</h4>
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-suitcase text-scheme1-neonPink text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">託運行李</span><span class="text-[10px] bg-scheme1-neonPink/20 text-scheme1-neonPink border border-scheme1-neonPink/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold"><i class="fa-solid fa-weight-scale text-[10px] mr-1"></i>23kg <span class="mx-1 text-white/30">|</span> 158cm</div>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-briefcase text-scheme1-neonCyan text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">手提行李</span><span class="text-[10px] bg-scheme1-neonCyan/20 text-scheme1-neonCyan border border-scheme1-neonCyan/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">8kg <span class="mx-1 text-white/30">|</span> 20x40x55cm</div>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-bag-shopping text-scheme1-neonGold text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">隨身物品</span><span class="text-[10px] bg-scheme1-neonGold/20 text-scheme1-neonGold border border-scheme1-neonGold/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">小型手袋 / 筆電包</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -215,9 +246,7 @@
                                         
                                         <div class="p-3 pt-2">
                                             <h4 class="font-bold text-lg text-white mb-1 drop-shadow-md">{{ item.title }}</h4>
-                                            
                                             <p v-if="item.addr" class="text-xs text-scheme1-neonCyan mb-1 flex items-center"><i class="fa-solid fa-location-dot mr-1"></i>{{ item.addr }}</p>
-                                            
                                             <p class="text-sm text-scheme1-textSub/90 mb-0 leading-relaxed font-bold line-clamp-2">{{ item.desc }}</p>
                                         </div>
                                     </div>
@@ -241,12 +270,75 @@
                 </div>
 
                 <div v-if="currentTab === 'shops'" class="animate-fade-in">
-                     <h3 class="font-bold text-xl mb-4 pl-3 border-l-4 border-scheme1-neonPink text-white opacity-90 text-glow">🛍️ 必逛店舖 & 美食</h3>
-                     <div class="text-center py-10 text-white/50">店舖列表 (保留原樣)</div>
+                    <h3 class="font-bold text-xl mb-4 pl-3 border-l-4 border-scheme1-neonPink text-white opacity-90 text-glow">🛍️ 必逛店舖 & 美食</h3>
+                    <div class="space-y-4">
+                        <div v-for="(shop, idx) in myData.shops" :key="idx" class="glass-card rounded-2xl p-4 flex items-center relative overflow-hidden group hover:border-scheme1-neonPink/50 transition-colors">
+                            <div :class="shop.color" class="w-12 h-12 rounded-full bg-white/5 border border-white/20 flex items-center justify-center flex-shrink-0 text-lg group-hover:scale-110 transition-transform shadow-inner">
+                                <i :class="['fa-solid', shop.icon]"></i>
+                            </div>
+                            <div class="flex-1 ml-4 mr-2">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h4 class="font-bold text-white text-lg drop-shadow-sm">{{ shop.name }}</h4>
+                                    <span v-if="shop.tag" class="text-[10px] bg-scheme1-neonPink/10 text-scheme1-neonPink px-1.5 py-0.5 rounded border border-scheme1-neonPink/20 font-bold">{{ shop.tag }}</span>
+                                </div>
+                                <div class="flex items-center text-xs text-scheme1-textSub gap-2 font-bold">
+                                    <span><i class="fa-solid fa-location-dot text-[10px] mr-1"></i>{{ shop.area }}</span>
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white/30"></span>
+                                    <span>{{ shop.type }}</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end justify-center">
+                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + shop.name" target="_blank" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-scheme1-neonPink hover:bg-scheme1-neonPink hover:text-white transition-colors shadow-sm border border-white/10">
+                                    <i class="fa-solid fa-diamond-turn-right text-sm"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div v-if="currentTab === 'hotel'" class="animate-fade-in">
-                     <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-neonCyan text-white opacity-90 text-glow">🏨 住宿資訊</h3>
-                     <div class="glass-card p-4 rounded-2xl mt-4"><img :src="myData.hotel.image" class="rounded-xl mb-2"> <h2 class="text-xl font-bold">{{myData.hotel.name}}</h2></div>
+
+                <div v-if="currentTab === 'hotel'" class="animate-fade-in space-y-4">
+                    <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-neonCyan text-white opacity-90 text-glow">🏨 住宿資訊</h3>
+                    <div class="glass-card rounded-2xl overflow-hidden">
+                        <div class="h-48 relative flex items-end overflow-hidden group">
+                            <img :src="myData.hotel.image" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70" alt="Hotel Room">
+                            <div class="absolute inset-0 bg-gradient-to-t from-scheme1-deepBlue via-scheme1-deepBlue/40 to-transparent"></div>
+                            <div class="relative z-10 p-5 w-full text-white">
+                                <div class="absolute top-4 right-4 bg-scheme1-neonPink/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full shadow-[0_0_15px_rgba(255,126,226,0.6)] border border-white/20">
+                                    4晚 ✨
+                                </div>
+                                <h2 class="text-2xl font-black leading-tight mb-1 text-white shadow-sm text-glow">{{ myData.hotel.name }}</h2>
+                                <p class="text-sm text-white/90 font-bold truncate">{{ myData.hotel.engName }}</p>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
+                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-dumbbell mr-1"></i>健身房</span>
+                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-person-swimming mr-1"></i>恆溫泳池</span>
+                                <span class="text-xs bg-white/5 text-scheme1-textSub px-2.5 py-1.5 rounded-md flex-shrink-0 border border-white/20 font-bold hover:bg-white/10 transition-colors"><i class="fa-solid fa-wifi mr-1"></i>免費WiFi</span>
+                            </div>
+                            <div class="bg-white/5 rounded-xl p-3 mb-4 flex items-start border border-white/10">
+                                <i class="fa-solid fa-location-dot text-scheme1-neonCyan mt-1 mr-2.5 text-lg drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]"></i>
+                                <div class="flex-1">
+                                    <p class="text-base text-white font-bold mb-1 leading-snug">{{ myData.hotel.address }}</p>
+                                    <a :href="'https://www.google.com/maps/search/?api=1&query=' + myData.hotel.name" target="_blank" class="text-xs text-scheme1-neonPink font-bold flex items-center gap-1 hover:underline">
+                                        開啟 Google Maps <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 text-center">
+                                <div class="bg-white/5 rounded-lg p-3 border border-white/10">
+                                    <div class="text-xs text-scheme1-textSub mb-1 uppercase tracking-wide font-black">Check-in</div>
+                                    <div class="font-bold text-scheme1-neonPink text-xl text-glow-pink">14:00</div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.hotel.checkIn }}</div>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-3 border border-white/10">
+                                    <div class="text-xs text-scheme1-textSub mb-1 uppercase tracking-wide font-black">Check-out</div>
+                                    <div class="font-bold text-scheme1-neonCyan text-xl text-glow-cyan">12:00</div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">{{ myData.hotel.checkOut }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </main>
@@ -300,10 +392,6 @@
                             <img :src="modalData.img" class="w-full h-full object-cover">
                         </div>
                         <div>
-                            <label class="text-xs text-scheme1-neonCyan font-bold uppercase">開放時間/備註</label>
-                            <input v-model="modalData.openHours" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1">
-                        </div>
-                        <div>
                             <label class="text-xs text-scheme1-neonCyan font-bold uppercase">詳細描述</label>
                             <textarea v-model="modalData.desc" rows="3" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1"></textarea>
                         </div>
@@ -325,7 +413,12 @@
 
         const myTripData = {
             title: "聖誕上海之旅", 
-            shops: [],
+            shops: [
+                { name: "姥姥家 Grandmas", type: "美食", area: "外灘", tag: "本幫菜", icon: "fa-utensils", color: "text-scheme1-neonPink" },
+                { name: "M Stand", type: "咖啡", area: "新天地", tag: "網紅打卡", icon: "fa-mug-hot", color: "text-white" },
+                { name: "Haus Nowhere", type: "購物", area: "淮海中路", tag: "眼鏡/香氛", icon: "fa-bag-shopping", color: "text-scheme1-neonCyan" },
+                { name: "Peet's Coffee", type: "咖啡", area: "武康路", tag: "露台位", icon: "fa-mug-saucer", color: "text-scheme1-neonGold" }
+            ],
             hotel: {
                 name: "上海東錦江希爾頓逸林酒店",
                 engName: "DoubleTree by Hilton",
@@ -373,11 +466,10 @@
                 const myData = ref(myTripData); 
                 const sortableList = ref(null);
                 
-                // Modal Logic
                 const showModal = ref(false);
                 const isEditing = ref(false);
                 const editingIdx = ref(-1);
-                const modalData = ref({}); // { time, title, location, desc, img, addr, openHours }
+                const modalData = ref({}); 
 
                 const getWeatherIcon = (type) => {
                     const t = type ? type.toLowerCase() : '';
@@ -386,18 +478,16 @@
                     return 'fa-solid fa-cloud-sun text-yellow-300';
                 };
 
-                // Initialize SortableJS
                 const initSortable = () => {
                     if (sortableList.value) {
                         new Sortable(sortableList.value, {
                             animation: 150,
-                            handle: '.glass-card', // 拖曳整個卡片
-                            delay: 200, // 長按 200ms 後開始拖曳 (避免誤觸點擊)
+                            handle: '.glass-card', 
+                            delay: 200, 
                             delayOnTouchOnly: true,
                             ghostClass: 'sortable-ghost',
                             dragClass: 'sortable-drag',
                             onEnd: (evt) => {
-                                // Update Vue Data after drag
                                 const item = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
                                 myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, item);
                             }
@@ -405,7 +495,6 @@
                     }
                 };
 
-                // Watch tab/day changes to re-init sortable
                 watch([currentTab, currentDayIndex], async () => {
                     if (currentTab.value === 'schedule') {
                         await nextTick();
@@ -417,7 +506,6 @@
                     initSortable();
                 });
 
-                // Edit / Add Functions
                 const openAddModal = () => {
                     isEditing.value = false;
                     modalData.value = { time: "", title: "", location: "", desc: "", img: "", addr: "", openHours: "" };
@@ -427,7 +515,6 @@
                 const openEditModal = (idx) => {
                     isEditing.value = true;
                     editingIdx.value = idx;
-                    // Clone data to avoid direct mutation
                     modalData.value = { ...myData.value.days[currentDayIndex.value].events[idx] };
                     showModal.value = true;
                 };
