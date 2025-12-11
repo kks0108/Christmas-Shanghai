@@ -103,8 +103,7 @@
         .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
         
         .sortable-ghost { opacity: 0.3; }
-        /* 拖曳時的效果 */
-        .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.15); transform: scale(1.02); z-index: 50; }
+        .sortable-drag { cursor: grabbing; background: rgba(255,255,255,0.15); transform: scale(1.02); }
     </style>
 </head>
 <body>
@@ -192,14 +191,14 @@
 
                 <div v-if="currentTab === 'schedule'" class="animate-fade-in space-y-4">
                     
-                    <div class="flex overflow-x-auto space-x-3 pb-1 scrollbar-hide px-1">
+                    <div class="grid grid-cols-4 gap-2 px-1">
                         <button v-for="(day, index) in myData.days" :key="index" @click="currentDayIndex = index" 
                             :class="currentDayIndex === index ? 'bg-scheme1-primary text-white shadow-[0_0_15px_rgba(255,126,226,0.6)] border-transparent scale-105' : 'glass-card text-scheme1-textSub border-white/20'"
-                            class="flex-shrink-0 px-4 py-2 rounded-xl flex flex-col items-center min-w-[75px] transition-all duration-300 backdrop-blur-sm">
-                            <div class="flex flex-col items-center leading-tight py-1">
-                                <span class="text-sm uppercase tracking-wider font-black mb-0.5">Day {{ index + 1 }}</span>
-                                <span class="font-bold text-lg leading-tight">{{ day.dateShort }}</span>
-                                <span class="text-[10px] opacity-80 mt-0.5">{{ day.weekday }}</span>
+                            class="py-1.5 rounded-xl flex flex-col items-center justify-center transition-all duration-300 backdrop-blur-sm h-full">
+                            <div class="flex flex-col items-center leading-tight w-full">
+                                <span class="text-sm uppercase tracking-wider font-black mb-0">Day {{ index + 1 }}</span>
+                                <span class="font-bold text-sm leading-tight">{{ day.dateShort }}</span>
+                                <span class="text-[10px] opacity-80 mt-0.5 transform scale-90">{{ day.weekday }}</span>
                             </div>
                         </button>
                     </div>
@@ -461,7 +460,7 @@
 
         createApp({
             setup() {
-                const currentTab = ref('flight'); // Default tab set to flight
+                const currentTab = ref('flight'); // Default to flight tab
                 const currentDayIndex = ref(0);
                 
                 const showModal = ref(false);
@@ -484,7 +483,7 @@
                             name: "一尺花園（廣富林店）", 
                             tag: "古宅花園", 
                             address: "松江區廣富林路3088弄3號集賢坊01-03棟", 
-                            hours: "星期一至日 10:00 - 22:00", // Updated to 24h
+                            hours: "星期一至日 10:00 - 22:00", 
                             transport: "巴士松江98路 / 松江15路 (廣富林路龍源路站) 下車步行5分鐘", 
                             icon: "tree", 
                             color: "text-green-400" 
@@ -493,7 +492,7 @@
                             name: "wabi cofe（愚園路店）", 
                             tag: "日式庭院", 
                             address: "長寧區愚園路1327號", 
-                            hours: "星期一至日 10:30 - 00:00", // Updated to 24h
+                            hours: "星期一至日 10:30 - 00:00", 
                             transport: "地鐵中山公園站 8號出口", 
                             icon: "mug-hot", 
                             color: "text-yellow-600" 
@@ -502,7 +501,7 @@
                             name: "LCH Café", 
                             tag: "復古風", 
                             address: "上海市黃浦區南昌路274號-1號", 
-                            hours: "週一至四 10:00-18:00 | 週五至日 10:00-19:00", // Already 24h
+                            hours: "週一至四 10:00-18:00 | 週五至日 10:00-19:00", 
                             transport: "地鐵陝西南路站 (1/10/12號線)", 
                             icon: "martini-glass-citrus", 
                             color: "text-pink-400" 
