@@ -112,9 +112,9 @@
             
             <div class="absolute inset-0 z-0 shanghai-bg pointer-events-none"></div>
 
-            <header class="glass-header text-white p-3 pt-8 shadow-sm z-10 flex justify-between items-center relative flex-shrink-0">
+            <header class="glass-header text-white p-3 pt-5 pb-2 shadow-sm z-10 flex justify-between items-center relative flex-shrink-0">
                 <div class="relative z-10 flex flex-col justify-center h-full w-full pl-2">
-                    <h2 class="text-xs tracking-widest opacity-90 text-scheme1-secondary mb-1 font-sans font-bold uppercase drop-shadow-md">Wayne & Chloe | Shanghai 2025</h2>
+                    <h2 class="text-xs tracking-widest opacity-90 text-scheme1-secondary mb-0.5 font-sans font-bold uppercase drop-shadow-md">Wayne & Chloe | Shanghai 2025</h2>
                     <h1 class="text-2xl font-deco tracking-widest text-white drop-shadow-lg font-medium mt-0">
                         {{ myData.title }}
                     </h1>
@@ -238,12 +238,12 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="p-3 pt-1.5 relative">
+                                        <div class="p-3 pt-1 relative">
                                             <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md">{{ item.title }}</h4>
                                             
-                                            <p class="text-xs text-scheme1-textSub/90 mb-1 leading-snug font-bold line-clamp-2">{{ item.desc }}</p>
+                                            <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2">{{ item.desc }}</p>
                                             
-                                            <div class="flex justify-between items-end mt-2">
+                                            <div class="flex justify-between items-end mt-0.5">
                                                 <p v-if="item.location" class="text-sm text-scheme1-secondary flex items-center truncate max-w-[65%]"><i class="fa-solid fa-location-dot mr-1 text-xs"></i>{{ item.location }}</p>
                                                 
                                                 <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20">
