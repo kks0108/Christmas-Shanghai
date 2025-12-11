@@ -58,7 +58,6 @@
         .animate-spin-slow { animation: spin 10s linear infinite; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* 玻璃擬態 */
         .glass-card {
             background: rgba(255, 255, 255, 0.08); 
             backdrop-filter: blur(12px);           
@@ -80,19 +79,16 @@
             box-shadow: 0 0 15px rgba(255, 126, 226, 0.5);
         }
 
-        /* 模態框玻璃 */
         .glass-modal {
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(20px);
         }
 
-        /* 文字發光 */
-        .text-glow { text-shadow: 0 0 8px rgba(255, 255, 255, 0.8); }
+        .text-glow { text-shadow: 0 0 8px rgba(255, 255, 255, 0.9); }
         .text-glow-pink { text-shadow: 0 0 10px rgba(255, 126, 226, 0.9); }
         .text-glow-gold { text-shadow: 0 0 10px rgba(253, 224, 71, 0.9); }
         .text-glow-cyan { text-shadow: 0 0 10px rgba(34, 211, 238, 0.9); }
 
-        /* 極光背景 */
         .aurora-bg {
             background-color: #0F172A;
             background-image: 
@@ -124,7 +120,7 @@
                 <div class="relative z-10 flex flex-col justify-center h-full w-full pl-2">
                     <h2 class="text-lg tracking-normal opacity-100 text-scheme1-neonPink mb-0 font-deco font-black rotate-1 drop-shadow-md leading-none text-glow-pink">Wayne & Chloe | Shanghai 2025</h2>
                     <h1 class="text-xl font-deco tracking-tight text-white drop-shadow-lg font-bold mt-1 text-glow">
-                        <span class="text-scheme1-neonGold">🎄 聖誕</span>上海之旅 ✨
+                        🎄 聖誕上海之旅 ✨
                     </h1>
                 </div>
                 <div class="w-9 h-9 glass-deco rounded-full flex items-center justify-center shadow-inner flex-shrink-0 mr-2 border border-white/30">
@@ -217,37 +213,46 @@
                         <div class="relative pl-4">
                             <div class="absolute left-[3.5px] top-2 bottom-0 w-[2px] bg-white/20 rounded-full"></div>
                             
-                            <div ref="sortableList" class="space-y-4">
-                                <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
+                            <div ref="sortableList" class="space-y-3"> <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
                                      @click="openEditModal(idx)"
                                      class="relative group cursor-pointer active:cursor-grabbing">
                                     
                                     <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-deepBlue border-[3px] border-scheme1-neonPink rounded-full z-10 shadow-[0_0_10px_rgba(255,126,226,0.5)]"></div>
                                     
-                                    <div class="glass-card rounded-2xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-neonPink/40">
+                                    <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-neonPink/40">
                                         
-                                        <div v-if="item.img" class="h-24 w-full relative overflow-hidden">
+                                        <div v-if="item.img" class="h-20 w-full relative overflow-hidden">
                                             <img :src="item.img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                                            <div class="absolute bottom-2 left-3 flex items-center gap-2 z-10">
-                                                <span class="bg-scheme1-neonPink text-scheme1-deepBlue font-bold text-xs px-2 py-0.5 rounded shadow">{{ item.time }}</span>
-                                                <div class="flex items-center text-white text-xs gap-1 font-bold" v-if="item.weather">
-                                                    <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
+                                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                                            <div class="absolute bottom-1.5 left-2.5 right-3 flex justify-between items-end z-10">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="bg-scheme1-neonPink text-scheme1-deepBlue font-bold text-[10px] px-1.5 py-0.5 rounded shadow">{{ item.time }}</span>
+                                                    <div class="flex items-center text-white text-[10px] gap-1 font-bold" v-if="item.weather">
+                                                        <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div v-else class="p-3 pb-0 flex justify-between items-center mb-1">
-                                            <span class="bg-scheme1-neonPink/20 text-scheme1-neonPink font-bold text-sm px-3 py-0.5 rounded-full border border-scheme1-neonPink/30">{{ item.time }}</span>
-                                            <div class="flex items-center text-scheme1-textSub text-xs gap-1.5 font-bold" v-if="item.weather">
+                                        <div v-else class="p-2.5 pb-0 flex justify-between items-center mb-1">
+                                            <span class="bg-scheme1-neonPink/20 text-scheme1-neonPink font-bold text-[10px] px-2 py-0.5 rounded-full border border-scheme1-neonPink/30">{{ item.time }}</span>
+                                            <div class="flex items-center text-scheme1-textSub text-[10px] gap-1.5 font-bold" v-if="item.weather">
                                                 <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                             </div>
                                         </div>
                                         
-                                        <div class="p-3 pt-2">
-                                            <h4 class="font-bold text-lg text-white mb-1 drop-shadow-md">{{ item.title }}</h4>
-                                            <p v-if="item.addr" class="text-xs text-scheme1-neonCyan mb-1 flex items-center"><i class="fa-solid fa-location-dot mr-1"></i>{{ item.addr }}</p>
-                                            <p class="text-sm text-scheme1-textSub/90 mb-0 leading-relaxed font-bold line-clamp-2">{{ item.desc }}</p>
+                                        <div class="p-2.5 pt-1.5 relative">
+                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md">{{ item.title }}</h4>
+                                            
+                                            <p class="text-xs text-scheme1-textSub/90 mb-1 leading-snug font-bold line-clamp-2">{{ item.desc }}</p>
+                                            
+                                            <div class="flex justify-between items-end mt-1">
+                                                <p v-if="item.addr" class="text-[10px] text-scheme1-neonCyan flex items-center truncate max-w-[65%]"><i class="fa-solid fa-location-dot mr-1"></i>{{ item.addr }}</p>
+                                                
+                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + (item.addr || item.location)" target="_blank" @click.stop class="bg-white/10 hover:bg-scheme1-neonCyan hover:text-black text-white text-[10px] px-2 py-1 rounded border border-white/20 transition-colors flex items-center gap-1">
+                                                    <i class="fa-solid fa-map-location-dot"></i> 導航
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -255,8 +260,8 @@
                         </div>
                     </div>
                     
-                    <button @click="openAddModal" class="fixed bottom-24 right-6 w-14 h-14 bg-scheme1-neonPink text-white rounded-full shadow-[0_0_20px_rgba(255,126,226,0.6)] flex items-center justify-center z-50 hover:scale-110 transition-transform border-2 border-white/50">
-                        <i class="fa-solid fa-plus text-2xl"></i>
+                    <button @click="openAddModal" class="fixed bottom-20 right-4 w-12 h-12 bg-scheme1-neonPink text-white rounded-full shadow-[0_0_15px_rgba(255,126,226,0.5)] flex items-center justify-center z-50 transition-all border border-white/30 opacity-30 hover:opacity-100 hover:scale-110">
+                        <i class="fa-solid fa-plus text-xl"></i>
                     </button>
                 </div>
 
@@ -392,6 +397,10 @@
                             <img :src="modalData.img" class="w-full h-full object-cover">
                         </div>
                         <div>
+                            <label class="text-xs text-scheme1-neonCyan font-bold uppercase">開放時間/備註</label>
+                            <input v-model="modalData.openHours" type="text" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1">
+                        </div>
+                        <div>
                             <label class="text-xs text-scheme1-neonCyan font-bold uppercase">詳細描述</label>
                             <textarea v-model="modalData.desc" rows="3" class="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white focus:border-scheme1-neonPink outline-none mt-1"></textarea>
                         </div>
@@ -434,7 +443,7 @@
                     events: [
                         { id: 1, time: "10:30", title: "抵達上海浦東", location: "上海浦東國際機場", desc: "入境手續、領取行李。", weather: "cloudy", temp: "8°C", img: "https://images.unsplash.com/photo-1474302770737-173ee21bab63?q=80&w=1000", addr: "浦東新區", openHours: "24H" },
                         { id: 2, time: "15:00", title: "浦東美術館", location: "浦東美術館", desc: "欣賞建築之美，直面外灘。", weather: "cloudy", temp: "9°C", img: "https://images.unsplash.com/photo-1634351330397-6950295232a5?q=80&w=1000", addr: "濱江大道2777號", openHours: "10:00-21:00" },
-                        { id: 3, time: "18:00", title: "十六鋪碼頭", location: "十六鋪碼頭", desc: "欣賞黃浦江璀璨夜景。", weather: "clear", temp: "5°C", addr: "中山東二路531號" }
+                        { id: 3, time: "18:00", title: "十六鋪碼頭", location: "十六鋪碼頭", desc: "欣賞黃浦江璀璨夜景。", weather: "clear", temp: "5°C", addr: "中山東二路531號", img: "https://images.unsplash.com/photo-1548658166-136d9f6a7df1?q=80&w=1000" }
                     ]
                 },
                 {
@@ -442,18 +451,23 @@
                     events: [
                         { id: 4, time: "10:00", title: "豫園 & 城隍廟", location: "豫園", desc: "江南古典園林。", weather: "sunny", temp: "9°C", img: "https://images.unsplash.com/photo-1580910543239-166299d25725?q=80&w=1000", addr: "福佑路168號", openHours: "09:00-16:30" },
                         { id: 5, time: "14:30", title: "新天地北里", location: "上海新天地", desc: "平安夜逛街。", weather: "sunny", temp: "10°C", img: "https://images.unsplash.com/photo-1548658827-63d0529d2b27?q=80&w=1000" },
-                        { id: 6, time: "19:00", title: "平安夜晚餐", location: "新天地", desc: "聖誕大餐。", weather: "clear", temp: "6°C" }
+                        { id: 6, time: "19:00", title: "平安夜晚餐", location: "新天地", desc: "聖誕大餐。", weather: "clear", temp: "6°C", img: "https://images.unsplash.com/photo-1543007630-9710e4a00a20?q=80&w=1000" }
                     ]
                 },
                 {
                     date: "12月25日 (四)", dateShort: "25",
                     events: [
-                        { id: 7, time: "10:00", title: "朱家角古鎮", location: "朱家角古鎮", desc: "上海威尼斯。", weather: "sunny", temp: "11°C", img: "https://images.unsplash.com/photo-1548956923-38c826922904?q=80&w=1000" }
+                        { id: 7, time: "10:00", title: "朱家角古鎮", location: "朱家角古鎮", desc: "上海威尼斯。", weather: "sunny", temp: "11°C", img: "https://images.unsplash.com/photo-1548956923-38c826922904?q=80&w=1000" },
+                        { id: 8, time: "17:00", title: "返回市區", location: "人民廣場", desc: "休息/晚餐", img: "https://images.unsplash.com/photo-1505164294036-746a5f67a2cb?q=80&w=1000" }
                     ]
                 },
                 {
                     date: "12月26日 (五)", dateShort: "26",
-                    events: []
+                    events: [
+                        { id: 9, time: "10:30", title: "武康路 City Walk", location: "武康路", desc: "法租界風情。", img: "https://images.unsplash.com/photo-1678786968037-33633667c427?q=80&w=1000" },
+                        { id: 10, time: "14:00", title: "田子坊", location: "田子坊", desc: "弄堂文創。", img: "https://images.unsplash.com/photo-1558273643-979929281a8f?q=80&w=1000" },
+                        { id: 11, time: "17:30", title: "前往機場", location: "浦東機場", desc: "返程", img: "https://images.unsplash.com/photo-1530521954074-e64f6810b32d?q=80&w=1000" }
+                    ]
                 }
             ]
         };
