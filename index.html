@@ -43,6 +43,7 @@
             overscroll-behavior: none;
             background-color: #0F172A;
             color: #FFFFFF;
+            -webkit-tap-highlight-color: transparent; /* 移除點擊高亮 */
         }
         
         #app {
@@ -103,16 +104,21 @@
         .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
         
         /* SortableJS Styles */
-        .sortable-ghost { opacity: 0.2; }
-        /* 拖曳時讓卡片稍微放大並變亮，給予視覺反饋 */
+        .sortable-ghost { opacity: 0.3; background: rgba(255, 255, 255, 0.1); }
+        /* 拖曳時的樣式：放大、陰影、顯眼 */
         .sortable-drag { 
-            cursor: grabbing; 
-            background: rgba(255,255,255,0.15); 
+            opacity: 1 !important; 
+            background: rgba(30, 41, 59, 0.95); 
             transform: scale(1.05); 
-            opacity: 1 !important;
-            z-index: 100;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 126, 226, 0.5); /* 拖曳時亮粉色邊框 */
+            cursor: grabbing; 
+            z-index: 9999;
         }
+
+        /* 關鍵：防止手機上長按選取文字，確保拖曳觸發 */
+        .touch-manipulation { touch-action: manipulation; }
+        .no-select { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 
         /* Loader */
         .loader { border: 3px solid rgba(255,255,255,0.1); border-left-color: #FF7EE2; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
@@ -142,7 +148,6 @@
                 
                 <div v-if="currentTab === 'flight' && myData.flightOut" class="animate-fade-in space-y-4">
                     <h3 class="font-bold text-xl pl-3 border-l-4 border-scheme1-primary text-white text-shadow-sm font-deco tracking-wide">✈️ 航班資訊</h3>
-                    
                     <div class="glass-card rounded-2xl p-4 relative overflow-hidden group">
                         <div class="absolute top-3 left-3 bg-scheme1-primary/20 border border-scheme1-primary/80 text-scheme1-primary text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest">去程 OUTBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-4">
@@ -158,7 +163,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="glass-card rounded-2xl p-4 relative overflow-hidden group">
                         <div class="absolute top-3 left-3 bg-scheme1-secondary/20 border border-scheme1-secondary/80 text-scheme1-secondary text-xs px-2.5 py-0.5 rounded-full font-bold tracking-widest">回程 INBOUND</div>
                         <div class="mt-8 flex justify-between items-center mb-4">
@@ -171,33 +175,6 @@
                             <div class="flex gap-4">
                                 <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Dep</span><span class="font-bold text-scheme1-secondary text-xl">{{ myData.flightIn.dep }}</span></div>
                                 <div class="text-right"><span class="text-xs text-scheme1-textSub/80 font-bold block">Arr</span><span class="font-bold text-scheme1-secondary text-xl">{{ myData.flightIn.arr }}</span><span class="text-[10px] text-scheme1-primary block mt-0.5 font-bold">+1 Day</span></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-xl p-4">
-                        <h4 class="text-base font-bold text-white mb-3 flex items-center text-shadow-sm"><i class="fa-solid fa-suitcase-rolling mr-2 text-scheme1-accent"></i> 行李限額</h4>
-                        <div class="flex flex-col gap-3">
-                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-suitcase text-scheme1-primary text-2xl drop-shadow-md"></i></div>
-                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">託運行李</span><span class="text-[10px] bg-scheme1-primary/20 text-scheme1-primary border border-scheme1-primary/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold"><i class="fa-solid fa-weight-scale text-[10px] mr-1"></i>23kg <span class="mx-1 text-white/30">|</span> 158cm</div>
-                                </div>
-                            </div>
-                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-briefcase text-scheme1-secondary text-2xl drop-shadow-md"></i></div>
-                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">手提行李</span><span class="text-[10px] bg-scheme1-secondary/20 text-scheme1-secondary border border-scheme1-secondary/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">7kg <span class="mx-1 text-white/30">|</span> 20x40x55cm</div>
-                                </div>
-                            </div>
-                             <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
-                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-bag-shopping text-scheme1-accent text-2xl drop-shadow-md"></i></div>
-                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">隨身物品</span><span class="text-[10px] bg-scheme1-accent/20 text-scheme1-accent border border-scheme1-accent/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
-                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">小型手袋 / 筆電包</div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -220,7 +197,7 @@
                     <div>
                         <h3 class="font-bold text-lg mb-4 text-white flex items-center justify-between opacity-90 pl-1 text-shadow-sm">
                             <div><span class="text-scheme1-primary mr-2"><i class="fa-solid fa-calendar-day"></i></span>{{ myData.days[currentDayIndex].date }}</div>
-                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-hand-pointer mr-1"></i>長按拖曳</span>
+                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-hand-pointer mr-1"></i>長按卡片拖曳</span>
                         </h3>
                         
                         <div class="relative pl-4">
@@ -229,19 +206,17 @@
                             <div ref="sortableList" class="space-y-3 pb-24">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
                                      @click="openEditModal(idx)"
-                                     class="relative group select-none transition-transform duration-200 cursor-pointer sortable-item"> 
-                                    
-                                    <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
+                                     class="relative group transition-transform duration-200 cursor-pointer touch-manipulation no-select"> <div class="absolute -left-[17px] top-3 w-3 h-3 bg-scheme1-bg border-[3px] border-scheme1-primary rounded-full z-10 shadow-sm"></div>
                                     
                                     <div class="glass-card rounded-xl p-0 transition-all duration-300 relative overflow-hidden z-0 hover:bg-white/10 hover:border-scheme1-primary/40">
                                         
                                         <div v-if="item.img" class="h-24 w-full relative overflow-hidden">
-                                            <img :src="item.img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 select-none pointer-events-none">
+                                            <img :src="item.img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 pointer-events-none">
                                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                                             <div class="absolute bottom-2 left-3 right-3 flex justify-between items-end z-10">
                                                 <div class="flex items-center gap-2">
-                                                    <span class="bg-scheme1-primary text-white font-bold text-sm px-2 py-0.5 rounded shadow-[0_0_10px_#FF7EE2] select-none">{{ item.time }}</span>
-                                                    <div class="flex items-center text-white text-xs gap-1 font-bold select-none" v-if="item.weather">
+                                                    <span class="bg-scheme1-primary text-white font-bold text-sm px-2 py-0.5 rounded shadow-[0_0_10px_#FF7EE2]">{{ item.time }}</span>
+                                                    <div class="flex items-center text-white text-xs gap-1 font-bold" v-if="item.weather">
                                                         <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                                     </div>
                                                 </div>
@@ -249,18 +224,21 @@
                                         </div>
 
                                         <div v-else class="p-3 pb-0 flex justify-between items-center mb-1">
-                                            <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-sm px-2.5 py-0.5 rounded-full border border-scheme1-primary/30 shadow-[0_0_10px_rgba(255,126,226,0.4)] select-none">{{ item.time }}</span>
-                                            <div class="flex items-center text-scheme1-textSub text-xs gap-1.5 font-bold select-none" v-if="item.weather">
+                                            <span class="bg-scheme1-primary/20 text-scheme1-primary font-bold text-sm px-2.5 py-0.5 rounded-full border border-scheme1-primary/30 shadow-[0_0_10px_rgba(255,126,226,0.4)]">{{ item.time }}</span>
+                                            <div class="flex items-center text-scheme1-textSub text-xs gap-1.5 font-bold" v-if="item.weather">
                                                 <i :class="getWeatherIcon(item.weather)"></i><span>{{ item.temp }}</span>
                                             </div>
                                         </div>
                                         
                                         <div class="p-3 pt-1 relative">
-                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md select-none">{{ item.title }}</h4>
-                                            <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2 select-none pointer-events-none">{{ item.desc }}</p>
+                                            <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md select-text cursor-text" @mousedown.stop @touchstart.stop>{{ item.title }}</h4>
+                                            
+                                            <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2 pointer-events-none">{{ item.desc }}</p>
+                                            
                                             <div class="flex justify-between items-end mt-0.5">
-                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text z-20" @mousedown.stop><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
-                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 select-none z-20">
+                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text" @mousedown.stop @touchstart.stop><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)]"></i>{{ item.location }}</p>
+                                                
+                                                <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 z-20">
                                                     <i class="fa-solid fa-diamond-turn-right text-sm"></i>
                                                 </a>
                                             </div>
@@ -277,7 +255,7 @@
                 </div>
 
                 <div v-if="currentTab === 'map'" class="animate-fade-in h-full flex flex-col items-center justify-center pt-10 pb-20">
-                    <div class="glass-card p-6 rounded-3xl mb-6 animate-bounce relative backdrop-blur-xl border border-scheme1-primary/40 shadow-[0_0_30px_rgba(255,126,226,0.3)]">
+                     <div class="glass-card p-6 rounded-3xl mb-6 animate-bounce relative backdrop-blur-xl border border-scheme1-primary/40 shadow-[0_0_30px_rgba(255,126,226,0.3)]">
                          <div class="absolute inset-0 bg-scheme1-primary/10 rounded-3xl blur-xl -z-10"></div>
                         <i class="fa-solid fa-map-location-dot text-7xl text-scheme1-primary drop-shadow-[0_0_15px_rgba(255,126,226,0.6)]"></i>
                     </div>
@@ -312,7 +290,7 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <button @click="openAddShopModal" class="w-full py-3 mt-6 rounded-xl border-2 border-dashed border-scheme1-primary/30 text-scheme1-primary/70 hover:bg-scheme1-primary/10 hover:border-scheme1-primary hover:text-scheme1-primary transition-all font-bold flex items-center justify-center gap-2">
                         <i class="fa-solid fa-plus"></i> 新增店舖
                     </button>
@@ -363,43 +341,26 @@
             </main>
 
             <nav class="glass-nav h-16 px-1 flex justify-evenly items-center z-50 rounded-t-[2rem] pb-1 relative flex-shrink-0">
-                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                    <i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span>
-                </button>
-                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                    <i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span>
-                </button>
-                <div class="-mt-8 relative z-10">
-                    <button @click="currentTab = 'map'" class="bg-scheme1-bg text-scheme1-primary w-14 h-14 rounded-full shadow-[0_0_20px_rgba(255,126,226,0.4)] border-2 border-scheme1-primary/50 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all">
-                        <i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(255,126,226,1)]"></i>
-                    </button>
-                </div>
-                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                    <i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span>
-                </button>
-                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors">
-                    <i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span>
-                </button>
+                <button @click="currentTab = 'flight'" :class="currentTab === 'flight' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-plane-departure text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">航班</span></button>
+                <button @click="currentTab = 'schedule'" :class="currentTab === 'schedule' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-clipboard-list text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">行程</span></button>
+                <div class="-mt-8 relative z-10"><button @click="currentTab = 'map'" class="bg-scheme1-bg text-scheme1-primary w-14 h-14 rounded-full shadow-[0_0_20px_rgba(255,126,226,0.4)] border-2 border-scheme1-primary/50 flex items-center justify-center backdrop-blur-sm transform active:scale-95 transition-all"><i class="fa-solid fa-map text-3xl animate-pulse drop-shadow-[0_0_5px_rgba(255,126,226,1)]"></i></button></div>
+                <button @click="currentTab = 'shops'" :class="currentTab === 'shops' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-store text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">店舖</span></button>
+                <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-scheme1-primary drop-shadow-[0_0_8px_rgba(255,126,226,0.8)]' : 'text-scheme1-textSub/40 hover:text-scheme1-textSub'" class="flex flex-col items-center w-14 transition-colors"><i class="fa-solid fa-bed text-2xl mb-0.5"></i><span class="text-[10px] tracking-wide font-bold">住宿</span></button>
             </nav>
 
             <div v-if="showShopModal && selectedShop" class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in glass-modal" @click.self="closeShopModal">
                 <div class="glass-card w-full max-w-sm rounded-3xl p-6 relative flex flex-col shadow-2xl border border-scheme1-primary/40">
                     <button @click="closeShopModal" class="absolute top-4 right-4 text-white/60 hover:text-white transition-colors z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
-                    
                     <div class="flex flex-col items-center text-center mb-6">
-                        <div :class="getShopIconColor(selectedShop.color)" class="w-16 h-16 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-3">
-                             <i :class="['fa-solid', getShopCategoryIcon(selectedShop.type)]"></i>
-                        </div>
+                        <div :class="getShopIconColor(selectedShop.color)" class="w-16 h-16 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-3"><i :class="['fa-solid', getShopCategoryIcon(selectedShop.type)]"></i></div>
                         <h3 class="text-2xl font-bold text-white font-deco tracking-wide select-text cursor-text">{{ selectedShop.name }}</h3>
                         <span v-if="selectedShop.tag" class="mt-2 text-xs bg-scheme1-primary/20 text-scheme1-primary px-3 py-0.5 rounded-full border border-scheme1-primary/30 font-bold select-none">{{ selectedShop.tag }}</span>
                     </div>
-
                     <div class="space-y-4 text-sm flex-1 overflow-y-auto scrollbar-hide">
                         <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-text cursor-text"><label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1 select-none">地址</label><p class="text-white leading-relaxed"><i class="fa-solid fa-location-dot mr-2 text-scheme1-secondary select-none"></i>{{ selectedShop.address }}</p></div>
                         <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-none"><label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1">營業時間</label><div class="text-white"><i class="fa-solid fa-clock mr-2 text-scheme1-secondary float-left mt-1"></i><div class="overflow-hidden"><div v-for="(line, idx) in selectedShop.hours.split('|')" :key="idx" class="block">{{ line.trim() }}</div></div></div></div>
                         <div class="bg-white/5 rounded-xl p-3 border border-white/10 select-none" v-if="selectedShop.transport"><label class="text-[10px] text-scheme1-secondary uppercase font-bold block mb-1">交通方式</label><p class="text-white"><i class="fa-solid fa-train-subway mr-2 text-scheme1-secondary"></i>{{ selectedShop.transport }}</p></div>
                     </div>
-                    
                     <div class="flex gap-2 mt-6">
                          <button @click="deleteShop(selectedShop)" class="px-4 py-3 rounded-xl border border-red-500/50 text-red-400 hover:bg-red-500/20 font-bold select-none"><i class="fa-solid fa-trash"></i></button>
                          <a :href="'https://www.google.com/maps/search/?api=1&query=' + selectedShop.address" target="_blank" class="flex-1 py-3 rounded-xl bg-scheme1-primary text-scheme1-bg hover:bg-scheme1-primary/90 transition-colors font-bold shadow-lg flex items-center justify-center gap-2 select-none"><i class="fa-solid fa-map-location-dot"></i> 開啟 Google Maps</a>
@@ -491,15 +452,9 @@
             const app = initializeApp(firebaseConfig);
             db = getFirestore(app);
             storage = getStorage(app);
-            enableIndexedDbPersistence(db).catch((err) => {
-                if (err.code == 'failed-precondition') {
-                    console.log('Multiple tabs open, persistence can only be enabled in one tab at a a time.');
-                } else if (err.code == 'unimplemented') {
-                    console.log('The current browser does not support all of the features required to enable persistence');
-                }
-            });
+            enableIndexedDbPersistence(db).catch((err) => {});
         } catch (e) {
-            console.error("Firebase Init Error (Check Config):", e);
+            console.error("Firebase Init Error:", e);
         }
 
         const defaultData = {
@@ -544,10 +499,11 @@
                 const showModal = ref(false);
                 const isEditing = ref(false);
                 const editingEventIndex = ref(null);
+                
                 const showShopModal = ref(false);
                 const showAddShopModal = ref(false);
                 const selectedShop = ref(null);
-                const shopFormData = ref({ name: '', type: 'Cafe', address: '', hours: '', transport: '' });
+                const shopFormData = ref({ name: '', type: 'Cafe', tag: '', address: '', hours: '', transport: '' });
 
                 const sortableList = ref(null);
                 let sortableInstance = null;
@@ -559,7 +515,6 @@
 
                 const initSync = () => {
                     if (!db) {
-                        console.warn("Firestore not initialized, using local data.");
                         isLoading.value = false;
                         return;
                     }
@@ -573,19 +528,18 @@
                         }
                         isLoading.value = false;
                         nextTick(() => { if(currentTab.value === 'schedule') initSortable(); });
-                    }, (error) => { console.error("Sync Error:", error); isLoading.value = false; });
+                    }, (error) => { isLoading.value = false; });
                 };
 
                 const updateTripData = () => {
                     if (!db) return;
                     const dataToSave = JSON.parse(JSON.stringify(myData.value));
-                    setDoc(doc(db, "trips", "shanghai2025"), dataToSave).catch(e => console.error("Save Error:", e));
+                    setDoc(doc(db, "trips", "shanghai2025"), dataToSave);
                 };
 
                 const handleFileUpload = async (event) => {
                     const file = event.target.files[0];
-                    if (!file) return;
-                    if (!storage) { alert("Storage not configured."); return; }
+                    if (!file || !storage) return;
                     isUploading.value = true;
                     try {
                         const compressedBlob = await compressImage(file);
@@ -594,7 +548,7 @@
                         await uploadBytes(imgRef, compressedBlob);
                         const url = await getDownloadURL(imgRef);
                         modalData.value.img = url;
-                    } catch (error) { console.error("Upload failed:", error); alert("圖片上傳失敗"); } finally { isUploading.value = false; }
+                    } catch (error) { alert("圖片上傳失敗"); } finally { isUploading.value = false; }
                 };
 
                 const compressImage = (file) => {
@@ -657,11 +611,12 @@
                     if (sortableList.value) {
                         sortableInstance = new Sortable(sortableList.value, {
                             animation: 150,
-                            delay: 300, // Shortened to 0.3s as requested
+                            delay: 300, // Long press 0.3s
                             delayOnTouchOnly: true, 
                             touchStartThreshold: 5, 
                             ghostClass: 'sortable-ghost',
                             dragClass: 'sortable-drag',
+                            forceFallback: true, // IMPORTANT for mobile reliability
                             onEnd: (evt) => {
                                 const movedItem = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
                                 myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, movedItem);
@@ -697,7 +652,7 @@
                 const closeShopModal = () => { showShopModal.value = false; setTimeout(() => selectedShop.value = null, 200); };
                 
                 const openAddShopModal = () => {
-                     shopFormData.value = { name: '', type: 'Cafe', address: '', hours: '10:00 - 22:00', transport: '' };
+                     shopFormData.value = { name: '', type: 'Cafe', tag: '', address: '', hours: '10:00 - 22:00', transport: '' };
                      showAddShopModal.value = true;
                 };
 
