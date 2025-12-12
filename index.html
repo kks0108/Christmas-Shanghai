@@ -102,15 +102,16 @@
 
         .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
         
-        /* SortableJS Styling */
+        /* SortableJS Styles - 視覺反饋 */
         .sortable-ghost { opacity: 0.2; }
         .sortable-drag { 
             cursor: grabbing; 
             background: rgba(255,255,255,0.15) !important; 
-            transform: scale(1.03); 
+            transform: scale(1.05); 
             opacity: 1 !important; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             z-index: 100;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
         /* Loader */
@@ -192,7 +193,7 @@
                     <div>
                         <h3 class="font-bold text-lg mb-4 text-white flex items-center justify-between opacity-90 pl-1 text-shadow-sm">
                             <div><span class="text-scheme1-primary mr-2"><i class="fa-solid fa-calendar-day"></i></span>{{ myData.days[currentDayIndex].date }}</div>
-                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-hand-pointer mr-1"></i>按住拖曳</span>
+                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-hand-pointer mr-1"></i>長按拖曳</span>
                         </h3>
                         
                         <div class="relative pl-4">
@@ -229,11 +230,10 @@
                                         
                                         <div class="p-3 pt-1 relative">
                                             <h4 class="font-bold text-base text-white mb-0.5 drop-shadow-md select-none">{{ item.title }}</h4>
-                                            
                                             <p class="text-xs text-scheme1-textSub/90 mb-0.5 leading-snug font-bold line-clamp-2 select-none pointer-events-none">{{ item.desc }}</p>
                                             
                                             <div class="flex justify-between items-end mt-0.5">
-                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text z-20" @click.stop><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
+                                                <p v-if="item.location" class="text-sm text-scheme1-secondary flex-1 mr-2 leading-tight select-text cursor-text relative z-20" @mousedown.stop><i class="fa-solid fa-location-dot mr-1 text-xs drop-shadow-[0_0_5px_rgba(34,211,238,1)] select-none"></i>{{ item.location }}</p>
                                                 
                                                 <a :href="'https://www.google.com/maps/search/?api=1&query=' + item.location" target="_blank" @click.stop class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-scheme1-secondary hover:bg-scheme1-secondary hover:text-white transition-colors shadow-sm border border-white/20 flex-shrink-0 select-none z-20">
                                                     <i class="fa-solid fa-diamond-turn-right text-sm"></i>
@@ -521,11 +521,10 @@
                 const showModal = ref(false);
                 const isEditing = ref(false);
                 const editingEventIndex = ref(null);
-                
                 const showShopModal = ref(false);
                 const showAddShopModal = ref(false);
                 const selectedShop = ref(null);
-                const shopFormData = ref({ name: '', type: 'Cafe', tag: '', address: '', hours: '10:00 - 22:00', transport: '' }); // tag (hidden in UI but kept in data structure), hours default
+                const shopFormData = ref({ name: '', type: 'Cafe', tag: '', address: '', hours: '10:00 - 22:00', transport: '' }); 
 
                 const sortableList = ref(null);
                 let sortableInstance = null;
@@ -608,12 +607,12 @@
                     return 'text-white';
                 };
 
-                // Updated: Icon logic based on TYPE
+                // Updated: Icon logic based on TYPE (Cafe, 餐廳, 零售)
                 const getShopCategoryIcon = (type) => {
                     if (type === 'Cafe') return 'fa-mug-hot';
                     if (type === '餐廳') return 'fa-utensils';
                     if (type === '零售') return 'fa-bag-shopping';
-                    return 'fa-store';
+                    return 'fa-store'; // default
                 };
 
                 const getShopNameParts = (name) => {
@@ -635,11 +634,12 @@
                     if (sortableList.value) {
                         sortableInstance = new Sortable(sortableList.value, {
                             animation: 150,
-                            delay: 300, // Short hold to drag
-                            delayOnTouchOnly: true, 
-                            touchStartThreshold: 5, 
+                            delay: 250, // Long press duration: 0.25s
+                            delayOnTouchOnly: true, // Mobile only
+                            touchStartThreshold: 5, // Allow slight shake
                             ghostClass: 'sortable-ghost',
                             dragClass: 'sortable-drag',
+                            // No handle, entire card drag
                             onEnd: (evt) => {
                                 const movedItem = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
                                 myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, movedItem);
@@ -675,7 +675,7 @@
                 const closeShopModal = () => { showShopModal.value = false; setTimeout(() => selectedShop.value = null, 200); };
                 
                 const openAddShopModal = () => {
-                     shopFormData.value = { name: '', type: 'Cafe', address: '', hours: '10:00 - 22:00', transport: '' };
+                     shopFormData.value = { name: '', type: 'Cafe', address: '', hours: '10:00 - 22:00', transport: '' }; // Default, no tag
                      showAddShopModal.value = true;
                 };
 
@@ -706,13 +706,10 @@
                      if (shopFormData.value.type === '餐廳') iconColor = 'text-orange-400';
                      if (shopFormData.value.type === '零售') iconColor = 'text-green-400';
 
-                     // Tag logic is removed from UI but we keep a dummy value or process name for it
-                     // Or just default tag to Type if needed. For now empty tag is fine.
-                     
                      const newShop = {
                          ...shopFormData.value,
-                         tag: shopFormData.value.type, // Use type as tag since manual tag is removed
-                         icon: '', // Handled by type
+                         tag: shopFormData.value.type, // Auto tag based on type
+                         icon: '', // Dynamic handled by UI
                          color: iconColor
                      };
                      
