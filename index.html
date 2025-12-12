@@ -7,7 +7,6 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+SC:wght@900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     
@@ -102,18 +101,6 @@
 
         .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
         
-        /* SortableJS Styles - 視覺反饋 */
-        .sortable-ghost { opacity: 0.2; }
-        .sortable-drag { 
-            cursor: grabbing; 
-            background: rgba(255,255,255,0.15) !important; 
-            transform: scale(1.05); 
-            opacity: 1 !important; 
-            z-index: 100;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
         /* Loader */
         .loader { border: 3px solid rgba(255,255,255,0.1); border-left-color: #FF7EE2; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -174,6 +161,33 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="glass-card rounded-xl p-4">
+                        <h4 class="text-base font-bold text-white mb-3 flex items-center text-shadow-sm"><i class="fa-solid fa-suitcase-rolling mr-2 text-scheme1-accent"></i> 行李限額</h4>
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-suitcase text-scheme1-primary text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">託運行李</span><span class="text-[10px] bg-scheme1-primary/20 text-scheme1-primary border border-scheme1-primary/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold"><i class="fa-solid fa-weight-scale text-[10px] mr-1"></i>23kg <span class="mx-1 text-white/30">|</span> 158cm</div>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-briefcase text-scheme1-secondary text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">手提行李</span><span class="text-[10px] bg-scheme1-secondary/20 text-scheme1-secondary border border-scheme1-secondary/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">7kg <span class="mx-1 text-white/30">|</span> 20x40x55cm</div>
+                                </div>
+                            </div>
+                             <div class="bg-white/5 rounded-lg p-3 flex items-center shadow-sm border border-white/10">
+                                <div class="w-10 text-center flex-shrink-0"><i class="fa-solid fa-bag-shopping text-scheme1-accent text-2xl drop-shadow-md"></i></div>
+                                <div class="flex-1 ml-2 border-l border-white/20 pl-3">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-white text-sm">隨身物品</span><span class="text-[10px] bg-scheme1-accent/20 text-scheme1-accent border border-scheme1-accent/40 px-2 py-0.5 rounded shadow-sm font-bold">1件</span></div>
+                                    <div class="text-xs text-scheme1-textSub mt-1 font-bold">小型手袋 / 筆電包</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div v-if="currentTab === 'schedule' && myData.days" class="animate-fade-in space-y-4">
@@ -193,13 +207,12 @@
                     <div>
                         <h3 class="font-bold text-lg mb-4 text-white flex items-center justify-between opacity-90 pl-1 text-shadow-sm">
                             <div><span class="text-scheme1-primary mr-2"><i class="fa-solid fa-calendar-day"></i></span>{{ myData.days[currentDayIndex].date }}</div>
-                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300"><i class="fa-solid fa-hand-pointer mr-1"></i>長按拖曳</span>
                         </h3>
                         
                         <div class="relative pl-4">
                             <div class="absolute left-[3.5px] top-2 bottom-0 w-[2px] bg-white/20 rounded-full"></div>
                             
-                            <div ref="sortableList" class="space-y-3 pb-24">
+                            <div class="space-y-3 pb-24">
                                 <div v-for="(item, idx) in myData.days[currentDayIndex].events" :key="item.id" 
                                      @click="openEditModal(idx)"
                                      class="relative group select-none transition-transform duration-200 cursor-pointer">
@@ -285,8 +298,6 @@
                                 <i class="fa-solid fa-clock mr-1.5"></i>
                                 <span class="truncate">{{ getSimpleHours(shop.hours) }}</span>
                             </div>
-                            
-                            <span v-if="shop.tag" class="text-[10px] bg-scheme1-primary/10 text-scheme1-primary px-2 py-0.5 rounded-full border border-scheme1-primary/20 font-bold">{{ shop.tag }}</span>
                         </div>
                     </div>
                     
@@ -634,12 +645,13 @@
                     if (sortableList.value) {
                         sortableInstance = new Sortable(sortableList.value, {
                             animation: 150,
-                            delay: 250, // Long press duration: 0.25s
-                            delayOnTouchOnly: true, // Mobile only
-                            touchStartThreshold: 5, // Allow slight shake
+                            delay: 0, // 移除 SortableJS 的內建 delay，改用 CSS 控制交互
+                            disabled: false,
                             ghostClass: 'sortable-ghost',
                             dragClass: 'sortable-drag',
-                            // No handle, entire card drag
+                            // 關鍵：不使用 handle，但依靠 Vue 的 @click 阻擋來區分點擊和拖曳
+                            // 在 PC 上這通常是立即拖曳，在手機上 SortableJS 預設會有防誤觸
+                            // 為了更穩定的手機體驗，我們設定 delay: 0 但配合 CSS touch-action
                             onEnd: (evt) => {
                                 const movedItem = myData.value.days[currentDayIndex.value].events.splice(evt.oldIndex, 1)[0];
                                 myData.value.days[currentDayIndex.value].events.splice(evt.newIndex, 0, movedItem);
@@ -675,7 +687,7 @@
                 const closeShopModal = () => { showShopModal.value = false; setTimeout(() => selectedShop.value = null, 200); };
                 
                 const openAddShopModal = () => {
-                     shopFormData.value = { name: '', type: 'Cafe', address: '', hours: '10:00 - 22:00', transport: '' }; // Default, no tag
+                     shopFormData.value = { name: '', type: 'Cafe', address: '', hours: '10:00 - 22:00', transport: '' };
                      showAddShopModal.value = true;
                 };
 
